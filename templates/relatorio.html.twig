@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Arial arial, helvetica, verdana, sans-serif;
+            font-size: 7pt;
+            color: #000;
+        }
+
+        body {
+            font-size: 7pt;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            max-width: 21cm;
+            min-height: 29.7cm;
+            padding: 1cm;
+            margin-left: 20px;
+            margin-right: 5px;
+            margin-top: 50px;
+            margin-bottom: 1cm;
+            border: 1px #D3D3D3 solid;
+            border-radius: 2px;
+            background: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            height: 50mm;
+            margin: 0;
+            padding: 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table td, th {
+            border-right: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            padding: 2mm;
+        }
+
+        thead th {
+            border-right: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            padding: 2mm;
+        }
+
+        #wrapper {
+            width: 180mm;
+            margin: 0 15mm;
+        }
+
+        #conteudo {
+            max-width: 21cm;
+            word-wrap: break-word;
+
+        }
+    </style>
+    <title>Relatório</title>
+</head>
+<body>
+<div>
+    <div class="conteudo">
+        Relatório: {{ nome }} <br>
+        Responsável: {{ usuario }}<br>
+        Data/Hora: {{ date()|date('d/m/Y H:i:s') }}<br>
+        <br>
+        {% if parametros is iterable %}
+            Parâmetros: <br>
+            <br>
+            {% for nome, valor in parametros %}
+                {{ nome }}: {{ valor.label }} <br>
+            {% endfor %}
+        {% endif %}
+        <br>
+        {% block conteudo %}{% endblock %}
+    </div>
+</div>
+</body>
+</html>

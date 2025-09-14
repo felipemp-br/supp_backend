@@ -1,0 +1,452 @@
+parameters:
+# ASSUNTO ADMINISTRATIVO
+    constantes.entidades.assunto_administrativo.const_1.default: 'ATIVIDADE MEIO'
+    constantes.entidades.assunto_administrativo.const_1: '%env(default:constantes.entidades.assunto_administrativo.const_1.default:string:CONSTANTES_ENTIDADES_ASSUNTO_ADMINISTRATIVO_CONST_1)%'
+
+    #Immutable
+    constantes.entidades.assunto_administrativo.immutable.default:
+        - '%constantes.entidades.assunto_administrativo.const_1%'
+    constantes.entidades.assunto_administrativo.immutable: '%env(default:constantes.entidades.assunto_administrativo.immutable.default:string:CONSTANTES_ENTIDADES_ASSUNTO_ADMINISTRATIVO_IMMUTABLE)%'
+
+# CLASSIFICACAO
+    constantes.entidades.classificacao.const_1.default: '305'
+    constantes.entidades.classificacao.const_1: '%env(default:constantes.entidades.classificacao.const_1.default:string:CONSTANTES_ENTIDADES_CLASSIFICACAO_CONST_1)%'
+    constantes.entidades.classificacao.const_2.default: '071.9'
+    constantes.entidades.classificacao.const_2: '%env(default:constantes.entidades.classificacao.const_2.default:string:CONSTANTES_ENTIDADES_CLASSIFICACAO_CONST_2)%'
+
+    #Immutable
+    constantes.entidades.classificacao.immutable.default:
+        - '%constantes.entidades.classificacao.const_1%'
+        - '%constantes.entidades.classificacao.const_2%'
+    constantes.entidades.classificacao.immutable: '%env(default:constantes.entidades.classificacao.immutable.default:string:CONSTANTES_ENTIDADES_CLASSIFICACAO_IMMUTABLE)%'
+
+
+# ESPECIE ATIVIDADE
+    constantes.entidades.especie_atividade.const_1.default: 'APROVAR DOCUMENTO'
+    constantes.entidades.especie_atividade.const_1: '%env(default:constantes.entidades.especie_atividade.const_1.default:string:CONSTANTES_ENTIDADES_ESPECIE_ATIVIDADE_CONST_1)%'
+
+    constantes.entidades.especie_atividade.const_2.default: 'CIÊNCIA, APOSIÇÃO DE'
+    constantes.entidades.especie_atividade.const_2: '%env(default:constantes.entidades.especie_atividade.const_2.default:string:CONSTANTES_ENTIDADES_ESPECIE_ATIVIDADE_CONST_2)%'
+
+    constantes.entidades.especie_atividade.const_3.default: 'PARECER (JURÍDICO) NA FORMA DA PORTARIA N° 1.399/2009, ELABORAÇÃO DE'
+    constantes.entidades.especie_atividade.const_3: '%env(default:constantes.entidades.especie_atividade.const_3.default:string:CONSTANTES_ENTIDADES_ESPECIE_ATIVIDADE_CONST_3)%'
+
+    constantes.entidades.especie_atividade.const_4.default: 'NOTA (JURÍDICA) NA FORMA DA PORTARIA N° 1.399/2009, ELABORAÇÃO DE'
+    constantes.entidades.especie_atividade.const_4: '%env(default:constantes.entidades.especie_atividade.const_4.default:string:CONSTANTES_ENTIDADES_ESPECIE_ATIVIDADE_CONST_4)%'
+
+    #Immutable
+    constantes.entidades.especie_atividade.immutable.default:
+        - '%constantes.entidades.especie_atividade.const_1%'
+        - '%constantes.entidades.especie_atividade.const_2%'
+        - '%constantes.entidades.especie_atividade.const_3%'
+        - '%constantes.entidades.especie_atividade.const_4%'
+    constantes.entidades.especie_atividade.immutable: '%env(default:constantes.entidades.especie_atividade.immutable.default:string:CONSTANTES_ENTIDADES_ESPECIE_ATIVIDADE_IMMUTABLE)%'
+
+# ESPECIE PROCESSO
+    constantes.entidades.especie_processo.const_1.default: 'COMUM'
+    constantes.entidades.especie_processo.const_1: '%env(default:constantes.entidades.especie_processo.const_1.default:string:CONSTANTES_ENTIDADES_ESPECIE_PROCESSO_CONST_1)%'
+
+    #Immutable
+    constantes.entidades.especie_processo.immutable.default:
+        - '%constantes.entidades.especie_processo.const_1%'
+    constantes.entidades.especie_processo.immutable: '%env(default:constantes.entidades.especie_processo.immutable.default:string:CONSTANTES_ENTIDADES_ESPECIE_PROCESSO_IMMUTABLE)%'
+
+# ESPECIE TAREFA
+    constantes.entidades.especie_tarefa.const_1.default: 'TRANSFERIR PROCESSO/DOCUMENTO AVULSO AO ARQUIVO INTERMEDIÁRIO'
+    constantes.entidades.especie_tarefa.const_1: '%env(default:constantes.entidades.especie_tarefa.const_1.default:string:CONSTANTES_ENTIDADES_ESPECIE_TAREFA_CONST_1)%'
+
+    constantes.entidades.especie_tarefa.const_2.default: 'ADOTAR PROVIDÊNCIAS ADMINISTRATIVAS'
+    constantes.entidades.especie_tarefa.const_2: '%env(default:constantes.entidades.especie_tarefa.const_2.default:string:CONSTANTES_ENTIDADES_ESPECIE_TAREFA_CONST_2)%'
+
+    constantes.entidades.especie_tarefa.const_3.default: 'DISTRIBUIR COMPLEMENTAÇÃO DE RESPOSTA DE COMUNICAÇÃO'
+    constantes.entidades.especie_tarefa.const_3: '%env(default:constantes.entidades.especie_tarefa.const_3.default:string:CONSTANTES_ENTIDADES_ESPECIE_TAREFA_CONST_3)%'
+
+    constantes.entidades.especie_tarefa.const_4.default: 'MANTER SOB GUARDA TEMPORÁRIA NO ARQUIVO CORRENTE'
+    constantes.entidades.especie_tarefa.const_4: '%env(default:constantes.entidades.especie_tarefa.const_4.default:string:CONSTANTES_ENTIDADES_ESPECIE_TAREFA_CONST_4)%'
+
+    constantes.entidades.especie_tarefa.const_5.default: 'ANALISAR DEMANDAS'
+    constantes.entidades.especie_tarefa.const_5: '%env(default:constantes.entidades.especie_tarefa.const_5.default:string:CONSTANTES_ENTIDADES_ESPECIE_TAREFA_CONST_5)%'
+
+    constantes.entidades.especie_tarefa.const_6.default: 'ELIMINAR PROCESSO/DOCUMENTO AVULSO'
+    constantes.entidades.especie_tarefa.const_6: '%env(default:constantes.entidades.especie_tarefa.const_6.default:string:CONSTANTES_ENTIDADES_ESPECIE_TAREFA_CONST_6)%'
+
+    constantes.entidades.especie_tarefa.const_7.default: 'RECOLHER PROCESSO/DOCUMENTO AVULSO AO ARQUIVO DEFINITIVO'
+    constantes.entidades.especie_tarefa.const_7: '%env(default:constantes.entidades.especie_tarefa.const_7.default:string:CONSTANTES_ENTIDADES_ESPECIE_TAREFA_CONST_7)%'
+
+    constantes.entidades.especie_tarefa.const_8.default: 'RESPONDER OFÍCIO REITERADO'
+    constantes.entidades.especie_tarefa.const_8: '%env(default:constantes.entidades.especie_tarefa.const_8.default:string:CONSTANTES_ENTIDADES_ESPECIE_TAREFA_CONST_8)%'
+
+
+    #Immutable
+    constantes.entidades.especie_tarefa.immutable.default:
+        - '%constantes.entidades.especie_tarefa.const_1%'
+        - '%constantes.entidades.especie_tarefa.const_2%'
+        - '%constantes.entidades.especie_tarefa.const_3%'
+        - '%constantes.entidades.especie_tarefa.const_4%'
+        - '%constantes.entidades.especie_tarefa.const_5%'
+        - '%constantes.entidades.especie_tarefa.const_6%'
+        - '%constantes.entidades.especie_tarefa.const_7%'
+    constantes.entidades.especie_tarefa.immutable: '%env(default:constantes.entidades.especie_tarefa.immutable.default:string:CONSTANTES_ENTIDADES_ESPECIE_TAREFA_IMMUTABLE)%'
+
+# ETIQUETA
+    constantes.entidades.etiqueta.const_1.default: 'MINUTA'
+    constantes.entidades.etiqueta.const_1: '%env(default:constantes.entidades.etiqueta.const_1.default:string:CONSTANTES_ENTIDADES_ETIQUETA_CONST_1)%'
+
+    constantes.entidades.etiqueta.const_2.default: 'COMPARTILHADA'
+    constantes.entidades.etiqueta.const_2: '%env(default:constantes.entidades.etiqueta.const_2.default:string:CONSTANTES_ENTIDADES_ETIQUETA_CONST_2)%'
+
+    constantes.entidades.etiqueta.const_3.default: 'OFÍCIO EM ELABORAÇÃO'
+    constantes.entidades.etiqueta.const_3: '%env(default:constantes.entidades.etiqueta.const_3.default:string:CONSTANTES_ENTIDADES_ETIQUETA_CONST_3)%'
+
+    constantes.entidades.etiqueta.const_4.default: 'OFÍCIO REMETIDO'
+    constantes.entidades.etiqueta.const_4: '%env(default:constantes.entidades.etiqueta.const_4.default:string:CONSTANTES_ENTIDADES_ETIQUETA_CONST_4)%'
+
+    constantes.entidades.etiqueta.const_5.default: 'REDISTRIBUÍDA'
+    constantes.entidades.etiqueta.const_5: '%env(default:constantes.entidades.etiqueta.const_5.default:string:CONSTANTES_ENTIDADES_ETIQUETA_CONST_5)%'
+
+    constantes.entidades.etiqueta.const_6.default: 'RELEVANTE'
+    constantes.entidades.etiqueta.const_6: '%env(default:constantes.entidades.etiqueta.const_6.default:string:CONSTANTES_ENTIDADES_ETIQUETA_CONST_6)%'
+
+    constantes.entidades.etiqueta.const_7.default: 'SIGILOSO'
+    constantes.entidades.etiqueta.const_7: '%env(default:constantes.entidades.etiqueta.const_7.default:string:CONSTANTES_ENTIDADES_ETIQUETA_CONST_7)%'
+
+    constantes.entidades.etiqueta.const_8.default: 'OFÍCIO RESPONDIDO'
+    constantes.entidades.etiqueta.const_8: '%env(default:constantes.entidades.etiqueta.const_8.default:string:CONSTANTES_ENTIDADES_ETIQUETA_CONST_8)%'
+
+    constantes.entidades.etiqueta.const_9.default: 'OFICIO'
+    constantes.entidades.etiqueta.const_9: '%env(default:constantes.entidades.etiqueta.const_9.default:string:CONSTANTES_ENTIDADES_ETIQUETA_CONST_9)%'
+
+    #Immutable
+    constantes.entidades.etiqueta.immutable.default: true
+    constantes.entidades.etiqueta.immutable: '%env(default:constantes.entidades.etiqueta.immutable.default:bool:CONSTANTES_ENTIDADES_ETIQUETA_IMMUTABLE)%'
+
+# MODALIDADE ETIQUETA
+    constantes.entidades.modalidade_etiqueta.const_1.default: 'TAREFA'
+    constantes.entidades.modalidade_etiqueta.const_1: '%env(default:constantes.entidades.modalidade_etiqueta.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_ETIQUETA_CONST_1)%'
+
+    #Immutable
+    constantes.entidades.modalidade_etiqueta.immutable.default:
+        - '%constantes.entidades.modalidade_etiqueta.const_1%'
+    constantes.entidades.modalidade_etiqueta.immutable: '%env(default:constantes.entidades.modalidade_etiqueta.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_ETIQUETA_IMMUTABLE)%'
+
+# MODALIDADE FASE
+    constantes.entidades.modalidade_fase.const_1.default: 'CORRENTE'
+    constantes.entidades.modalidade_fase.const_1: '%env(default:constantes.entidades.modalidade_fase.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_FASE_CONST_1)%'
+
+    constantes.entidades.modalidade_fase.const_2.default: 'INTERMEDIÁRIA'
+    constantes.entidades.modalidade_fase.const_2: '%env(default:constantes.entidades.modalidade_fase.const_2.default:string:CONSTANTES_ENTIDADES_MODALIDADE_FASE_CONST_2)%'
+
+    constantes.entidades.modalidade_fase.const_3.default: 'DEFINITIVA'
+    constantes.entidades.modalidade_fase.const_3: '%env(default:constantes.entidades.modalidade_fase.const_3.default:string:CONSTANTES_ENTIDADES_MODALIDADE_FASE_CONST_3)%'
+
+    constantes.entidades.modalidade_fase.const_4.default: 'ELIMINADO'
+    constantes.entidades.modalidade_fase.const_4: '%env(default:constantes.entidades.modalidade_fase.const_4.default:string:CONSTANTES_ENTIDADES_MODALIDADE_FASE_CONST_4)%'
+
+    #Immutable
+    constantes.entidades.modalidade_fase.immutable.default:
+        - '%constantes.entidades.modalidade_fase.const_1%'
+        - '%constantes.entidades.modalidade_fase.const_2%'
+        - '%constantes.entidades.modalidade_fase.const_3%'
+        - '%constantes.entidades.modalidade_fase.const_4%'
+    constantes.entidades.modalidade_fase.immutable: '%env(default:constantes.entidades.modalidade_fase.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_FASE_IMMUTABLE)%'
+
+# MODALIDADE FOLDER
+    constantes.entidades.modalidade_folder.const_1.default: 'TAREFA'
+    constantes.entidades.modalidade_folder.const_1: '%env(default:constantes.entidades.modalidade_folder.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_FOLDER_CONST_1)%'
+
+    #Immutable
+    constantes.entidades.modalidade_folder.immutable.default:
+        - '%constantes.entidades.modalidade_folder.const_1%'
+    constantes.entidades.modalidade_folder.immutable: '%env(default:constantes.entidades.modalidade_folder.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_FOLDER_IMMUTABLE)%'
+
+# MODALIDADE GENERO PESSOA
+    constantes.entidades.modalidade_genero_pessoa.const_1.default: 'DESCONHECIDO'
+    constantes.entidades.modalidade_genero_pessoa.const_1: '%env(default:constantes.entidades.modalidade_genero_pessoa.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_GENERO_PESSOA_CONST_1)%'
+
+    constantes.entidades.modalidade_genero_pessoa.const_2.default: 'PESSOA FÍSICA'
+    constantes.entidades.modalidade_genero_pessoa.const_2: '%env(default:constantes.entidades.modalidade_genero_pessoa.const_2.default:string:CONSTANTES_ENTIDADES_GENERO_PESSOA_CONST_2)%'
+
+    #Immutable
+    constantes.entidades.modalidade_genero_pessoa.immutable.default:
+        - '%constantes.entidades.modalidade_genero_pessoa.const_1%'
+        - '%constantes.entidades.modalidade_genero_pessoa.const_2%'
+    constantes.entidades.modalidade_genero_pessoa.immutable: '%env(default:constantes.entidades.modalidade_genero_pessoa.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_GENERO_PESSOA_IMMUTABLE)%'
+
+# MODALIDADE INTERESSADO
+    constantes.entidades.modalidade_interessado.const_1.default: 'REQUERENTE (PÓLO ATIVO)'
+    constantes.entidades.modalidade_interessado.const_1: '%env(default:constantes.entidades.modalidade_interessado.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_INTERESSADO_CONST_1)%'
+
+    #Immutable
+    constantes.entidades.modalidade_interessado.immutable.default:
+        - '%constantes.entidades.modalidade_interessado.const_1%'
+    constantes.entidades.modalidade_interessado.immutable: '%env(default:constantes.entidades.modalidade_interessado.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_INTERESSADO_IMMUTABLE)%'
+
+# MODALIDADE MEIO
+    constantes.entidades.modalidade_meio.const_1.default: 'ELETRÔNICO'
+    constantes.entidades.modalidade_meio.const_1: '%env(default:constantes.entidades.modalidade_meio.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_MEIO_CONST_1)%'
+
+    constantes.entidades.modalidade_meio.const_2.default: 'FÍSICO'
+    constantes.entidades.modalidade_meio.const_2: '%env(default:constantes.entidades.modalidade_meio.const_2.default:string:CONSTANTES_ENTIDADES_MODALIDADE_MEIO_CONST_2)%'
+
+    #Immutable
+    constantes.entidades.modalidade_meio.immutable.default:
+        - '%constantes.entidades.modalidade_meio.const_1%'
+        - '%constantes.entidades.modalidade_meio.const_2%'
+    constantes.entidades.modalidade_meio.immutable: '%env(default:constantes.entidades.modalidade_meio.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_MEIO_IMMUTABLE)%'
+
+# MODALIDADE MODELO
+    constantes.entidades.modalidade_modelo.const_1.default: 'INDIVIDUAL'
+    constantes.entidades.modalidade_modelo.const_1: '%env(default:constantes.entidades.modalidade_modelo.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_MODELO_CONST_1)%'
+
+    constantes.entidades.modalidade_modelo.const_2.default: 'LOCAL'
+    constantes.entidades.modalidade_modelo.const_2: '%env(default:constantes.entidades.modalidade_modelo.const_2.default:string:CONSTANTES_ENTIDADES_MODALIDADE_MODELO_CONST_2)%'
+
+    constantes.entidades.modalidade_modelo.const_3.default: 'NACIONAL'
+    constantes.entidades.modalidade_modelo.const_3: '%env(default:constantes.entidades.modalidade_modelo.const_3.default:string:CONSTANTES_ENTIDADES_MODALIDADE_MODELO_CONST_3)%'
+
+    constantes.entidades.modalidade_modelo.const_4.default: 'EM BRANCO'
+    constantes.entidades.modalidade_modelo.const_4: '%env(default:constantes.entidades.modalidade_modelo.const_4.default:string:CONSTANTES_ENTIDADES_MODALIDADE_MODELO_CONST_4)%'
+
+    #Immutable
+    constantes.entidades.modalidade_modelo.immutable.default:
+        - '%constantes.entidades.modalidade_modelo.const_1%'
+        - '%constantes.entidades.modalidade_modelo.const_2%'
+        - '%constantes.entidades.modalidade_modelo.const_3%'
+        - '%constantes.entidades.modalidade_modelo.const_4%'
+    constantes.entidades.modalidade_modelo.immutable: '%env(default:constantes.entidades.modalidade_modelo.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_MODELO_IMMUTABLE)%'
+
+# MODALIDADE NOTIFICACAO
+    constantes.entidades.modalidade_notificacao.const_1.default: 'SISTEMA'
+    constantes.entidades.modalidade_notificacao.const_1: '%env(default:constantes.entidades.modalidade_notificacao.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_NOTIFICACAO_CONST_1)%'
+
+    #Immutable
+    constantes.entidades.modalidade_notificacao.immutable.default:
+        - '%constantes.entidades.modalidade_notificacao.const_1%'
+    constantes.entidades.modalidade_notificacao.immutable: '%env(default:constantes.entidades.modalidade_notificacao.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_NOTIFICACAO_IMMUTABLE)%'
+
+# MODALIDADE TRANSICAO
+    constantes.entidades.modalidade_transicao.const_1.default: 'TRANSFERÊNCIA'
+    constantes.entidades.modalidade_transicao.const_1: '%env(default:constantes.entidades.modalidade_transicao.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_TRANSICAO_CONST_1)%'
+
+    constantes.entidades.modalidade_transicao.const_2.default: 'RECOLHIMENTO'
+    constantes.entidades.modalidade_transicao.const_2: '%env(default:constantes.entidades.modalidade_transicao.const_2.default:string:CONSTANTES_ENTIDADES_MODALIDADE_TRANSICAO_CONST_2)%'
+
+    constantes.entidades.modalidade_transicao.const_3.default: 'DESARQUIVAMENTO'
+    constantes.entidades.modalidade_transicao.const_3: '%env(default:constantes.entidades.modalidade_transicao.const_3.default:string:CONSTANTES_ENTIDADES_MODALIDADE_TRANSICAO_CONST_3)%'
+
+    constantes.entidades.modalidade_transicao.const_4.default: 'EXTRAVIO'
+    constantes.entidades.modalidade_transicao.const_4: '%env(default:constantes.entidades.modalidade_transicao.const_4.default:string:CONSTANTES_ENTIDADES_MODALIDADE_TRANSICAO_CONST_4)%'
+
+    constantes.entidades.modalidade_transicao.const_5.default: 'ELIMINAÇÃO'
+    constantes.entidades.modalidade_transicao.const_5: '%env(default:constantes.entidades.modalidade_transicao.const_5.default:string:CONSTANTES_ENTIDADES_MODALIDADE_TRANSICAO_CONST_5)%'
+
+    #Immutable
+    constantes.entidades.modalidade_transicao.immutable.default:
+        - '%constantes.entidades.modalidade_transicao.const_1%'
+        - '%constantes.entidades.modalidade_transicao.const_2%'
+        - '%constantes.entidades.modalidade_transicao.const_3%'
+        - '%constantes.entidades.modalidade_transicao.const_4%'
+        - '%constantes.entidades.modalidade_transicao.const_5%'
+    constantes.entidades.modalidade_transicao.immutable: '%env(default:constantes.entidades.modalidade_transicao.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_TRANSICAO_IMMUTABLE)%'
+
+# MODALIDADE VINCULACAO DOCUMENTO
+    constantes.entidades.modalidade_vinculacao_documento.const_1.default: 'ANEXO'
+    constantes.entidades.modalidade_vinculacao_documento.const_1: '%env(default:constantes.entidades.modalidade_vinculacao_documento.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_VINCULACAO_DOCUMENTO_CONST_1)%'
+
+    #Immutable
+    constantes.entidades.modalidade_vinculacao_documento.immutable.default:
+        - '%constantes.entidades.modalidade_vinculacao_documento.const_1%'
+    constantes.entidades.modalidade_vinculacao_documento.immutable: '%env(default:constantes.entidades.modalidade_vinculacao_documento.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_VINCULACAO_DOCUMENTO_IMMUTABLE)%'
+
+# MODALIDADE VINCULACAO PROCESSO
+    constantes.entidades.modalidade_vinculacao_processo.const_1.default: 'REMISSÃO'
+    constantes.entidades.modalidade_vinculacao_processo.const_1: '%env(default:constantes.entidades.modalidade_vinculacao_processo.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_VINCULACAO_PROCESSO_CONST_1)%'
+
+    constantes.entidades.modalidade_vinculacao_processo.const_2.default: 'ANEXAÇÃO'
+    constantes.entidades.modalidade_vinculacao_processo.const_2: '%env(default:constantes.entidades.modalidade_vinculacao_processo.const_2.default:string:CONSTANTES_ENTIDADES_MODALIDADE_VINCULACAO_PROCESSO_CONST_2)%'
+
+    constantes.entidades.modalidade_vinculacao_processo.const_3.default: 'APENSAMENTO'
+    constantes.entidades.modalidade_vinculacao_processo.const_3: '%env(default:constantes.entidades.modalidade_vinculacao_processo.const_3.default:string:CONSTANTES_ENTIDADES_MODALIDADE_VINCULACAO_PROCESSO_CONST_3)%'
+
+    #Immutable
+    constantes.entidades.modalidade_vinculacao_processo.immutable.default:
+        - '%constantes.entidades.modalidade_vinculacao_processo.const_1%'
+        - '%constantes.entidades.modalidade_vinculacao_processo.const_2%'
+    constantes.entidades.modalidade_vinculacao_processo.immutable: '%env(default:constantes.entidades.modalidade_vinculacao_processo.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_VINCULACAO_PROCESSO_IMMUTABLE)%'
+
+# MODELO
+    constantes.entidades.modelo.const_1.default: 'APROVAÇÃO DE DOCUMENTO'
+    constantes.entidades.modelo.const_1: '%env(default:constantes.entidades.modelo.const_1.default:string:CONSTANTES_ENTIDADES_MODELO_CONST_1)%'
+
+    #Immutable
+    constantes.entidades.modelo.immutable.default:
+        - '%constantes.entidades.modelo.const_1%'
+    constantes.entidades.modelo.immutable: '%env(default:constantes.entidades.modelo.immutable.default:string:CONSTANTES_ENTIDADES_MODELO_IMMUTABLE)%'
+
+# TIPO DOCUMENTO
+    constantes.entidades.tipo_documento.const_1.default: 'OUTROS'
+    constantes.entidades.tipo_documento.const_1: '%env(default:constantes.entidades.tipo_documento.const_1.default:string:CONSTANTES_ENTIDADES_TIPO_DOCUMENTO_CONST_1)%'
+
+    constantes.entidades.tipo_documento.const_2.default: 'REQUERIMENTO'
+    constantes.entidades.tipo_documento.const_2: '%env(default:constantes.entidades.tipo_documento.const_2.default:string:CONSTANTES_ENTIDADES_TIPO_DOCUMENTO_CONST_2)%'
+
+    constantes.entidades.tipo_documento.const_3.default: 'RELATÓRIO'
+    constantes.entidades.tipo_documento.const_3: '%env(default:constantes.entidades.tipo_documento.const_3.default:string:CONSTANTES_ENTIDADES_TIPO_DOCUMENTO_CONST_3)%'
+
+    constantes.entidades.tipo_documento.const_4.default: 'REPOSITÓRIO'
+    constantes.entidades.tipo_documento.const_4: '%env(default:constantes.entidades.tipo_documento.const_4.default:string:CONSTANTES_ENTIDADES_TIPO_DOCUMENTO_CONST_4)%'
+
+    #Immutable
+    constantes.entidades.tipo_documento.immutable.default:
+        - '%constantes.entidades.tipo_documento.const_1%'
+        - '%constantes.entidades.tipo_documento.const_2%'
+        - '%constantes.entidades.tipo_documento.const_3%'
+        - '%constantes.entidades.tipo_documento.const_4%'
+    constantes.entidades.tipo_documento.immutable: '%env(default:constantes.entidades.tipo_documento.immutable.default:string:CONSTANTES_ENTIDADES_TIPO_DOCUMENTO_IMMUTABLE)%'
+
+# TIPO PROCESSO
+    constantes.entidades.tipo_processo.const_1.default: !php/const SuppCore\AdministrativoBackend\Entity\Processo::TP_NOVO
+    constantes.entidades.tipo_processo.const_1: '%env(default:constantes.entidades.tipo_processo.const_1.default:string:CONSTANTES_ENTIDADES_TIPO_PROCESSO_CONST_1)%'
+
+    constantes.entidades.tipo_processo.const_2.default: !php/const SuppCore\AdministrativoBackend\Entity\Processo::TP_INFORMADO
+    constantes.entidades.tipo_processo.const_2: '%env(default:constantes.entidades.tipo_processo.const_2.default:string:CONSTANTES_ENTIDADES_TIPO_PROCESSO_CONST_2)%'
+
+    constantes.entidades.tipo_processo.const_3.default: !php/const SuppCore\AdministrativoBackend\Entity\Processo::TP_PENDENTE
+    constantes.entidades.tipo_processo.const_3: '%env(default:constantes.entidades.tipo_processo.const_3.default:string:CONSTANTES_ENTIDADES_TIPO_PROCESSO_CONST_3)%'
+
+    #Immutable
+    constantes.entidades.tipo_processo.immutable.default:
+        - '%constantes.entidades.tipo_processo.const_1%'
+        - '%constantes.entidades.tipo_processo.const_2%'
+        - '%constantes.entidades.tipo_processo.const_3%'
+    constantes.entidades.tipo_processo.immutable: '%env(default:constantes.entidades.tipo_processo.immutable.default:string:CONSTANTES_ENTIDADES_TIPO_PROCESSO_IMMUTABLE)%'
+
+
+# TIPO NOTIFICACAO
+    constantes.entidades.tipo_notificacao.const_1.default: !php/const SuppCore\AdministrativoBackend\Entity\TipoNotificacao::TN_PROCESSO
+    constantes.entidades.tipo_notificacao.const_1: '%env(default:constantes.entidades.tipo_notificacao.const_1.default:string:CONSTANTES_ENTIDADES_TIPO_NOTIFICACAO_CONST_1)%'
+
+    constantes.entidades.tipo_notificacao.const_2.default: !php/const SuppCore\AdministrativoBackend\Entity\TipoNotificacao::TN_TAREFA
+    constantes.entidades.tipo_notificacao.const_2: '%env(default:constantes.entidades.tipo_notificacao.const_2.default:string:CONSTANTES_ENTIDADES_TIPO_NOTIFICACAO_CONST_2)%'
+
+    constantes.entidades.tipo_notificacao.const_3.default: !php/const SuppCore\AdministrativoBackend\Entity\TipoNotificacao::TN_RELATORIO
+    constantes.entidades.tipo_notificacao.const_3: '%env(default:constantes.entidades.tipo_notificacao.const_3.default:string:CONSTANTES_ENTIDADES_TIPO_NOTIFICACAO_CONST_3)%'
+
+    constantes.entidades.tipo_notificacao.const_4.default: !php/const SuppCore\AdministrativoBackend\Entity\TipoNotificacao::TN_DOWNLOAD_PROCESSO
+    constantes.entidades.tipo_notificacao.const_4: '%env(default:constantes.entidades.tipo_notificacao.const_4.default:string:CONSTANTES_ENTIDADES_TIPO_NOTIFICACAO_CONST_4)%'
+
+    constantes.entidades.tipo_notificacao.const_5.default: !php/const SuppCore\AdministrativoBackend\Entity\TipoNotificacao::TN_TRANSFERENCIA
+    constantes.entidades.tipo_notificacao.const_5: '%env(default:constantes.entidades.tipo_notificacao.const_5.default:string:CONSTANTES_ENTIDADES_TIPO_NOTIFICACAO_CONST_5)%'
+
+    constantes.entidades.tipo_notificacao.const_6.default: !php/const SuppCore\AdministrativoBackend\Entity\TipoNotificacao::TN_ASSINATURA
+    constantes.entidades.tipo_notificacao.const_6: '%env(default:constantes.entidades.tipo_notificacao.const_6.default:string:CONSTANTES_ENTIDADES_TIPO_NOTIFICACAO_CONST_6)%'
+
+    #Immutable
+    constantes.entidades.tipo_notificacao.immutable.default:
+        - '%constantes.entidades.tipo_notificacao.const_1%'
+        - '%constantes.entidades.tipo_notificacao.const_2%'
+        - '%constantes.entidades.tipo_notificacao.const_3%'
+        - '%constantes.entidades.tipo_notificacao.const_4%'
+        - '%constantes.entidades.tipo_notificacao.const_5%'
+        - '%constantes.entidades.tipo_notificacao.const_6%'
+    constantes.entidades.tipo_notificacao.immutable: '%env(default:constantes.entidades.tipo_notificacao.immutable.default:string:CONSTANTES_ENTIDADES_TIPO_NOTIFICACAO_IMMUTABLE)%'
+
+# ESPECIE SETOR
+    constantes.entidades.especie_setor.const_1.default: 'PROTOCOLO'
+    constantes.entidades.especie_setor.const_1: '%env(default:constantes.entidades.especie_setor.const_1.default:string:CONSTANTES_ENTIDADES_ESPECIE_SETOR_CONST_1)%'
+
+    constantes.entidades.especie_setor.const_2.default: 'ARQUIVO'
+    constantes.entidades.especie_setor.const_2: '%env(default:constantes.entidades.especie_setor.const_2.default:string:CONSTANTES_ENTIDADES_ESPECIE_SETOR_CONST_2)%'
+
+    constantes.entidades.especie_setor.const_3.default: 'SERVIÇO DE CONFORMIDADE DOCUMENTAL'
+    constantes.entidades.especie_setor.const_3: '%env(default:constantes.entidades.especie_setor.const_3.default:string:CONSTANTES_ENTIDADES_ESPECIE_SETOR_CONST_3)%'
+
+    #Immutable
+    constantes.entidades.especie_setor.immutable.default:
+        - '%constantes.entidades.especie_setor.const_1%'
+        - '%constantes.entidades.especie_setor.const_2%'
+    constantes.entidades.especie_setor.immutable: '%env(default:constantes.entidades.especie_setor.immutable.default:string:CONSTANTES_ENTIDADES_ESPECIE_SETOR_IMMUTABLE)%'
+
+# GENERO PROCESSO
+    constantes.entidades.genero_processo.const_1.default: 'ADMINISTRATIVO'
+    constantes.entidades.genero_processo.const_1: '%env(default:constantes.entidades.genero_processo.const_1.default:string:CONSTANTES_ENTIDADES_GENERO_PROCESSO_CONST_1)%'
+
+    #Immutable
+    constantes.entidades.genero_processo.immutable.default:
+        - '%constantes.entidades.genero_processo.const_1%'
+    constantes.entidades.genero_processo.immutable: '%env(default:constantes.entidades.genero_processo.immutable.default:string:CONSTANTES_ENTIDADES_ESPECIE_SETOR_IMMUTABLE)%'
+
+# TIPO RELATORIO
+    constantes.entidades.tipo_relatorio.const_1.default: 'LISTAGEM DO HISTÓRICO DE CLASSIFICAÇÕES DE UM PROCESSO'
+    constantes.entidades.tipo_relatorio.const_1: '%env(default:constantes.entidades.tipo_relatorio.const_1.default:string:CONSTANTES_ENTIDADES_TIPO_RELATORIO_CONST_1)%'
+    #Immutable
+    constantes.entidades.tipo_relatorio.immutable.default:
+        - '%constantes.entidades.tipo_relatorio.const_1%'
+    constantes.entidades.tipo_relatorio.immutable: '%env(default:constantes.entidades.tipo_relatorio.immutable.default:string:CONSTANTES_ENTIDADES_TIPO_RELATORIO_IMMUTABLE)%'
+
+# SETOR
+    constantes.entidades.setor.const_1.default: 'DIVISÃO DE ASSUNTOS DISCIPLINARES'
+    constantes.entidades.setor.const_1: '%env(default:constantes.entidades.setor.const_1.default:string:CONSTANTES_ENTIDADES_SETOR_CONST_1)%'
+
+# MODALIDADE ORGAO CENTRAL
+    constantes.entidades.modalidade_orgao_central.const_1.default: 'PGF'
+    constantes.entidades.modalidade_orgao_central.const_1: '%env(default:constantes.entidades.modalidade_orgao_central.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_ORGAO_CENTRAL_CONST_1)%'
+
+    constantes.entidades.modalidade_orgao_central.const_2.default: 'CGU'
+    constantes.entidades.modalidade_orgao_central.const_2: '%env(default:constantes.entidades.modalidade_orgao_central.const_2.default:string:CONSTANTES_ENTIDADES_MODALIDADE_ORGAO_CENTRAL_CONST_2)%'
+
+# GENERO TAREFA
+    constantes.entidades.genero_tarefa.const_1.default: 'ARQUIVÍSTICO'
+    constantes.entidades.genero_tarefa.const_1: '%env(default:constantes.entidades.genero_tarefa.const_1.default:string:CONSTANTES_ENTIDADES_GENERO_TAREFA_CONST_1)%'
+
+    constantes.entidades.genero_tarefa.const_2.default: 'ADMINISTRATIVO'
+    constantes.entidades.genero_tarefa.const_2: '%env(default:constantes.entidades.genero_tarefa.const_2.default:string:CONSTANTES_ENTIDADES_GENERO_TAREFA_CONST_2)%'
+
+    #Immutable
+    constantes.entidades.genero_tarefa.immutable.default:
+        - '%constantes.entidades.genero_tarefa.const_1%'
+        - '%constantes.entidades.genero_tarefa.const_2%'
+    constantes.entidades.genero_tarefa.immutable: '%env(default:constantes.entidades.genero_tarefa.immutable.default:string:CONSTANTES_ENTIDADES_GENERO_TAREFA_IMMUTABLE)%'
+
+# MODALIDADE COLABORADOR
+    constantes.entidades.modalidade_colaborador.const_1.default: 'ESTAGIÁRIO'
+    constantes.entidades.modalidade_colaborador.const_1: '%env(default:constantes.entidades.modalidade_colaborador.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_COLABORADOR_CONST_1)%'
+
+    constantes.entidades.modalidade_colaborador.const_2.default: 'TERCEIRIZADO'
+    constantes.entidades.modalidade_colaborador.const_2: '%env(default:constantes.entidades.modalidade_colaborador.const_2.default:string:CONSTANTES_ENTIDADES_MODALIDADE_COLABORADOR_CONST_2)%'
+
+    #Immutable
+    constantes.entidades.modalidade_colaborador.immutable.default:
+        - '%constantes.entidades.modalidade_colaborador.const_1%'
+        - '%constantes.entidades.modalidade_colaborador.const_2%'
+    constantes.entidades.modalidade_colaborador.immutable: '%env(default:constantes.entidades.modalidade_colaborador.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_COLABORADOR_IMMUTABLE)%'
+
+# MODALIDADE COPIA
+    constantes.entidades.modalidade_copia.const_1.default: 'AUTENTICADA EM CARTÓRIO'
+    constantes.entidades.modalidade_copia.const_1: '%env(default:constantes.entidades.modalidade_copia.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_COPIA_CONST_1)%'
+
+    constantes.entidades.modalidade_copia.const_2.default: 'AUTENTICADA ADMINISTRATIVAMENTE'
+    constantes.entidades.modalidade_copia.const_2: '%env(default:constantes.entidades.modalidade_copia.const_2.default:string:CONSTANTES_ENTIDADES_MODALIDADE_COPIA_CONST_2)%'
+
+    constantes.entidades.modalidade_copia.const_3.default: 'SIMPLES'
+    constantes.entidades.modalidade_copia.const_3: '%env(default:constantes.entidades.modalidade_copia.const_3.default:string:CONSTANTES_ENTIDADES_MODALIDADE_COPIA_CONST_3)%'
+
+    #Immutable
+    constantes.entidades.modalidade_copia.immutable.default:
+        - '%constantes.entidades.modalidade_copia.const_1%'
+        - '%constantes.entidades.modalidade_copia.const_2%'
+        - '%constantes.entidades.modalidade_copia.const_3%'
+    constantes.entidades.modalidade_copia.immutable: '%env(default:constantes.entidades.modalidade_copia.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_COPIA_IMMUTABLE)%'
+
+    constantes.entidades.modalidade_urn.const_1.default: 'PRECEDENTE'
+    constantes.entidades.modalidade_urn.const_1: '%env(default:constantes.entidades.modalidade_urn.const_1.default:string:CONSTANTES_ENTIDADES_MODALIDADE_URN_CONST_1)%'
+    constantes.entidades.modalidade_urn.const_2.default: 'DISPOSITIVO NORMATIVO'
+    constantes.entidades.modalidade_urn.const_2: '%env(default:constantes.entidades.modalidade_urn.const_2.default:string:CONSTANTES_ENTIDADES_MODALIDADE_URN_CONST_2)%'
+
+    #Immutable
+    constantes.entidades.modalidade_urn.immutable.default:
+        - '%constantes.entidades.modalidade_urn.const_1%'
+        - '%constantes.entidades.modalidade_urn.const_2%'
+    constantes.entidades.modalidade_urn.immutable: '%env(default:constantes.entidades.modalidade_urn.immutable.default:string:CONSTANTES_ENTIDADES_MODALIDADE_URN_IMMUTABLE)%'
+    #CONSULTIVO
+    constantes.entidades.unidade.consultivo: { role: 'ROLE_CONSULTIVO', key: 'CONSULTIVO' }

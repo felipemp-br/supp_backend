@@ -1,0 +1,18 @@
+<br><br>
+<hr>
+<div style="display: flex; flex-direction: row; flex: 1 1 auto;">
+    <div>
+        <img src="{{ qr_code_data_uri(linkSistema, 'assinatura') }}"  alt="Url validação assinatura"/>
+    </div>
+    <div style='text-align: justify;'>
+        Documento assinado eletronicamente por {{ nome }}, de acordo com os normativos legais aplicáveis.
+        A conferência da autenticidade do documento está disponível com o código {{ id }} e chave de acesso {{ chaveAcesso }} no endereço eletrônico
+        {{ linkSistema }}.
+        Informações adicionais:
+        Signatário (a): {{ nome }}.
+        Data e Hora: {{ dataHora }}.
+        Número de Série: {{ serialNumber }}.
+        Emissor: {{ emissor }}.
+    </div>
+</div>
+<hr>

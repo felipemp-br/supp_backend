@@ -1,0 +1,189 @@
+{# @var processo \SuppCore\AdministrativoBackend\Api\V1\DTO\Processo #}
+{# @var analises array #}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <title>PROTOCOLO EXTERNO - PACIFICA - SALÁRIO MATERNIDADE RURAL</title>
+
+    <style>
+        * {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            width: 100%;
+            font-family: "Calibri", sans-serif;
+            font-size: 12px;
+            margin-top: 5%;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 80%;
+            line-height: 140%;
+            -webkit-print-color-adjust: exact !important;
+        }
+
+        #container {
+            /*border: 2px solid blue;*/
+            right: 100%;
+            width: 95%;
+            margin: 30px 20px 20px;
+        }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            line-height: 1.1em;
+        }
+
+        .titulo {
+            text-align: center;
+            max-width: 100%;
+            font-weight: bold;
+
+        }
+
+        .subtitulo {
+            text-align: left;
+            max-width: 100%;
+            font-weight: bold !important;
+            border-width: 1px 1px 1px 1px !important;
+            background-color: #e5e5e5 !important;
+            padding: 3px !important;
+            margin-top: 1lh;
+            margin-bottom: 1lh;
+        }
+
+        p.texto {
+            text-indent: 50px;
+            text-align: justify;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .cabecalho {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0 15px;
+            list-style-type: none;
+        }
+
+        li {
+            list-style-position: inside;
+        }
+
+        ul.lowerAlpha li {
+            list-style-type: lower-alpha;
+        }
+
+        .campo {
+            /*border: 2px solid rgb(0, 255, 187);*/
+            right: 100%;
+            width: 99.999%;
+            margin-bottom: 10px;
+        }
+
+        .titulo-coluna {
+            font-weight: bold;
+            font-size: 14px;
+            margin: 6px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            padding-left: 6px;
+            padding-right: 6px;
+        }
+
+        .texto-dado {
+            font-weight: 4px;
+            font-size: 14px;
+            border-bottom: 1px solid rgb(135, 218, 235);
+            margin: 6px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            padding-left: 6px;
+            padding-right: 6px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+            white-space: normal; /* Allow text wrapping */
+        }
+    </style>
+</head>
+<body>
+<div class="cabecalho">
+    {{ formatCabecalho(processo.setorAtual, true)|raw }}<br/>
+</div>
+
+<div class="titulo">
+    PACIFICA<br/>
+    SALÁRIO – MATERNIDADE (SEGURADA ESPECIAL)<br/>
+    RELATÓRIO
+</div>
+<br/>
+
+<div id="container">
+    <div class="subtitulo">
+        I – ANÁLISES REALIZADAS
+    </div>
+
+    <div class="campo">
+        {% for analise in analises %}
+            <h3>{{ analise.getNomeAnalise()|upper }}</h3>
+            <table style="width:100%;">
+                <tbody>
+                <tr>
+                    <td class="texto-dado" style="width:200px;">CPF Analisado</td>
+                    <td class="texto-dado" style="width:600px;">
+                        {{ analise.getCpfAnalisado() }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="texto-dado" style="width:200px;">Dossiês</td>
+                    <td class="texto-dado" style="width:600px;">
+                        {{ analise.getDossies()|join(', ') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="texto-dado" style="width:200px;">Analise Executada?</td>
+                    <td class="texto-dado" style="width:600px;">
+                        {{ analise.getAnaliseExecutada() ? 'Sim' : 'Não' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="texto-dado" style="width:200px;">Passou na Analise?</td>
+                    <td class="texto-dado" style="width:600px;">
+                        {{ analise.getPassouAnalise() ? 'Sim' : 'Não' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="texto-dado" style="width:200px;">Resultado da Analise</td>
+                    <td class="texto-dado" style="width:600px;">
+                        {{ analise.getResultadoAnalise() is not null ? analise.getResultadoAnalise() : 'N/A' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="texto-dado" style="width:200px;">Observação</td>
+                    <td class="texto-dado" style="width:600px;">
+                        {{ analise.getObservacao() is not null ? analise.getObservacao() : 'N/A' }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <hr>
+            <br/>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

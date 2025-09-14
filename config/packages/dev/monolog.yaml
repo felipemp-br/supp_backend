@@ -1,0 +1,27 @@
+monolog:
+    channels:
+        - 'statistics'
+        - 'frontend'
+        - 'eventos_preservacao'
+        - 'cronjob'
+        - 'inteligencia_artificial'
+    handlers:
+        stats:
+            type: service
+            id: snc_redis.monolog.handler
+            level: info
+            channels: [ 'statistics', 'eventos_preservacao', 'cronjob', 'inteligencia_artificial' ]
+        main:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            level: error
+        redis:
+            type: service
+            id: snc_redis.monolog.handler
+            level: error
+            channels: [ '!statistics', '!eventos_preservacao', '!cronjob', '!inteligencia_artificial' ]
+        stdout:
+            type: stream
+            level: info
+            path: php://stdout
+            channels: [ '!statistics', '!eventos_preservacao', '!cronjob' ]

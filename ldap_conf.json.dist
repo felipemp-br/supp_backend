@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Rede AGU",
+        "domain": "@agu.gov.br",
+        "type_auth": "AD",
+        "host": "10.207.112.13",
+        "port": 389,
+        "protocol_version": 3,
+        "referrals": false,
+        "base_dn": "dc=agu,dc=gov,dc=br",
+        "ui_key": "sAMAccountName",
+        "search_dn": null,
+        "search_password": null,
+        "filter": "({uid_key}={username})",
+        "extra_fields": {},
+        "password_attribute": "userpassword",
+        "name_attribute": "name",
+        "email_attribute": "mail",
+        "cpf_attribute": "postOfficeBox",
+        "encryption": "none"
+    }
+]

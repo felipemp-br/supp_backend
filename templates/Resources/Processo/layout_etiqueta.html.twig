@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8" />
+        <title>Etiqueta</title>
+        <script>
+            (function () {
+                window.print();
+            })();
+        </script>
+    </head>
+
+    <body>
+        <div class="etiqueta">
+            <table style="min-width: 500px">
+                {%  if (processo.getDocumentosAvulsos()) %}
+                    <thead><tr><th colspan=2><center>---------------------- DOCUMENTO AVULSO ----------------------</center></th></tr></thead>
+                {% else %}
+                    <thead><tr><th colspan=2><center>-------------------------- PROCESSO --------------------------</center></th></tr></thead>
+                {% endif %}
+
+               <tr><td style="min-width: 120px">NUP:</td><td style="width: 380px">{{processo.getNUPFormatado}}</td></tr>
+               <tr><td style="min-width: 120px">Espécie:</td><td style="width: 380px">{{ processo.getEspecieProcesso().getNome }}</td></tr>
+                <tr><td style="min-width: 120px">Abertura:</td><td style="width: 380px">{{ processo.getDataHoraAbertura()|date("d-m-Y G:i") }}</td></tr>
+                <tr><td style="min-width: 120px">Procedência:</td><td style="width: 380px">{{ processo.getProcedencia().getNome }}</td></tr>
+
+                {%  set assuntos = processo.getAssuntos() %}
+                {% if assuntos|length > 0 %}
+                    <tr>
+                        <td style="min-width: 120px">Assunto:  </td>
+                        <td style="min-width: 380px">
+                            {{ assuntos[0].getAssuntoAdministrativo().getNome }}
+                            {% if assuntos|length > 1 %}
+                                E OUTRO(S)
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td style="min-width: 120px">Assunto:</td><td style="min-width: 380px"></td></tr>
+                {% endif %}
+
+                {%  set interessados = processo.getInteressados() %}
+                {% if interessados|length > 0 %}
+                    <tr>
+                        <td style="min-width: 120px">Interessado:</td>
+                        <td style="min-width: 380px">
+                            {{ interessados[0].getPessoa().getNome }}
+                            {% if interessados|length > 1 %}
+                                E OUTRO(S)
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                    <td style="min-width: 120px">Interessado:</td><td style="min-width: 380px"></td>
+                    </tr>
+                {% endif %}
+
+
+                <tr>
+                    <td style="min-width: 120px;">Título:</td>
+                    <td style="width: 380px;">{{ processo.getTitulo() }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><p>{{ processo.getNUP()|drawBarCodeEtiqueta|raw }}</p></td>
+                </tr>
+
+            </table>
+        </div> <!-- end nup-->
+    </body>
+
+</html>

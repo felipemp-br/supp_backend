@@ -1,0 +1,7 @@
+FROM opensearchproject/opensearch:2.18.0
+RUN bin/opensearch-plugin install --batch ingest-attachment
+
+RUN echo "cluster.routing.allocation.disk.threshold_enabled: true" >> /usr/share/opensearch/config/opensearch.yml
+RUN echo "cluster.routing.allocation.disk.watermark.flood_stage: 200mb" >> /usr/share/opensearch/config/opensearch.yml
+RUN echo "cluster.routing.allocation.disk.watermark.low: 500mb" >> /usr/share/opensearch/config/opensearch.yml
+RUN echo "cluster.routing.allocation.disk.watermark.high: 300mb" >> /usr/share/opensearch/config/opensearch.yml

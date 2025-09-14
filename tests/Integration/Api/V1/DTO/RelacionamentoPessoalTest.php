@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * /tests/Integration/Api/V1/DTO/RelacionamentoPessoalTest.php.
+ *
+ * @author Advocacia-Geral da União <supp@agu.gov.br>
+ */
+
+namespace SuppCore\AdministrativoBackend\Tests\Integration\Api\V1\DTO;
+
+use SuppCore\AdministrativoBackend\Api\V1\DTO\RelacionamentoPessoal as RelacionamentoPessoalDto;
+use SuppCore\AdministrativoBackend\Entity\RelacionamentoPessoal as RelacionamentoPessoalEntity;
+
+/**
+ * Class RelacionamentoPessoalTest.
+ *
+ * @author Advocacia-Geral da União <supp@agu.gov.br>
+ */
+class RelacionamentoPessoalTest extends DtoTestCase
+{
+    protected string $dtoClass = RelacionamentoPessoalDto::class;
+
+    protected string $entityClass = RelacionamentoPessoalEntity::class;
+}

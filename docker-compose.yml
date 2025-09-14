@@ -1,0 +1,234 @@
+version: '3'
+services:
+    php-dev:
+        container_name: php-dev
+        image: php-dev-testeagu:latest
+        build:
+            context: .
+            dockerfile: docker/dev/php/DockerFile
+        environment:
+            # XDEBUG_CONFIG: client_host=192.168.1.5    # docker network ip. No OSX usar host.docker.internal, no Ubuntu usar 'ip a' para verificar (em geral 172.17.0.1). Ao alterar o IP, é necessário reconstruir a imagem. Confirme config do xdebug no phpinfo()
+            # PHP_IDE_CONFIG: serverName=xdebug-docker # phpstorm variavel de ambiente com o nome do server configurado. No VSCODE, manter mesmo valor
+            # XDEBUG_SESSION: docker
+            # XDEBUG_TRIGGER: 1
+            NEWRELIC_APP_NAME: "supp"
+            NEWRELIC_LICENSE_KEY: ~
+            USE_PHP_FPM_AND_CADDY: ""
+        depends_on:
+            - redis
+            - postgresql-dev
+            - elasticsearch
+            - mercure-php
+            - logstash
+            - kibana
+            - rabbitmq
+            - ldap
+        ports:
+            - '8000:8000'
+        volumes:
+            - '.:/app'
+            - '..:/supp'
+        tty: true
+        command: tail -f /dev/null
+        links:
+            - redis
+            - postgresql-dev
+            - elasticsearch
+            - mercure-php
+            - rabbitmq
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.10
+
+    php-prod:
+        container_name: php-prod
+        image: suppregistry.azurecr.io/homologacao/php-supp-hml:1.0.30
+        environment:
+            APP_ENV: "prod"
+            APP_DEBUG: "0"
+        build:
+            context: .
+            dockerfile: docker/prod/DockerFile
+        ports:
+            - '8000:8000'
+        tty: true
+        command: tail -f /dev/null        
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.29
+
+    rabbitmq:
+        container_name: rabbitmq
+        hostname: rabbitmq
+        image: rabbitmq:3.11.10-management
+        environment:
+            RABBITMQ_CONFIG_FILE: /etc/rabbitmq/custom/rabbitmq.conf
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        volumes:
+            - './docker/dev/rabbit:/etc/rabbitmq/custom'
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.26
+
+    logstash:
+        container_name: logstash
+        image: logstash-testeagu:latest
+        build:
+            context: .
+            dockerfile: docker/logstash/DockerFile
+        tty: true
+        command: tail -f /dev/null
+        links:
+            - redis
+            - elasticsearch
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.13
+
+    kibana:
+        container_name: kibana
+        image: opensearchproject/opensearch-dashboards:2.18.0
+        ports:
+            - '5601:5601'
+        expose:
+            - '5601'
+        environment:
+            - 'OPENSEARCH_HOSTS=["http://elasticsearch:9200"]'
+            - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.14
+
+    redis:
+        container_name: redis
+        image: eqalpha/keydb:alpine_x86_64_v6.3.3
+        hostname: redis
+            - "6379:6379"
+        ports:
+            - 6379:6379
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.12
+        volumes:
+            - redis_data-testeagu:/data
+
+    elasticsearch:
+        container_name: elasticsearch
+        hostname: elasticsearch
+        build:
+            context: .
+            dockerfile: docker/elasticsearch/DockerFile
+        ports:
+            - '9200:9200'
+            - '9300:9300'
+            - '9600:9600'
+        environment:
+            - 'node.name=es01'
+            - 'cluster.name=docker-cluster'
+            - 'discovery.type=single-node'
+            - 'bootstrap.memory_lock=true'
+            - 'OPENSEARCH_JAVA_OPTS=-Xms4g -Xmx4g'
+            - 'DISABLE_SECURITY_PLUGIN=true'
+        volumes:
+            - 'es-data-testeagu:/usr/share/opensearch/data'
+        ulimits:
+            nofile:
+                soft: 65535
+                hard: 65535
+            memlock:
+                soft: -1
+                hard: -1
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.21
+
+    maintenance:
+        container_name: maintenance
+        image: maintenace-testeagu:latest
+        build:
+            context: .
+            dockerfile: docker/maintenance/DockerFile
+        tty: true
+        command: tail -f /dev/null
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.31
+
+    ldap:
+        container_name: ldap
+        image: ldap-testeagu:latest
+        build:
+            context: .
+            dockerfile: docker/dev/ldap/DockerFile
+        ports:
+            - 389:389
+            - 10389:10389
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.22
+
+    postgresql-dev:
+            container_name: postgresql
+            image: postgresql-dev-testeagu:latest
+            build:
+                context: .
+                dockerfile: docker/postgresql/DockerFile
+            environment:
+                POSTGRES_USER: root
+                POSTGRES_PASSWORD: root
+                POSTGRES_DB: supp
+            volumes:
+            - 'postgresql-data-dev-testeagu:/var/lib/postgresql/data'
+            ports:
+            - 5432:5432
+            networks:
+                supp_network:
+                    ipv4_address: 192.168.0.19
+
+    mercure-php:
+        container_name: mercure-php
+        image: mercure-dev-testeagu:latest
+        build:
+            context: .
+            dockerfile: docker/mercure/DockerFile
+        restart: unless-stopped
+        environment:
+            SERVER_NAME: ':4001'
+            MERCURE_PUBLISHER_JWT_KEY: 'IrXVxmkLZ9CViaKf+UqW1pNCK80OIOq1iaRvkMrkIgNIMDIuGyfctG7Xs/5GrPocTFTb/d5+6GNaoTGbm/q7FQ'
+            MERCURE_SUBSCRIBER_JWT_KEY: 'IrXVxmkLZ9CViaKf+UqW1pNCK80OIOq1iaRvkMrkIgNIMDIuGyfctG7Xs/5GrPocTFTb/d5+6GNaoTGbm/q7FQ'
+            MERCURE_EXTRA_DIRECTIVES: |
+                cors_origins *
+                transport_url local://
+            GLOBAL_OPTIONS: |
+                log {
+                    level ERROR
+                }
+            CADDY_SERVER_EXTRA_DIRECTIVES: |
+                log {
+                    output discard
+                }
+        volumes:
+            - mercure_data-testeagu:/data
+            - mercure_config-testeagu:/config
+        ports:
+            - '4001:4001'
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.32
+
+networks:
+    supp_network:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.0.0/24
+
+volumes:
+    postgresql-data-dev-testeagu:
+    mercure_data-testeagu:
+    mercure_config-testeagu:
+    redis_data-testeagu:
+    es-data-testeagu:

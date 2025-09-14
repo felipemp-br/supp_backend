@@ -1,0 +1,44 @@
+liip_monitor:
+    enable_controller: true
+    checks:
+        # Checks to see if the APC memory usage is below warning/critical thresholds
+        apc_memory:
+            warning: 70
+            critical: 90
+
+        # Checks to see if the APC fragmentation is below warning/critical thresholds
+        apc_fragmentation:
+            warning: 70
+            critical: 90
+
+        # Checks to see if the disk usage is below warning/critical percent thresholds
+        disk_usage:
+            warning: 70
+            critical: 90
+
+        # Connection name or an array of connection names
+        doctrine_dbal: [ 'default' ] # Example: [default, crm]
+
+        # Checks to see if the OpCache memory usage is below warning/critical thresholds
+        opcache_memory:
+            warning: 70
+            critical: 90
+
+        # Validate that a given path (or a collection of paths) is a dir and is readable
+        readable_directory: [ '%supp_core.administrativo_backend.filesystem_directory%' ] # Example: ["%kernel.cache_dir%"]
+
+        # Checks the version of this app against the latest stable release
+        symfony_version: ~
+
+        # Validate that a given path (or a collection of paths) is a dir and is writable
+        writable_directory: [ '%supp_core.administrativo_backend.filesystem_directory%' ] # Example: ["%kernel.cache_dir%"]
+
+when@dev:
+    liip_monitor:
+        checks:
+            # Validate that a named extension or a collection of extensions is available
+            php_extensions: [
+                    amqp, apcu, bcmath, curl, dom, gd, iconv, igbinary, imap, intl, json,
+                    ldap, mbstring, mysqli, openssl, pcov, pgsql, redis, soap, sqlite3,
+                    xdebug, xml, zip, zlib
+            ]

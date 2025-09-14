@@ -1,0 +1,10 @@
+monolog:
+    channels:
+        - 'statistics'
+        - 'frontend'
+        - 'eventos_preservacao'
+        - 'cronjob'
+        - 'inteligencia_artificial'
+    handlers:
+        main:
+            type: test

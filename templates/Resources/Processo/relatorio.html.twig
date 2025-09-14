@@ -1,0 +1,342 @@
+<html lang="pt">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>SUPER-BR</title>
+    <style type="text/css">
+        body {
+            font-family: "Times New Roman, Times, serif", serif;
+            font-size: 10pt;
+            margin-top: 5%;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 210mm;
+        }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            line-height: 1.1em;
+        }
+
+        table.tableData {
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tableData tbody td {
+            border-left: 1px solid #000000;
+            border-top: 1px solid #000000;
+            padding-top: 1px;
+            padding-bottom: 1px;
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+
+        .tableData thead th {
+            background-color: #e5e5e5;
+            text-align: center;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #000000;
+            border-left: 1px solid #000000;
+            border-top: 1px solid #000000;
+        }
+
+        .tableData td {
+            vertical-align: top;
+            text-align: left;
+            font-size: 10pt;
+            font-weight: normal;
+            color: #000000;
+            padding-top: 1px;
+            padding-bottom: 1px;
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+
+        .tableData tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        .tableData tbody tr:nth-child(even) {
+            background-color: #e5e5e5;
+        }
+
+        .tableData td.thead {
+            text-align: left;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #000000;
+            border-left: none;
+        }
+
+        .tableData td.firstthead {
+            text-align: left;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .titulo {
+            text-align: center;
+            max-width: 100%;
+            font-weight: bold;
+            border-width: 1px 1px 1px 1px;
+            background-color: #e5e5e5;
+            padding: 3px;
+        }
+
+        .volume {
+            text-align: center;
+            max-width: 100%;
+            font-weight: bold;
+            border: 1px solid #000000;
+            background-color: #e5e5e5;
+            padding: 3px;
+            margin-bottom: 8px;
+        }
+
+        .cabecalho {
+            text-align: center;
+        }
+
+        .conteudo {
+            max-width: 21cm;
+            word-wrap: break-word;
+        }
+
+        .tarefa {
+            font-weight: bold;
+            background-color: lightgray;
+            margin-bottom: 3px;
+            width: 100%;
+        }
+
+        .manifestacao {
+            width: 40%;
+        }
+
+        .observacao {
+            padding-left: 5%;
+            width: 30%;
+            border-top: none;
+        }
+
+    </style>
+
+    <script>
+        (function () {
+            window.print();
+        })();
+    </script>
+</head>
+<body lang="pt-BR">
+{% block cabecalho %}
+    <div class="cabecalho">
+        {{ getParameter('supp_core.administrativo_backend.logo_instituicao')|raw }}
+        <br>
+        <b>{{ getParameter('supp_core.administrativo_backend.nome_instituicao') }}</b>
+        <br>
+        <p>
+            <b> NUP {{ processo.NUPFormatado }}</b>
+            <br>
+            <b>SETOR: {{ processo.setorAtual.nome }} / {{ processo.setorAtual.unidade.sigla }}</b>
+            <br>
+        </p>
+    </div>
+{% endblock %}
+
+{% if contexto.capaProcesso is defined %}
+    <div class="cabecalho">
+        <b>CAPA DO PROCESSO</b>
+    </div>
+    <br/>
+    <table class="tableData">
+        <tbody>
+            <tr>
+                <td>TÍTULO: </td>
+                <td>{{ processo.titulo }}</td>
+            </tr>
+            <tr>
+                <td>DESCRIÇÃO: </td>
+                <td>{{ processo.descricao }}</td>
+            </tr>
+            <tr>
+                <td>OUTRO NÚMERO: </td>
+                <td>{{ processo.outroNumero }}</td>
+            </tr>
+            <tr>
+                <td>CLASSIFICAÇÃO: </td>
+                <td>{{ processo.classificacao.nome }}</td>
+            </tr>
+            <tr>
+                <td>PROCEDÊNCIA: </td>
+                <td>{{ processo.procedencia.nome }}</td>
+            </tr>
+            <tr>
+                <td>MEIO: </td>
+                <td>{{ processo.modalidadeMeio.valor }}</td>
+            </tr>
+            <tr>
+                <td>TIPO: </td>
+                <td>{{ processo.especieProcesso.nome }}</td>
+            </tr>
+            <tr>
+                <td>MEIO: </td>
+                <td>{{ processo.modalidadeMeio.valor }}</td>
+            </tr>
+            <tr>
+                <td>ABERTURA: </td>
+                <td>{{ processo.dataHoraAbertura | date('d/m/Y H:i') }}</td>
+            </tr>
+            <tr>
+                <td>IDADE: </td>
+                <td>{{ processo.modalidadeFase.valor }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endif %}
+
+{% if contexto.interessados is defined %}
+    <br/><br/>
+    <div class="cabecalho">
+        <b>INTERESSADOS</b>
+    </div>
+    <br/>
+    <table class="tableData">
+        <tbody>
+            {% for interessados in processo.interessados %}
+                <tr>
+                    <td>{{ interessados.pessoa.nome }}</td>
+                    <td>{{ interessados.pessoa.numeroDocumentoPrincipal }}</td>
+                    <td>{{ interessados.modalidadeInteressado.valor }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if contexto.assuntos is defined %}
+    <br/><br/>
+    <div class="cabecalho">
+        <b>ASSUNTOS</b>
+    </div>
+    <br/>
+    <table class="tableData">
+        <tbody>
+            {% for assuntos in processo.assuntos %}
+                <tr>
+                    <td>{{ assuntos.assuntoAdministrativo.nome }}</td>
+                    {% if assuntos.principal == 1 %}
+                        <td>PRINCIPAL</td>
+                    {% endif %}
+                    {% if assuntos.principal == 0 %}
+                        <td></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if contexto.sequenciais is defined %}
+    <br/><br/>
+    <div class="cabecalho">
+        <b>RELAÇÃO DE DOCUMENTOS</b>
+    </div>
+    <br/>
+<table class="tableData">
+    <thead>
+    <tr>
+        <th>SEQUENCIAL</th>
+        <th>DATA/HORA</th>
+        <th>MOVIMENTO</th>
+        <th>TIPO DE DOCUMENTO</th>
+        <th>USUÁRIO</th>
+        <th>COMPONENTES DIGITAIS</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for volume in processo.volumes %}
+        <div class="volume">VOLUME {{ volume.numeracaoSequencial }}</div>
+        {% for juntada in volume.juntadas %}
+            <tr>
+                <td>{{ juntada.numeracaoSequencial }}</td>
+                <td>{{ juntada.criadoEm | date('d/m/Y H:i') }}</td>
+                <td>{{ juntada.descricao }}</td>
+                <td>{{ juntada.documento.tipoDocumento.nome }}</td>
+                <td>
+                    {% if juntada.criadoPor is not null %}
+                        {{ juntada.criadoPor.nome }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% for componenteDigital in juntada.documento.componentesDigitais %}
+                        <li>{{ componenteDigital.fileName }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if contexto.extrato is defined %}
+    <br/><br/>
+    <div class="cabecalho">
+        <b>EXTRATO DE TAREFAS E ATIVIDADES DO SAPIENS</b>
+    </div>
+    <br/>
+    <div class="conteudo">
+        {% if tarefas is empty %}
+            Não há tarefas
+        {% endif %}
+        {% for tarefa in tarefas %}
+            <div class="tarefa">
+                TAREFA ID {{ tarefa.id }} - {{ tarefa.especieTarefa.nome }} ({{ tarefa.especieTarefa.generoTarefa.nome }})
+                <br>
+                USUÁRIO RESPONSÁVEL: {{ tarefa.usuarioResponsavel.nome }}
+                <br>
+                SETOR RESPONSÁVEL: {{ tarefa.setorResponsavel.nome }} ({{ tarefa.setorResponsavel.unidade.sigla }})
+                <br>
+                INÍCIO PRAZO: {{ tarefa.dataHoraInicioPrazo | date('d-m-Y H:i') }} - FINAL PRAZO: {{ tarefa.dataHoraFinalPrazo | date('d-m-Y H:i') }} - CONCLUSÃO PRAZO: {% if tarefa.dataHoraConclusaoPrazo %} {{ tarefa.dataHoraConclusaoPrazo | date('d-m-Y H:i') }} {% else %} PENDENTE {% endif %}
+                <br>
+                OBSERVAÇÃO: {{ tarefa.observacao }}
+            </div>
+            <table>
+                <tr>
+                    <th>Atividades</th>
+                    <th>Data/Hora</th>
+                    <th>Setor</th>
+                    <th>Usuário</th>
+                </tr>
+                {% if tarefa.atividades is empty %}
+                    <tr>
+                        <td colspan="5" class="observacao">Não há atividades</td>
+                    </tr>
+                {% endif %}
+                {% for atividade in tarefa.atividades %}
+                    <tr>
+                        <td class="manifestacao">{{ atividade.especieAtividade.nome }} ({{ atividade.especieAtividade.generoAtividade.nome }})</td>
+                        <td>{{atividade.dataHoraConclusao | date('d-m-Y H:i')}}</td>
+                        <td>{{atividade.setor.nome}} ({{atividade.setor.unidade.sigla}})</td>
+                        <td class="usuario">{{atividade.usuario.nome}}</td>
+                    </tr>
+                    {% if atividade.observacao is not null %}
+                        <tr>
+                            <td colspan="5" class="observacao">Obs. {{ atividade.observacao }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+            <br>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<br>
+</body>
+</html>

@@ -1,0 +1,72 @@
+security:
+    # https://symfony.com/doc/current/security/passwords.html#named-password-hashers
+    password_hashers:
+        sodium:
+            algorithm: sodium
+        sha512:
+            algorithm: sha512
+
+    # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        chain_provider:
+            chain:
+                providers: [ user_provider, api_key_user_provider ]
+        api_key_user_provider:
+            id: SuppCore\AdministrativoBackend\Security\ApiKeyUserProvider
+        user_provider:
+            entity:
+                class: SuppCore\AdministrativoBackend\Entity\Usuario
+
+    # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        css:
+            pattern: ^/contentCss$
+            security: false
+        jnlp:
+            pattern: ^/v1/administrativo/assinatura/(.*)/get_jnlp
+        login:
+            pattern: ^/auth/get_token$
+            json_login:
+                provider: user_provider
+                check_path: /auth/get_token
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        assinador:
+            pattern: ^/auth/assinador_get_token$
+        x509:
+            pattern: ^/auth/x509_get_token$
+            provider: user_provider
+            custom_authenticators:
+                - SuppCore\AdministrativoBackend\Security\X509Authenticator
+        ldap:
+            pattern: ^/auth/ldap_get_token$
+            provider: user_provider
+            custom_authenticators:
+                - SuppCore\AdministrativoBackend\Security\LdapAuthenticator
+        ssoGovBr:
+            pattern: ^/auth/govbr_get_token$
+            provider: user_provider
+            custom_authenticators:
+                - SuppCore\AdministrativoBackend\Security\SsoGovBrAuthenticator
+        api:
+            pattern: ^/
+            provider: user_provider
+            jwt: ~
+            custom_authenticators:
+                - SuppCore\AdministrativoBackend\Security\ApiKeyAuthenticator
+
+    role_hierarchy:
+        ROLE_API: [ ROLE_LOGGED ]
+        ROLE_USER: [ ROLE_LOGGED ]
+        ROLE_USUARIO_EXTERNO: [ ROLE_USER ]
+        ROLE_COLABORADOR: [ ROLE_USER ]
+        ROLE_COORDENADOR_UNIDADE: [ ROLE_COORDENADOR_SETOR ]
+        ROLE_COORDENADOR_ORGAO_CENTRAL: [ ROLE_COORDENADOR_UNIDADE ]
+        ROLE_ADMIN: [ ROLE_COORDENADOR_ORGAO_CENTRAL ]
+        ROLE_ROOT: [ ROLE_ADMIN ]
+
+    access_decision_manager:
+        strategy: unanimous

@@ -1,0 +1,101 @@
+{# @var processo \SuppCore\AdministrativoBackend\Api\V1\DTO\Processo #}
+{# @var usuario \SuppCore\AdministrativoBackend\Entity\Usuario #}
+{# @var vinculados array #}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <title>ANÁLISE PROCURADOR - PACIFICA - SALÁRIO MATERNIDADE RURAL</title>
+
+    <style>
+        body {
+            width: 100%;
+            font-family: "Calibri", sans-serif;
+            font-size: 12px;
+            margin-top: 5%;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 80%;
+            line-height: 140%;
+            -webkit-print-color-adjust: exact !important;
+        }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            line-height: 1.1em;
+        }
+
+        .titulo {
+            text-align: center;
+            max-width: 100%;
+            font-weight: bold;
+
+        }
+
+        .subtitulo {
+            text-align: left;
+            max-width: 100%;
+            font-weight: bold !important;
+            border-width: 1px 1px 1px 1px !important;
+            background-color: #e5e5e5 !important;
+            padding: 3px !important;
+            margin-top: 1lh;
+            margin-bottom: 1lh;
+        }
+
+        p.texto {
+            text-indent: 50px;
+            text-align: justify;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .cabecalho {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0 15px;
+            list-style-type: none;
+        }
+
+        li {
+            list-style-position: inside;
+        }
+
+        ul.lowerAlpha li {
+            list-style-type: lower-alpha;
+        }
+    </style>
+</head>
+<body>
+<div class="cabecalho">
+    {{ formatCabecalho(processo.setorAtual, true)|raw }}<br/>
+</div>
+
+<div class="titulo">
+    PACIFICA<br/>
+    FORMULÁRIO<br/>
+    SALÁRIO – MATERNIDADE (SEGURADA ESPECIAL)
+</div>
+<br/>
+
+<div class="subtitulo">
+    I – ANÁLISE DO PROCURADOR
+</div>
+
+<div>
+
+</div>
+<br/>
+
+
+<br/>
+<br/>
+
+</body>
+</html>

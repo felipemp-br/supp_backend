@@ -1,0 +1,17 @@
+{
+	"name": "supp-core/php-coveralls",
+	"require": {},
+	"require-dev": {
+		"php-coveralls/php-coveralls": "2.7.0",
+		"roave/security-advisories": "dev-latest"
+	},
+	"config": {
+		"platform": {
+			"php": "8.3.0"
+		},
+		"preferred-install": {
+			"*": "dist"
+		},
+		"sort-packages": true
+	}
+}

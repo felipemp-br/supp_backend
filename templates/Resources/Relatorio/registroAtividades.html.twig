@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        {
+            margin: 0;
+            padding: 0;
+            font-family: Arial arial, helvetica, verdana, sans-serif;
+            font-size: 7pt;
+            color: #000;
+        }
+        body {
+            font-size: 7pt;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            max-width: 21cm;
+            min-height: 29.7cm;
+            padding: 1cm;
+            margin-left: 20px;
+            margin-right: 5px;
+            margin-top: 50px;
+            margin-bottom: 1cm;
+            border: 1px #D3D3D3 solid;
+            border-radius: 2px;
+            background: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        table
+        {
+            height:50mm;
+            margin: 0;
+            padding: 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table td, th
+        {
+            border-right: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            padding: 2mm;
+        }
+
+        thead th
+        {
+            border-right: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            padding: 2mm;
+        }
+        #wrapper
+        {
+            width:180mm;
+            margin:0 15mm;
+        }
+
+        #conteudo {
+            max-width: 21cm;
+            word-wrap: break-word;
+
+        }
+    </style>
+    <title>SAPIENS - Relatório</title>
+</head>
+<body>
+<div>
+    <div>
+        <table>
+            <tr>
+                <td style="text-align: center; font-weight: bold">
+                    ADVOCACIA-GERAL DA UNIÃO<br>
+                    FOLHA DE REGISTRO DE ATIVIDADES
+                </td>
+            </tr>
+            {% if parametros is iterable %}
+                {% for nome, valor in parametros %}
+                    <tr>
+                        <td>{{ nome }}: {{ valor }} <br></td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+    <br>
+    <div class="conteudo">
+
+        {% set start_date = date(attribute(parametros, 'Data Início')) %}
+        {% set end_date = date(attribute(parametros, 'Data Fim')) %}
+        {% set afastamentos = get_afastamentos(attribute(parametrosRaw, 'usuario')) %}
+
+        <table>
+            <thead>
+            <tr>
+                <th>DIA</th>
+                <th>ASSINATURA</th>
+                <th>REGISTROS ADICIONAIS</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}
+                {% set total = 0 %}
+                {% for i, row in table %}
+                    {% if attribute(row, 'data_hora_conclusao')|date('d/m/Y') == x|date('d/m/Y') %}
+                        {% set total = total + 1 %}
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td>{{ x|date('d/m/Y') }} {% if x|date('w') == 6 %} - SÁBADO {% endif %} {% if x|date('w') == 0 %} - DOMINGO {% endif %}</td>
+                    <td>
+                        {% set status = '' %}
+                        {% for afastamento in afastamentos %}
+                            {% if afastamento.dataInicioBloqueio is defined and
+                                afastamento.dataInicioBloqueio|date('Y-m-d') <= x|date('Y-m-d') and
+                                afastamento.dataFimBloqueio|date('Y-m-d') >= x|date('Y-m-d') %}
+                                {% set status = 'DISTRIBUIÇÃO BLOQUEADA ' %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ status }}{% if total > 0 %} {{ total ~ ' atividade(s) realizadas no SAPIENS' }} {% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br>
+    Data/Hora: {{ date()|date('d/m/Y H:i:s') }}<br>
+</div>
+</body>
+</html>

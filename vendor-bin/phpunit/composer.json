@@ -1,0 +1,22 @@
+{
+	"name": "supp-core/phpunit",
+	"require": {},
+	"require-dev": {
+		"liuggio/fastest": "1.11.0",
+		"phpunit/php-code-coverage": "11.0.6",
+		"phpunit/phpcov": "10.0.0",
+		"phpunit/phpunit": "11.3.1",
+		"roave/security-advisories": "dev-latest",
+		"symfony/browser-kit": "6.4.8",
+		"symfony/phpunit-bridge": "6.4.10"
+	},
+	"config": {
+		"platform": {
+			"php": "8.3.0"
+		},
+		"preferred-install": {
+			"*": "dist"
+		},
+		"sort-packages": true
+	}
+}

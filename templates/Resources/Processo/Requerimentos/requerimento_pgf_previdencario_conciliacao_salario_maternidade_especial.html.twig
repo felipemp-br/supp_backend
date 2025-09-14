@@ -1,0 +1,354 @@
+{# @var processo \SuppCore\AdministrativoBackend\Api\V1\DTO\Processo #}
+{# @var usuario \SuppCore\AdministrativoBackend\Entity\Usuario #}
+{# @var vinculados array #}
+
+{% set generoNome = {'masculino':'Masculino', 'feminino':'Feminino', 'outro':'Outro'} %}
+{% set relacaoNome = {'defensoria_publica':'Defensoria Pública', 'advogado_privado':'Advogado Privado', 'outro_profissional':'Outro profissional', 'amigo':'Amigo', 'parente':'Parente'} %}
+{% set parentescoBeneficiario = {'pai':'Pai','mae':'Mãe','filho':'Filho','filha':'Filha','conjuge':'Cônjuge','irmao':'Irmão','irma':'Irmã','primo':'Primo','prima':'Prima','cunhado':'Cunhado','cunhada':'Cunada','sobrinho':'Sobrinho','sobrinha':'Sobrinha','tio':'Tio','tia':'Tia','outro':'Outro'} %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <title>FORMULÁRIO DE REQUERIMENTO PAC PREV SALÁRIO MATERNIDADE ESPECIAL</title>
+
+    <style>
+        body {
+            width: 100%;
+            font-family: "Calibri", sans-serif;
+            font-size: 12px;
+            margin-top: 5%;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 80%;
+            line-height: 140%;
+            -webkit-print-color-adjust: exact !important;
+        }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            line-height: 1.1em;
+        }
+
+        .titulo {
+            text-align: center;
+            max-width: 100%;
+            font-weight: bold;
+
+        }
+
+        .subtitulo {
+            text-align: left;
+            max-width: 100%;
+            font-weight: bold !important;
+            border-width: 1px 1px 1px 1px !important;
+            background-color: #e5e5e5 !important;
+            padding: 3px !important;
+            margin-top: 1lh;
+            margin-bottom: 1lh;
+        }
+
+        p.texto {
+            text-indent: 50px;
+            text-align: justify;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .cabecalho {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0 15px;
+            list-style-type: none;
+        }
+
+        li {
+            list-style-position: inside;
+        }
+
+        ul.lowerAlpha li {
+            list-style-type: lower-alpha;
+        }
+    </style>
+</head>
+<body>
+<div class="cabecalho">
+    {{ formatCabecalho(processo.setorAtual, true)|raw }}<br/>
+</div>
+
+<div class="titulo">
+    PROGRAMA DE ACELERAÇÃO CONCILIATÓRIA PREVIDENCIÁRIA - PAC PREV<br/>
+    FORMULÁRIO<br/>
+    SALÁRIO – MATERNIDADE (SEGURADA ESPECIAL)
+</div>
+<br/>
+
+<div class="subtitulo">
+    I – DADOS PESSOAIS
+</div>
+
+<div>
+    1. Nome da requerente: {{ nomeRequerente }}<br/>
+    2. CPF da requerente: {{ cpfRequerente|formatCpf }}<br/>
+    3. Nome do Conjuge: {{ nomeConjuge ?? '' }}<br/>
+    4. CPF do Conjuge: {{ cpfConjuge ? cpfConjuge|formatCpf : '' }}<br/>
+    5. Endereço: {{ rua }}, {{ numero }}<br/>
+    5.1. Complemento: {{ complemento ?? '' }}<br/>
+    5.2. Município: {{ municipio|toEntity('Administrativo', 'Municipio').nome }}<br/>
+    5.3. Estado: {{ estado|toEntity('Administrativo', 'Estado').nome }}<br/>
+    6. E-mail: {{ email }}<br/>
+    7. Data de nascimento: {{ dataNascimento|date("d/m/Y") }} <br/>
+    8. Gênero: {{ generoNome[genero] }} <br/>
+</div>
+
+<div class="subtitulo">
+    II - INFORMAÇÕES DO REQUERIMENTO
+</div>
+
+<div>
+    1. Número do benefício: {{ numeroBeneficio|formatNumeroBeneficio }}<br/>
+    2. Data da entrada do requerimento administrativo – DER: {{ dataEntradaRequerimento|date("d/m/Y") }}<br/>
+    3. Data do nascimento da criança: {{ dataNascimentoCrianca|date("d/m/Y") }}<br/>
+    4. Quando procurou o INSS para fazer seu pedido, você teve ajuda de alguém? {{ teveAjuda ? 'Sim' : 'Não' }}
+    <ul>
+        {% if (teveAjuda) %}
+            <li>Quem?</li>
+            <li>
+                <ul>
+                    <li>Relação: {{ relacaoNome[relacao] }}</li>
+                    {% if (relacao == 'advogado_privado') %}
+                        <li>Qual o número da OAB: {{ oab ?? '' }} {{ uf ?? '' }}</li>
+                    {% endif %}
+                    <li>Nome: {{ nomeRepresentante ?: '' }}</li>
+                </ul>
+            </li>
+        {% endif %}
+    </ul>
+    6. Você entrou na justiça para conseguir esse benefício que foi negado pelo
+    INSS? {{ entrouContatoJustica ? 'Nos casos em que existe ação judicial com o mesmo pedido, não é possível fazer o acordo fora da justiça. O seu pedido de acordo não será iniciado.' : 'Não' }}
+</div>
+
+<div class="subtitulo">
+    III – INFORMAÇÕES DO LABOR RURAL
+</div>
+
+<div>
+    1. Informe os períodos e locais que desempenhou atividade rural:
+    <ul class="lowerAlpha">
+        {% for atividade in atividadesRurais %}
+            <li>Data: {{ atividade.dataInicio|date("d/m/Y") }} a {{ atividade.dataFim|date("d/m/Y") }} -
+                Local: {{ atividade.municipio|toEntity('Administrativo', 'Municipio').nome }}
+                / {{ atividade.estado|toEntity('Administrativo', 'Estado').nome }}</li>
+        {% endfor %}
+    </ul>
+
+    <br/>
+    2. Algum membro de sua família recebe (ou recebeu) algum benefício como segurado
+    especial? {{ membroFamiliaRecebeuBeneficio ? 'Sim' : 'Não' }}
+    <ul>
+        {% if (membroFamiliaRecebeuBeneficio) %}
+            <li>
+                <ul class="lowerAlpha">
+                    {% for beneficiario in beneficiarios %}
+                        <li>
+                            Nome: {{ beneficiario.nomeBeneficiario }},
+                            {% if beneficiario.cpfBeneficiario %}
+                                CPF: {{ beneficiario.cpfBeneficiario|formatCpf }},
+                            {% endif %}
+                            Parentesco:
+                            {% if (beneficiario.parentescoBeneficiario != 'outro') %}
+                                {{ parentescoBeneficiario[beneficiario.parentescoBeneficiario] }}
+                            {% else %}
+                                {{ beneficiario.especificarParentescoBeneficiario }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="subtitulo">
+    IV - DOCUMENTOS COMPROBATÓRIOS DA ATIVIDADE RURAL:
+</div>
+
+<div>
+    Estamos quase acabando, informe os documentos que <strong>conste a profissão ou qualquer outro
+        elemento que demonstre que você exerce/exerceu a atividade</strong> como segurada especial (no máximo 03
+    documentos).
+
+    <br/>
+    Clique <a href="#" target="_blank">aqui</a> para saber quais os documentos são considerados como
+    início de prova material.
+
+    <br/>
+    Para te auxiliar, selecionamos os documentos mais comuns. Caso o seu documento não esteja na
+    listagem, basta clicar em outros.
+
+    <br/>
+    <br/>
+
+    <div class="cabecalho">TIPOS DE DOCUMENTOS</div>
+    <div class="cabecalho">(IMPORTANTE: o documento precisa constar a profissão ou outro indicativo de que a pessoa
+        realiza atividades no meio rural)
+    </div>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'carteira_vacinacao_gestante' in tiposDocumentos ? 'X' : ' ' }}) carteira de
+    vacinação e cartão da gestante;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'ficha_registro_livros' in tiposDocumentos ? 'X' : ' ' }}) ficha ou registro
+    em livros de casas de saúde,
+    hospitais,
+    postos de saúde ou do programa dos agentes comunitários de saúde;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'ficha_atendimento_medico' in tiposDocumentos ? 'X' : ' ' }}) ficha de
+    atendimento médico ou odontológico;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'certidao_casamento_uniao_estavel' in tiposDocumentos ? 'X' : ' ' }})
+    certidão de casamento civil ou
+    religioso ou certidão de
+    união estável;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'certidao_nascimento_batismo' in tiposDocumentos ? 'X' : ' ' }}) certidão de
+    nascimento ou de batismo dos
+    filhos;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'titulo_certidao_eleitoral' in tiposDocumentos ? 'X' : ' ' }}) título de
+    eleitor, ficha de cadastro
+    eleitoral ou
+    certidão
+    eleitoral;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'comprovante_escolar' in tiposDocumentos ? 'X' : ' ' }}) comprovante de
+    matrícula ou ficha de inscrição em
+    escola,
+    ata ou boletim escolar do trabalhador ou dos filhos
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'contrato_arrendamento' in tiposDocumentos ? 'X' : ' ' }}) contrato de
+    arrendamento, parceria, meação ou
+    comodato
+    rural, cujo período da atividade será considerado somente a partir da data do registro ou do reconhecimento de
+    firma
+    do documento em cartório;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'declaracao_programa_agricultura_familiar' in tiposDocumentos ? 'X' : ' ' }}
+    ) Declaração de Aptidão ao
+    Programa Nacional de
+    Fortalecimento
+    da Agricultura Familiar, de que trata o inciso II do caput do art. 2º da Lei nº 12.188, de 11 de janeiro de
+    2010, ou
+    por documento que a substitua;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'licenca_incra' in tiposDocumentos ? 'X' : ' ' }}) licença de ocupação ou
+    permissão outorgada pelo
+    Instituto
+    Nacional de Colonização e Reforma Agrária - INCRA ou qualquer outro documento emitido por esse órgão que indique
+    ser
+    o beneficiário assentado do programa de reforma agrária;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'comprovante_pagamento_itr' in tiposDocumentos ? 'X' : ' ' }}) comprovante
+    de pagamento do Imposto sobre a
+    Propriedade
+    Territorial Rural - ITR, Documento de Informação e Atualização Cadastral do Imposto sobre a Propriedade
+    Territorial
+    Rural – DIAC e/ou Documento de Informação e Apuração do Imposto sobre a Propriedade Territorial Rural - DIAT,
+    com
+    comprovante de envio à RFB, ou outros que a RFB vier a instituir;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'certidao_funai' in tiposDocumentos ? 'X' : ' ' }}) certidão fornecida pela
+    FUNAI, certificando a condição
+    do
+    índio como trabalhador rural, observado o contido no § 5º;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'escritura_imovel_rural' in tiposDocumentos ? 'X' : ' ' }}) escritura
+    pública de imóvel ou título de
+    propriedade de
+    imóvel rural;
+    <br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'outros' in tiposDocumentos ? 'X' : ' ' }}) Outros: {{ descricaoOutros }}
+</div>
+
+<div class="subtitulo">
+    V - CLÁUSULAS DO ACORDO:
+</div>
+
+<div>
+    <p class="texto">Através do PROGRAMA DE ACELERAÇÃO CONCILIATÓRIA PREVIDENCIÁRIA (PAC PREV), o Instituto Nacional do
+        Seguro Social (INSS) e a Advocacia-Geral da União (AGU), por meio da Procuradoria-Geral Federal (PGF),
+        possibilitam que a requerente submeta a análise do benefício de salário-maternidade para segurada especial,
+        indeferido administrativamente, de forma extrajudicial. A análise do benefício só será possível após o
+        indeferimento do INSS e antes do ajuizamento da demanda judicial. Ao aderir ao programa a requerente vincula-se
+        às seguintes cláusulas do acordo:
+    </p>
+    <br/>
+    <p class="texto">Cláusula 1ª. Uma vez preenchido o formulário eletrônico, a requerente concorda que, caso a
+        manifestação da Procuradoria-Geral Federal seja favorável ao acordo, seu benefício será implantado desde a
+        DER.
+    </p>
+    <br/>
+    <p class="texto">Cláusula 2ª. A manifestação da Procuradoria-Geral Federal será restrita a concordância de concessão
+        do benefício (celebração do acordo) ou manutenção da decisão administrativa (sem interesse no acordo), e será
+        realizada no prazo máximo de 10 dias úteis a contar do protocolo eletrônico realizado pelo requerente no Sistema
+        Sapiens.
+    </p>
+    <br/>
+    <p class="texto">Parágrafo primeiro. O requerente poderá acompanhar o andamento do seu pedido no Sistema
+        Sapiens.
+    </p>
+    <br/>
+    <p class="texto">Cláusula 3ª. Na eventualidade da manifestação da Procuradoria-Geral Federal ser favorável ao
+        acordo, os parâmetros para implantação e pagamento do benefício serão realizados de forma eletrônica pela
+        Procuradoria-Geral Federal diretamente ao INSS.
+    </p>
+    <br/>
+    <p class="texto">Parágrafo primeiro. A implantação do benefício de salário-maternidade de segurada especial e o
+        pagamento de valores atrasados será realizado de forma administrativa diretamente pelo INSS, no prazo de 45
+        (quarenta e cinco) dias após a conclusão da análise da Procuradoria Federal.
+    </p>
+    <br/>
+    <p class="texto">Parágrafo segundo. A comunicação da concessão do benefício será feita pelo INSS diretamente à
+        requerente.
+    </p>
+    <br/>
+    <p class="texto">Parágrafo terceiro. Com a implantação e o pagamento do benefício, nos moldes acima, a requerente dá
+        plena e total quitação do principal (diferenças devidas) e dos acessórios (correção monetária, juros etc.).
+    </p>
+    <br/>
+    <p class="texto">Parágrafo quarto. A requerente renuncia a eventuais direitos decorrentes do mesmo fato ou
+        fundamento jurídico que deu origem a presente análise administrativa.
+    </p>
+    <br/>
+    <p class="texto">Parágrafo quinto. Tendo em conta o interesse público, e considerando a possibilidade de
+        enriquecimento sem causa, constatada a qualquer tempo, a existência de litispendência, coisa julgada, falta de
+        requisitos legais para a concessão do benefício ou fraude, no todo ou em parte, referente ao objeto do presente
+        programa, a requerente concorda, desde já, que fica sem efeito o acordo.
+    </p>
+    <br/>
+    <p class="texto">Parágrafo sexto. Constatado, a qualquer tempo, pagamento indevido de valores relativos a alguma das
+        competências mensais abrangidas por esta proposta de transação, a requerente concorda, desde já, ao
+        ressarcimento integral pela via administrativa adequada.
+    </p>
+    <br/>
+    <p class="texto">Parágrafo sétimo. O acordo não representa reconhecimento expresso ou tácito do direito cuja
+        existência é alegada neste programa, apenas objetiva a concessão de benefício de forma mais célere, por entender
+        que a chance de concessão do benefício pleiteado é alta se for submetido a análise do Poder Judiciário.
+    </p>
+    <br/>
+    <p class="texto">Parágrafo oitavo. A requerente declara que não há outro requerimento administrativo ou demanda
+        judicial, em tramitação, postulando a concessão de salário-maternidade em decorrência do mesmo fato gerador
+        deste programa, sob pena de invalidação do acordo celebrado.
+    </p>
+</div>
+
+<br/>
+<br/>
+<br/>
+
+</body>
+</html>

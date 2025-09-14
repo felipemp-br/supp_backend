@@ -1,0 +1,305 @@
+framework:
+    messenger:
+        serializer:
+            default_serializer: messenger.transport.symfony_serializer
+            symfony_serializer:
+                format: json
+                context: { }
+        transports:
+            triagem_ia:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%triagem_ia'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            assistente_ia:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%assistente_ia'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            indexacao_componente_digital:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%indexacao_componente_digital'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            indexacao_pessoa:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%indexacao_pessoa'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            indexacao_modelo:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%indexacao_modelo'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            dense_vector:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%dense_vector'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            dense_vector_query:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%dense_vector_query'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            indexacao_repositorio:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%indexacao_repositorio'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            indexacao_processo:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%indexacao_processo'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            populate_componente_digital:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%populate_componente_digital'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            populate_pessoa:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%populate_pessoa'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            populate_modelo:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%populate_modelo'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            populate_repositorio:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%populate_repositorio'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            populate_processo:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%populate_processo'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            relatorio_create:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%relatorio_create'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            push_mercure:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%push_mercure'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            push_resource:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%push_resource'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            push_count:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%push_count'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            regras_etiqueta:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%regras_etiqueta'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            integracao_gerar_dossie:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%integracao_gerar_dossie'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            integracao_gerar_dossie_tarefa:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%integracao_gerar_dossie_tarefa'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            process_favorito:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%process_favorito'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            download_processo:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%download_processo'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            copiar_documentos_processo:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%copiar_documentos_processo'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            envia_ciencia:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%envia_ciencia'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            envia_componentes_digitais:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%envia_componentes_digitais'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            envia_documento_avulso:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%envia_documento_avulso'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            envia_processo:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%envia_processo'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            recebe_componentes_digitais:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%recebe_componentes_digitais'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            recebe_recibo_de_tramite:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%recebe_recibo_de_tramite'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            recebe_tramite:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%recebe_tramite'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            tarefa_barramento:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%tarefa_barramento'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            resposta_oficio_barramento:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%resposta_oficio_barramento'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            chat:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%chat'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            sincroniza_barramento:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%sincroniza_barramento'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            verificacao_virus:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%verificacao_virus'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            test_liip_monitor:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%test_liip_monitor'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            populate_tese:
+                dsn: "%env(MESSENGER_TRANSPORT_DSN)%populate_tese"
+                retry_strategy:
+                    max_retries: 0
+                options:
+                    persistent: true
+            indexacao_tese:
+                dsn: "%env(MESSENGER_TRANSPORT_DSN)%indexacao_tese"
+                retry_strategy:
+                    max_retries: 0
+                options:
+                    persistent: true
+            transferir_acervo:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%transferir_acervo'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            assina_documento:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%assina_documento'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            classifica_documento_ia:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%classifica_documento_ia'
+                options:
+                    persistent: true
+                retry_strategy:
+                    max_retries: 0
+            sync: 'sync://'
+        routing:
+            # async is whatever name you gave your transport above
+            'SuppCore\AdministrativoBackend\InteligenciaArtificial\Triagem\Message\TriagemMessage':  'triagem_ia'
+            'SuppCore\AdministrativoBackend\InteligenciaArtificial\Assistente\Message\AssistenteMessage':  'assistente_ia'
+            'SuppCore\AdministrativoBackend\InteligenciaArtificial\Classificacao\Message\ClassificaDocumentoMessage': 'classifica_documento_ia'
+            'SuppCore\AdministrativoBackend\InteligenciaArtificial\DenseVector\Message\DenseVectorMessage':  'dense_vector'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Juntada\Message\IndexacaoMessage':  'indexacao_componente_digital'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Pessoa\Message\IndexacaoMessage':  'indexacao_pessoa'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Modelo\Message\IndexacaoMessage':  'indexacao_modelo'
+            'SuppCore\AdministrativoBackend\Elastic\Message\DenseVectorQueryMessage':  'dense_vector_query'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Processo\Message\IndexacaoMessage':  'indexacao_processo'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Repositorio\Message\IndexacaoMessage':  'indexacao_repositorio'
+            'SuppCore\AdministrativoBackend\Command\Elastic\Messages\PopulateComponenteDigitalMessage':  'populate_componente_digital'
+            'SuppCore\AdministrativoBackend\Command\Elastic\Messages\PopulatePessoaMessage':  'populate_pessoa'
+            'SuppCore\AdministrativoBackend\Command\Elastic\Messages\PopulateModeloMessage':  'populate_modelo'
+            'SuppCore\AdministrativoBackend\Command\Elastic\Messages\PopulateRepositorioMessage':  'populate_repositorio'
+            'SuppCore\AdministrativoBackend\Command\Elastic\Messages\PopulateProcessoMessage':  'populate_processo'
+            'SuppCore\AdministrativoBackend\Mercure\Message\PushMessage':  'push_mercure'
+            'SuppCore\AdministrativoBackend\Counter\Message\PushMessage':  'push_count'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Relatorio\Message\CreateMessage':  'relatorio_create'
+            'SuppCore\AdministrativoBackend\Rest\Message\PushMessage':  'push_resource'
+            'SuppCore\AdministrativoBackend\RegrasEtiqueta\Message\RegrasEtiquetaMessage':  'regras_etiqueta'
+            'SuppCore\AdministrativoBackend\Integracao\Dossie\Operacoes\GerarDossie\Message\GerarDossieMessage': 'integracao_gerar_dossie'
+            'SuppCore\AdministrativoBackend\Integracao\Dossie\Operacoes\GerarDossieTarefa\Message\GerarDossieTarefaMessage': 'integracao_gerar_dossie_tarefa'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Favorito\Message\FavoritoMessage':  'process_favorito'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Processo\Message\DownloadProcessoMessage':  'download_processo'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Processo\Message\CopyProcessoDocumentosMessage':  'copiar_documentos_processo'
+            'SuppCore\AdministrativoBackend\Barramento\Message\EnviaCienciaMessage':  'envia_ciencia'
+            'SuppCore\AdministrativoBackend\Barramento\Message\EnviaComponentesDigitaisMessage':  'envia_componentes_digitais'
+            'SuppCore\AdministrativoBackend\Barramento\Message\EnviaProcessoMessage':  'envia_processo'
+            'SuppCore\AdministrativoBackend\Barramento\Message\EnviaDocumentoAvulsoMessage':  'envia_documento_avulso'
+            'SuppCore\AdministrativoBackend\Barramento\Message\RecebeComponentesDigitaisMessage':  'recebe_componentes_digitais'
+            'SuppCore\AdministrativoBackend\Barramento\Message\RecebeReciboDeTramiteMessage':  'recebe_recibo_de_tramite'
+            'SuppCore\AdministrativoBackend\Barramento\Message\RecebeTramiteMessage':  'recebe_tramite'
+            'SuppCore\AdministrativoBackend\Barramento\Message\CriaTarefaBarramentoMessage':  'tarefa_barramento'
+            'SuppCore\AdministrativoBackend\Barramento\Message\CriaRespostaOficioBarramentoMessage':  'resposta_oficio_barramento'
+            'SuppCore\AdministrativoBackend\Chat\Message\ChatMessage':  'chat'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\StatusBarramento\Message\SincronizaBarramentoMessage': 'sincroniza_barramento'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\ComponenteDigital\Message\VerificacaoVirusMessage':  'verificacao_virus'
+            'SuppCore\AdministrativoBackend\Diagnostics\Message\Test': 'test_liip_monitor'
+            'SuppCore\AdministrativoBackend\Command\Elastic\Messages\PopulateTeseMessage': "populate_tese"
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Tese\Message\IndexacaoMessage': "indexacao_tese"
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Setor\Message\TransferirAcervoMessage':  'transferir_acervo'
+            'SuppCore\AdministrativoBackend\Api\V1\Triggers\Assinatura\Message\AssinaDocumentoMessage':  'assina_documento'

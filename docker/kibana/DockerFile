@@ -1,0 +1,28 @@
+FROM openjdk:11
+MAINTAINER William Durand <william.durand1@gmail.com>
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV ES_SKIP_SET_KERNEL_PARAMETERS true
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y supervisor wget apt-transport-https && \
+    apt-get clean
+
+# ELK
+RUN \
+    wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - && \
+    rm -f /etc/apt/sources.list.d/* && \
+    if ! grep "elastic" /etc/apt/sources.list; then echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" >> /etc/apt/sources.list;fi && \
+    apt-get update && \
+    apt-get install --no-install-recommends -y kibana=7.17.0 && \
+    apt-get clean && \
+    mkdir -p /usr/share/kibana/config && \
+    echo 'server.host: 0.0.0.0' >> /usr/share/kibana/config/kibana.yml && \
+    echo "elasticsearch.hosts: [\"http://elasticsearch:9200\"]" >> /usr/share/kibana/config/kibana.yml
+
+ADD docker/kibana/supervisor/ /etc/supervisor/conf.d/
+ADD docker/kibana/docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
+
+EXPOSE 5601
+
+ENTRYPOINT ["sh", "/usr/bin/docker-entrypoint.sh"]

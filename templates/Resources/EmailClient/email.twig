@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt">
+    <head>
+        <title>SUPP</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <div>
+            <p><h2>{{subject}}</h2></p>
+            <hr>
+            <p>
+                <b>{{ from }}</b>
+                {% if to is not empty %}
+                    <br>
+                    Para: {{ to | join(', ') }}
+                {% endif %}
+                {% if cc is not empty %}
+                    <br>
+                    CC: {{ cc | join(', ') }}
+                {% endif %}
+                {% if bcc is not empty %}
+                    <br>
+                    CCO: {{ bcc | join(', ') }}
+                {% endif %}
+                <span style="position: relative; float: right;">
+                    {{date | date('d/m/Y H:i:s') }}
+                </span>
+            </p>
+            <hr>
+            <p>
+                {{ body | raw }}
+            </p>
+            {% if attachments is not empty %}
+                <hr>
+                <p>
+                    <b>{{ attachments | length }} anexos:</b>
+                    <br>
+                    <ul>
+                        {% for attachment in attachments %}
+                            <li>{{ attachment }}</li>
+                        {% endfor %}
+                    </ul>
+                </p>
+            {% endif %}
+        </div>
+    </body>
+</html>

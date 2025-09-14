@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <title>SUPP</title>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div>
+    <p>Aviso de segurança do {{ sistema }}!</p>
+
+    <p>
+        Pedido de recuperação de senha enviado no ambiente de {{ ambiente }}!<br>
+        Para resetar a senha acesse o link: {{ urlreset }}<br>
+    </p>
+
+    <p>Email enviado em {{date()|date('d/m/Y')}} às {{date()|date('H:i:s')}}.</p>
+</div>
+</body>
+</html>

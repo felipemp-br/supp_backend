@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <title>SUPP</title>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div>
+    <p>Envio de Documentos do sistema {{ sistema }}!</p>
+
+    <p>
+        Envio de documentos do processo de NUP {{ NUP }} no ambiente de {{ ambiente }}!<br>
+    </p>
+
+    <p>Email enviado em {{date()|date('d/m/Y')}} às {{date()|date('H:i:s')}}.</p>
+
+    {% if mensagem|length > 0 %}
+        <br><p>{{ mensagem }}</p>
+    {% endif %}
+</div>
+</body>
+</html>

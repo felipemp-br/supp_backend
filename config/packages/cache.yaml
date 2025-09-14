@@ -1,0 +1,18 @@
+framework:
+    cache:
+        app: cache.adapter.memcached
+        system: cache.adapter.memcached
+        default_redis_provider: '%env(REDIS_URL)%'
+        pools:
+            rate_limiter.cache:
+                adapter: cache.adapter.redis
+            validator.cache:
+                adapter: cache.adapter.memcached
+            doctrine.result_cache_pool:
+                adapter: cache.adapter.memcached
+            doctrine.system_cache_pool:
+                adapter: cache.adapter.memcached
+            scheduler.cache:
+                adapter: cache.adapter.redis
+            in_memory_cache:
+              adapter: cache.adapter.array

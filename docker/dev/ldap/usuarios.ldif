@@ -1,0 +1,32 @@
+version: 1
+
+dn: dc=agu,dc=gov,dc=br
+dc: jboss
+objectClass: top
+objectClass: domain
+
+dn: ou=Users,dc=agu,dc=gov,dc=br
+objectClass: organizationalUnit
+objectClass: top
+ou: Users
+
+dn: uid=eduardoromao,ou=Users,dc=agu,dc=gov,dc=br
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+cn: Eduardo Romao
+sn: 06318353933
+mail: eduardo.romao@outlook.com
+uid: eduardoromao
+userPassword: Agu123456
+
+dn: ou=Roles,dc=agu,dc=gov,dc=br
+objectclass: top
+objectclass: organizationalUnit
+ou: Roles
+
+dn: cn=Admin,ou=Roles,dc=agu,dc=gov,dc=br
+objectClass: top
+objectClass: groupOfNames
+cn: Admin
+member: uid=eduardoromao,ou=Users,dc=agu,dc=gov,dc=br

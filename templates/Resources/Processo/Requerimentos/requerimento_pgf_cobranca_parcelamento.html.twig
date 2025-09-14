@@ -1,0 +1,241 @@
+{# @var processo \SuppCore\AdministrativoBackend\Api\V1\DTO\Processo #}
+{# @var usuario \SuppCore\AdministrativoBackend\Entity\Usuario #}
+{# @var vinculados array #}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <title>FORMULÁRIO DE PEDIDO DE PARCELAMENTO SIMPLIFICADO - FPPS</title>
+
+    <style>
+        body
+        {
+            width: 100%;
+            font-family:"Calibri",sans-serif;
+            font-size: 12px;
+            margin-top: 5%;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 80%;
+            line-height: 140%;
+            -webkit-print-color-adjust: exact !important;
+        }
+        p
+        {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            line-height: 1.1em;
+        }
+        .titulo {
+            text-align: center;
+            max-width: 100%;
+            font-weight:bold;
+
+        }
+        .subtitulo {
+            text-align: left;
+            max-width: 100%;
+            font-weight: bold !important;
+            border-width: 1px 1px 1px 1px !important;
+            background-color: #e5e5e5 !important;
+            padding: 3px !important;
+            margin-top: 1lh;
+            margin-bottom: 1lh;
+        }
+        p.texto{
+            text-indent:50px;
+            text-align:justify;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+        .cabecalho {
+            text-align:center;
+            font-weight:bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cabecalho">
+    {{ formatCabecalho(processo.setorAtual, true)|raw }}<br/>
+</div>
+
+<div class="titulo">
+    FORMULÁRIO DE PEDIDO DE PARCELAMENTO SIMPLIFICADO - FPPS<br/>
+    (ANEXO DA PORTARIA NORMATIVA N. 35/PGF/AGU, DE 07 DE NOVEMBRO DE 2022)
+</div>
+<br/>
+
+{# @var municipioEntity \SuppCore\AdministrativoBackend\Entity\Municipio #}
+{% set municipioEntity = municipio|toEntity('Administrativo', 'Municipio') %}
+
+{# @var estadoEntity \SuppCore\AdministrativoBackend\Entity\Estado #}
+{% set estadoEntity = estado|toEntity('Administrativo', 'Estado') %}
+
+<div class="subtitulo">
+    I – IDENTIFICAÇÃO DO DEVEDOR
+</div>
+1. Tipo de pessoa:
+({% if (tipoPessoa == 'fisica') %}X{% else %}  {% endif %}) Física
+({% if (tipoPessoa == 'juridica') %}X{% else %}  {% endif %}) Jurídica<br/>
+2. CNPJ/CPF: {{ cpfCnpj|onlyNumbers|formatCpfCnpj }}<br/>
+3. Nome/Razão Social: {{ nomeRazaoSocial }}<br/>
+4. Endereço: {{ endereco }}<br/>
+4.1. Complemento: {{ complemento }}<br/>
+4.2. CEP: {{ cep }}<br/>
+4.3. Município: {{ municipioEntity.nome }}<br/>
+4.4. Estado: {{ estadoEntity.nome }}<br/>
+5. E-mail: {{ email }}<br/>
+6. Telefone: {{ telefone }} <br/>
+
+<div class="subtitulo">
+    II - IDENTIFICAÇÃO DO REPRESENTANTE LEGAL (SE FOR O CASO)
+</div>
+7. CPF: {{ cpfRepresentante }}<br/>
+8. Nome: {{ nomeRepresentante }}<br/>
+9. OAB (se advogado): Número: {{ oab }} 10. UF: {{ uf }}<br/>
+11. E-mail: {{ emailRepresentante }}<br/>
+12. Telefone Celular: {{ celular }}<br/>
+13. Telefone Comercial: {{ telefoneComercial }}<br/>
+
+<div class="subtitulo">
+    III – MOTIVO DA SOLICITAÇÃO
+</div>
+14. Motivos: <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'protesto' in motivoSolicitacao ? 'X' : ' ' }}) Foi protestado<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'negativacao' in motivoSolicitacao ? 'X' : ' ' }}) Registrado em cadastro de proteção ao crédito<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'leilao_judicial' in motivoSolicitacao ? 'X' : ' ' }}) Há proximidade de leilão judicial<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'penhora' in motivoSolicitacao ? 'X' : ' ' }}) Houve penhora de bens (dinheiro, veículos, etc)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'execucao_fiscal' in motivoSolicitacao ? 'X' : ' ' }}) Houve cobrança em execução fiscal<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ 'outros' in motivoSolicitacao ? 'X' : ' ' }}) Outro(s): {{ motivoSolicitacaoOutros }}<br/>
+
+<div class="subtitulo">
+    IV - IDENTIFICAÇÃO DA CREDORA E CRÉDITOS A SEREM PARCELADOS:
+</div>
+15. Entidade credora: {{ credor }}<br/><br/>
+
+16. Número(s) do(s) crédito(s), inscrição(s) ou do(s) processo(s) administrativo(s) <br/>
+{% for cip in creditosInscricoesProcessos %}
+    {% if cip.creditoInscricaoProcesso is not empty %}
+        {{ cip.creditoInscricaoProcesso }}<br/>
+    {% endif %}
+{% endfor %}
+
+<br/>
+17. Quantidade de parcelas desejadas no parcelamento (2 a 60): <u>{{ numeroParcelas }}</u> <br/>
+
+<br/>
+18. O(s) débito(s) objeto da solicitação está(ão) protestado(s)?<br/>
+({% if (protestado == 'sim') %}X{% else %}  {% endif %}) Sim (indicar o(s) número(s) do(s) título(s) ou do(s)
+protocolo(s):<br/>
+
+{% set allNull = protocolos|filter(item => item.protocolo is not empty)|length == 0 %}
+{% if allNull %}
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NÃO INFORMADO<br/>
+{% endif %}
+
+{% for p in protocolos %}
+    {% if p.protocolo is not empty %}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ p.protocolo }}<br/>
+    {% endif %}
+{% endfor %}
+
+({% if (protestado == 'nao') %}X{% else %}  {% endif %}) Não<br/>
+({% if (protestado == 'nao_sabe') %}X{% else %}  {% endif %}) Não sabe<br/>
+
+<br/>
+19.Tem ciência se o(s) débito(s) tem ação judicial de execução fiscal?<br/>
+({% if (ajuizado == 'sim') %}X{% else %}  {% endif %}) Sim. Indicar o número da execução fiscal: {{ numeroAcao }} <br/>
+({% if (ajuizado == 'nao') %}X{% else %}  {% endif %}) Não<br/>
+({% if (ajuizado == 'nao_sabe') %}X{% else %}  {% endif %}) Não sabe<br/>
+
+<br/>
+20. Existem embargos à(s) execução(s) fiscal(s) ou ação(s) anulatória(s) do(s) débito(s)?<br/>
+({% if (embargo == 'sim') %}X{% else %}  {% endif %}) Sim. Indicar o(s) número(s) do(s) processo(s) judicial(s):<br/>
+
+{% set allNull = embargosProcesso|filter(item => item.embargoProcesso is not empty)|length == 0 %}
+{% if allNull %}
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NÃO INFORMADO<br/>
+{% endif %}
+
+{% for p in embargosProcesso %}
+    {% if p.embargoProcesso is not empty %}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ p.embargoProcesso }}<br/>
+    {% endif %}
+{% endfor %}
+
+({% if (embargo == 'nao') %}X{% else %}  {% endif %}) Não<br/>
+({% if (embargo == 'nao_sabe') %}X{% else %}  {% endif %}) Não sabe<br/>
+
+<br/>
+21. Caso deseje prestar INFORMAÇÕES ADICIONAIS, utilizar o campo abaixo:<br/>
+{{ infoAdicionais }}
+
+<br/>
+<br/>
+
+{% if (tipoPessoa == 'fisica') %}
+    <p class="texto">
+        22. Devedor pessoa física:  O requerente declara que não se enquadra nas
+        hipóteses dos incisos I a VI do Art. 2ª da Portaria Normativa Nº 35/PGF/AGU, DE 7 DE NOVEMBRO DE 2022, especialmente que não se trata de
+        pessoa física com insolvência civil decretada, bem como que tem ciência de que é de sua responsabilidade manter atualizado o e-mail no
+        cadastro junto à PGF.
+    </p>
+{% else %}
+    <p class="texto">
+        22. Devedor pessoa jurídica: O requerente declara que é o responsável perante o Cadastro Nacional da Pessoa Jurídica (CNPJ),
+        que o devedor não se enquadra nas hipóteses dos incisos I a VI do Art. 2ª da Portaria Normativa Nº 35/PGF/AGU, DE 7 DE NOVEMBRO DE 2022,
+        especialmente não se trata de pessoa jurídica com falência, liquidação extrajudicial ou recuperação judicial decretada, ou com cadastro baixado
+        junto à Receita Federal do Brasil, bem como que tem ciência de que é de sua responsabilidade manter atualizado o e-mail no cadastro junto à PGF.
+    </p>
+{% endif %}
+
+<br/>
+<br/>
+
+<div class="titulo">
+    CONDIÇÕES E INFORMAÇÕES IMPORTANTES (LER COM ATENÇÃO)
+</div>
+
+<p class="texto">
+    a) O(a) requerente e seu(a) representante, se houver, responsabilizam-se pela veracidade de
+    todas informações prestadas neste formulário e pela autenticidade de todos os documentos a ele anexos e, inclusive para os fins dos artigos
+    1º, 2º e 3º da Lei nº 7.115 de 29.08.1983 e do artigo 3º, parágrafo único, do Decreto nº 9.094 de 17.07.2017, concedem expressamente a autorização
+    de compartilhamento de informações a que se refere o caput do mencionado artigo 3º.
+</p>
+
+<br/>
+<br/>
+
+<p class="texto">
+    b) A omissão ou falsidade das informações prestadas e documentos apresentados implicará o arquivamento provisório por prazo indeterminado
+    até o saneamento, sem análise, ou mesmo o indeferimento definitivo do(s) requerimento(s), bem como a cabível responsabilização civil,
+    administrativa e criminal, sem prejuízo da possível incursão do(s) responsável(s) nas penas do art. 299 do Código Penal (falsidade ideológica),
+    isentando de qualquer responsabilidade a unidade da PGF e a entidade representada, bem como seus servidores, quanto a danos ao(à) próprio(a)
+    requerente pela falta de atendimento ao requerido.
+</p>
+
+<br/>
+<br/>
+
+<p class="texto">
+    c) Qualquer informação sobre a tramitação do presente requerimento somente será prestada ao requerente ou seu representante legal,
+    por meio de consulta pelo requerente ao protocolo eletrônico da AGU ou envio de mensagem pela PGF ao e-mail indicado no item 4.
+</p>
+
+<br/>
+<br/>
+<hr>
+<br/>
+
+<p style="text-align: center;">
+    Local/Data: {{ municipioEntity.nome }}/{{ estadoEntity.nome }} - {{ "now"|date('d/m/Y') }}<br/>
+    Assinatura: {{ nomeRazaoSocial }}
+</p>
+
+<br/>
+<br/>
+<br/>
+</body>
+</html>

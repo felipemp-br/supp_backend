@@ -1,0 +1,1431 @@
+imports:
+    - { resource: ./constantes/constantes.yaml }
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    cache_warmer_directory: ['%kernel.project_dir%/src/Api/V1/DTO']
+
+    locale: 'pt_BR'
+
+    env(JWT_PRIVATE_KEY_PATH): '%kernel.project_dir%/%env(SECRET_KEY)%'
+    env(JWT_PUBLIC_KEY_PATH): '%kernel.project_dir%/%env(PUBLIC_KEY)%'
+    env(DEFAULT_INTELIGENCIA_ARTICIFIAL_URI): ''
+
+    mercure_jwt_secret: '%env(MERCURE_JWT_SECRET)%'
+
+    token_auth: '%env(TOKEN_AUTH)%'
+
+    supp_core.administrartivo_backend.elasticsearch: '%env(ELASTIC_URL)%'
+    supp_core.administrativo_backend.environment: '%env(ENVIRONMENT)%'
+    supp_core.administrativo_backend.jwt_exp: '%env(JWT_EXP)%'
+    supp_core.administrativo_backend.ai.default_client: '%env(DEFAULT_INTELIGENCIA_ARTICIFIAL_URI)%'
+    supp_core.administrativo_backend.nome_sistema: '%env(NOME_SISTEMA)%'
+    supp_core.administrativo_backend.sigla_sistema: '%env(SIGLA_SISTEMA)%'
+    supp_core.administrativo_backend.logo_sistema: '%env(LOGO_SISTEMA)%'
+    supp_core.administrativo_backend.icone_sistema: '%env(ICONE_SISTEMA)%'
+    supp_core.administrativo_backend.url_sistema_backend: '%env(URL_BACKEND)%'
+    supp_core.administrativo_backend.assinador_version: '1.1.10'
+    supp_core.administrativo_backend.url_sistema_frontend: '%env(URL_FRONTEND)%'
+    supp_core.administrativo_backend.url_mercure: '%env(MERCURE_URL)%'
+    supp_core.administrativo_backend.nome_instituicao: '%env(NOME_INSTITUICAO)%'
+    supp_core.administrativo_backend.sigla_unidade_arquivo_intermediario_instituicao: '%env(SIGLA_UNIDADE_ARQUIVO_INT)%'
+    supp_core.administrativo_backend.sigla_unidade_arquivo_definitivo_instituicao: '%env(SIGLA_UNIDADE_ARQUIVO_DEF)%'
+    supp_core.administrativo_backend.cnpj_instituicao: '%env(CNPJ_INSTITUICAO)%'
+    supp_core.administrativo_backend.logo_instituicao: '%env(LOGO_INSTITUICAO)%'
+    supp_core.administrativo_backend.email_suporte: '%env(EMAIL_SUPORTE)%'
+    supp_core.administrativo_backend.signer_proxy: '%env(SIGNER_PROXY)%'
+    supp_core.administrativo_backend.certificado_a1_institucional_CN: '%env(CERTIFICATE_CN)%'
+    supp_core.administrativo_backend.certificado_a1_institucional_password: '%env(CERTIFICATE_PASSWORD)%'
+    supp_core.administrativo_backend.certificado_a1_institucional_pfx: '%env(CERTIFICATE_PFX)%'
+    supp_core.administrativo_backend.template_email_boa_vindas: 'Resources/Usuario/emails/email_boa_vindas.twig'
+    supp_core.administrativo_backend.template_email_reset_senha: 'Resources/Usuario/emails/email_reset_senha.twig'
+    supp_core.administrativo_backend.template_email_auto_cadastro: 'Resources/Usuario/emails/email_auto_cadastro.twig'
+    supp_core.administrativo_backend.template_email_recupera_senha: 'Resources/Usuario/emails/email_recupera_senha.twig'
+    supp_core.administrativo_backend.template_ckeditor_administrativo_comum: 'Resources/Ckeditor/administrativo/comum.html.twig'
+    supp_core.administrativo_backend.template_processo_pdf_desentranhamento: 'Resources/Processo/downloadAsPdf/desentranhamento.twig'
+    supp_core.administrativo_backend.template_processo_pdf_acesso_negado: 'Resources/Processo/downloadAsPdf/acesso_negado.twig'
+    supp_core.administrativo_backend.template_processo_pdf_erro_integracao: 'Resources/Processo/downloadAsPdf/erro_integracao.twig'
+    supp_core.administrativo_backend.template_processo_pdf_erro_desconhecido: 'Resources/Processo/downloadAsPdf/erro_desconhecido.twig'
+    supp_core.administrativo_backend.template_processo_pdf_erro_extensao: 'Resources/Processo/downloadAsPdf/erro_extensao.twig'
+    supp_core.administrativo_backend.template_processo_pdf_sem_componentes: 'Resources/Processo/downloadAsPdf/sem_componentes.twig'
+    supp_core.administrativo_backend.template_envio_documentos_email: 'Resources/Documento/envio_email.twig'
+    supp_core.administrativo_backend.template_envio_solicitacao_acesso_email: 'Resources/Processo/envio_solicitacao_acesso_email.twig'
+    supp_core.administrativo_backend.template_envio_solicitacao_acesso_documento_email: 'Resources/Documento/envio_solicitacao_acesso_email.twig'
+    supp_core.administrativo_backend.template_envio_documento_assinatura_externa_email: 'Resources/Documento/envio_email_assinatura_externa.twig'
+    supp_core.administrativo_backend.template_chancela_assinatura: 'Resources/Documento/chancela_assinatura.twig'
+    supp_core.administrativo_backend.sso_gov_br_client_id: '%env(SSO_GOV_BR_CLIENT_ID)%'
+    supp_core.administrativo_backend.sso_gov_br_client_secret: '%env(SSO_GOV_BR_CLIENT_SECRET)%'
+    supp_core.administrativo_backend.sso_gov_br_redirect_uri: '%env(SSO_GOV_BR_REDIRECT_URI)%'
+    supp_core.administrativo_backend.sso_gov_br_sso_url: '%env(SSO_GOV_BR_SSO_URL)%'
+    supp_core.administrativo_backend.sso_gov_br_api_url: '%env(SSO_GOV_BR_API_URL)%'
+    
+    env(SSO_GOV_BR_REVALIDA_OAUTH_URL): ''
+    env(SSO_GOV_BR_REVALIDA_CLIENT_ID): ''
+    env(SSO_GOV_BR_REVALIDA_CLIENT_SECRET): ''
+    env(SSO_GOV_BR_REVALIDA_REDIRECT_URI): ''
+    supp_core.administrativo_backend.sso_gov_br_revalida_oauth_url: '%env(SSO_GOV_BR_REVALIDA_OAUTH_URL)%'
+    supp_core.administrativo_backend.sso_gov_br_revalida_client_id: '%env(SSO_GOV_BR_REVALIDA_CLIENT_ID)%'
+    supp_core.administrativo_backend.sso_gov_br_revalida_client_secret: '%env(SSO_GOV_BR_REVALIDA_CLIENT_SECRET)%'
+    supp_core.administrativo_backend.sso_gov_br_revalida_redirect_uri: '%env(SSO_GOV_BR_REVALIDA_REDIRECT_URI)%'
+
+    supp_core.administrativo_backend.neoid_url: '%env(NEOID_URL)%'
+    supp_core.administrativo_backend.neoid_client_id: '%env(NEOID_CLIENT_ID)%'
+    supp_core.administrativo_backend.neoid_client_secret: '%env(NEOID_CLIENT_SECRET)%'
+    supp_core.administrativo_backend.neoid_redirect_uri: '%env(NEOID_REDIRECT_URI)%'
+    
+    supp_core.administrativo_backend.sso_gov_br_confiabilidades_validas:
+        # https://manual-roteiro-integracao-login-unico.servicos.gov.br/pt/stable/iniciarintegracao.html#resultado-esperado-do-acesso-ao-servico-de-confiabilidade-cadastral-categorias
+        balcao_presencial: 'verificada'
+        internet_banking: 'verificada'
+        biometria_facial: 'verificada'
+        servidor_publico: 'verificada'
+        certificado_digital: 'comprovada'
+        biometria_individualizada: 'comprovada'
+        cin_facial: 'comprovada'
+
+    supp_core.administrativo_backend.sso_gov_br_niveis_validos:
+        # https://acesso.gov.br/roteiro-tecnico/iniciarintegracao.html#resultado-esperado-do-acesso-ao-servico-de-confiabilidade-cadastral-niveis
+        ouro: '3'
+        prata: '2'
+
+    env(LDAP_CONF): '[{}]'
+    supp_core.administrativo_backend.ldap_conf: '%env(json:LDAP_CONF)%'
+    
+    env(LOGIN_INTERNO_ATIVO): 'true'
+    env(LOGIN_LDAP_ATIVO):    'true'
+    env(LOGIN_GOVBR_ATIVO):   'true'
+    supp_core.administrativo_backend.login_interno_ativo: '%env(bool:LOGIN_INTERNO_ATIVO)%'    
+    supp_core.administrativo_backend.login_ldap_ativo:    '%env(bool:LOGIN_LDAP_ATIVO)%'    
+    supp_core.administrativo_backend.login_govbr_ativo:   '%env(bool:LOGIN_GOVBR_ATIVO)%'
+
+    env(PASSWORD_EXPIRATION_TIME): ''
+    supp_core.administrativo_backend.password_expiration_time: '%env(PASSWORD_EXPIRATION_TIME)%'
+
+    #Tamanho em MB, ex: 100
+    env(PROCESSO_DOWNLOAD_PART_SIZE): ''
+    supp_core.administrativo_backend.processo_download_part_size: '%env(PROCESSO_DOWNLOAD_PART_SIZE)%'
+
+    #Cache contadores
+    supp_core.administrativo_backend.cached_counters_expiration: '%env(CACHED_COUNTERS_EXPIRATION)%'
+
+    supp_core.administrativo_backend.kernel_environment_mapping:
+        'dev': 'desenvolvimento'
+        'prod': 'produção'
+        'test': 'teste'
+        env(MERCURE_URL): ''
+        env(MERCURE_JWT_SECRET): ''
+    supp_core.administrativo_backend.componente_digital_extensions:
+        txt: {allowUpload: false, mimeType: 'text/plain', typeSignature: [], maxSizeBytes: 10485760}
+        rtf: {allowUpload: false, mimeType: 'application/rtf', typeSignature: ['7B 5C 72 74 66 31'], maxSizeBytes: 10485760}
+        html: {allowUpload: true, mimeType: 'text/html', typeSignature: [], maxSizeBytes: 10485760}
+        htm: {allowUpload: true, mimeType: 'text/html', typeSignature: [], maxSizeBytes: 10485760}
+        pdf: {allowUpload: true, mimeType: 'application/pdf', typeSignature: ['25 50 44 46', 'EF BB BF 25 50 44 46'], maxSizeBytes: 10485760}
+        jpg: {allowUpload: true, mimeType: 'image/jpeg', typeSignature: ['FF D8 FF DB', 'FF D8 FF E0 00 10 4A 46 49 46', 'FF D8 FF E0 00 10 4A 46 49 46 00 01', 'FF D8 FF EE', 'FF D8 FF E1 ?? ?? 45 78 69 66 00 00', 'FF D8 FF E1 2F 50 45 78 69 66 00 00'], maxSizeBytes: 10485760}
+        jpeg: {allowUpload: true, mimeType: 'image/pjpeg', typeSignature: ['FF D8 FF DB', 'FF D8 FF E0 00 10 4A 46 49 46', 'FF D8 FF E0 00 10 4A 46 49 46 00 01', 'FF D8 FF EE', 'FF D8 FF E1 ?? ?? 45 78 69 66 00 00'], maxSizeBytes: 10485760}
+        ogg: {allowUpload: true, mimeType: 'audio/ogg', typeSignature: ['4F 67 67 53'], maxSizeBytes: 10485760}
+        mp3: {allowUpload: false, mimeType: 'audio/mp3', typeSignature: ['FF FB', '49 44 33'], maxSizeBytes: 10485760}
+        mp4: {allowUpload: true, mimeType: 'video/mp4', typeSignature: ['00 00 00 20','00 00 00 18', '00 00 00 14', '66 74 79 70', '49 4D 4B 48', '00 00 00 1C'], maxSizeBytes: 52428800}
+        pjc: {allowUpload: true, mimeType: 'application/zip', typeSignature: ['50 4B 03 04'], maxSizeBytes: 10485760}
+        odt: {allowUpload: false, mimeType: 'application/vnd.oasis.opendocument.text', typeSignature: ['50 4B 03 04'], maxSizeBytes: 10485760}
+        doc: {allowUpload: false, mimeType: 'application/msword', typeSignature: ['D0 CF 11 E0 A1 B1 1A E1'], maxSizeBytes: 10485760}
+        docx: {allowUpload: true, mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', typeSignature: ['50 4B 03 04 14 00'], maxSizeBytes: 10485760}
+        xls: {allowUpload: false, mimeType: 'application/vnd.ms-excel', typeSignature: ['D0 CF 11 E0 A1 B1 1A E1'], maxSizeBytes: 10485760}
+        xlsx: {allowUpload: false, mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', typeSignature: ['50 4B 03 04 14 00 06 00', '50 4B 03 04'], maxSizeBytes: 10485760}
+        tif: {allowUpload: false, mimeType: 'application/vnd.oasis.opendocument.spreadsheet', typeSignature: ['49 49 2A 00', '4D 4D 00 2A'], maxSizeBytes: 10485760}
+
+    supp_core.administrativo_backend.especie_atividade_submeter_aprovacao_administrativo: 'APROVAR DOCUMENTO'
+    supp_core.administrativo_backend.especie_atividade_devolver_submissao_administrativo: 'REVISAR DOCUMENTO'
+    supp_core.administrativo_backend.volume_quantidade_documento: false
+
+    supp_core.administrativo_backend.limite_requisicoes_simultaneas_recurso: 25
+    supp_core.administrativo_backend.segundos_bloqueio_recurso: 900
+
+    static_roles:
+        - { label: ADMINISTRADOR, role: ROLE_ADMIN }
+
+    static_roles_tipo_relatorio:
+        - { label: ROLE_USER, role: ROLE_USER }
+        - { label: ROLE_COLABORADOR, role: ROLE_COLABORADOR }
+        - { label: ROLE_ADMIN, role: ROLE_ADMIN }
+        - { label: ROLE_COORDENADOR, role: ROLE_COORDENADOR }
+        - { label: ROLE_DISTRIBUIDOR, role: ROLE_DISTRIBUIDOR }
+        - { label: ROLE_ARQUIVISTA, role: ROLE_ARQUIVISTA }
+
+    monolog_stats_level: 400
+    monolog_stats_slow_request: 3
+
+    integracao_barramento:
+        ativo: '%env(BARRAMENTO_MODULO)%'
+        config:
+            url_soap: '%env(BARRAMENTO_URL_SOAP)%'
+            cert_id: '%env(int:BARRAMENTO_CERT_ID)%'
+            cert_senha: '%env(BARRAMENTO_CERT_SENHA)%'
+            repositorio_siorg: '%env(int:BARRAMENTO_REPOSITORIO_SIORG)%'
+            id_organizacional: '%env(int:BARRAMENTO_ID_ORGANIZACIONAL)%'
+            certificado: '%env(resolve:BARRAMENTO_CERT)%'
+
+        mapeamentos:
+            modalidade_interessado:
+                'ativo': 'REQUERENTE (PÓLO ATIVO)'
+                'passivo': 'REQUERIDO (PÓLO PASSIVO)'
+                'terceiro': 'TERCEIRO'
+            modalidade_interessado_envio:
+                'REQUERENTE (PÓLO ATIVO)': 'ativo'
+                'REQUERIDO (PÓLO PASSIVO)': 'passivo'
+                'TERCEIRO': 'terceiro'
+                'FISCAL DA LEI DIVERSO': 'terceiro'
+                'TESTEMUNHA DO JUÍZO': 'terceiro'
+                'ASSISTENTE SIMPLES DESINTERESSADO (AMICUS CURIAE)': 'terceiro'
+                'VÍTIMA': 'passivo'
+                'ENVOLVIDO': 'terceiro'
+                'ÓRGÃO': 'terceiro'
+                'ACUSADO': 'passivo'
+                'ADVOGADO DO ACUSADO / PERITO': 'terceiro'
+            modalidade_qualificacao_pessoa:
+                'fisica': 'PESSOA FÍSICA'
+                'juridica': 'PESSOA JURÍDICA'
+                'orgaopublico': 'PESSOA JURÍDICA'
+            modalidade_genero_pessoa:
+                'M': 'MASCULINO'
+                'F': 'FEMININO'
+                'D': 'DESCONHECIDO'
+            modalidade_doc_identificador:
+                'CI': 'CARTEIRA DE IDENTIDADE'
+                'CNH': 'CARTEIRA NACIONAL DE HABILITAÇÃO'
+                'TE': 'TÍTULO DE ELEITOR'
+                'CN': 'CERTIDÃO DE NASCIMENTO'
+                'CC': 'CERTIDÃO DE CASAMENTO'
+                'PAS': 'PASSAPORTE'
+                'CT': 'CARTEIRA DE TRABALHO'
+                'RIC': 'REGISTRO INDIVIDUAL DO CIDADÃO'
+                'CMF': 'CADASTRO NO MINISTÉRIO DA FAZENDA BRASILEIRO'
+                'PISPASEP': 'NÚMERO NO PROGRAMA DE INTEGRAÇÃO SOCIAL'
+                'CEI': 'CADASTRO ESPECÍFICO DO INSS'
+                'NIT': 'NÚMERO DE IDENTIFICAÇÃO DO TRABALHO'
+                'CP': 'CADASTRO EM CONSELHOS PROFISSIONAIS'
+                'IF': 'IDENTIDADE FUNCIONAL'
+                'OAB': 'NÚMERO DE CADASTRO NA ORDEM DOS ADVOGADOS DO BRASIL'
+                'RJC': 'NÚMERO DE INSCRIÇÃO EMPRESARIAL'
+                'RGE': 'REGISTRO DE IDENTIFICAÇÃO DO ESTRANGEIRO'
+            tipo_documento_barramento:
+                1: 'Abaixo-assinado'
+                2: 'Acórdão'
+                3: 'Acordo'
+                4: 'Alvará'
+                5: 'Anais'
+                6: 'Anteprojeto'
+                7: 'Apólice'
+                8: 'Apostila'
+                9: 'Ata'
+                10: 'Atestado'
+                11: 'Ato'
+                12: 'Auto'
+                13: 'Aviso'
+                14: 'Balancete'
+                15: 'Balanço'
+                16: 'Bilhete'
+                17: 'Boletim'
+                18: 'Carta'
+                19: 'Cartaz'
+                20: 'Cédula'
+                21: 'Certidão'
+                22: 'Certificado'
+                23: 'Cheque'
+                24: 'Comprovante'
+                25: 'Comunicado'
+                26: 'Consulta'
+                27: 'Contracheque'
+                28: 'Contrato'
+                29: 'Convênio'
+                30: 'Convite'
+                31: 'Convenção'
+                32: 'Crachá'
+                33: 'Cronograma'
+                34: 'Currículo'
+                35: 'Debênture'
+                36: 'Decisão'
+                37: 'Declaração'
+                38: 'Decreto'
+                39: 'Deliberação'
+                40: 'Demonstrativo'
+                41: 'Depoimento'
+                42: 'Despacho'
+                43: 'Diário'
+                44: 'Diploma'
+                45: 'Diretriz'
+                46: 'Dissertação'
+                47: 'Dossiê'
+                48: 'Edital'
+                49: 'E-mail'
+                50: 'Embargos'
+                51: 'Emenda'
+                52: 'Escala'
+                53: 'Escritura'
+                54: 'Estatuto'
+                55: 'Exposição de Motivos'
+                56: 'Extrato'
+                57: 'Fatura'
+                58: 'Ficha'
+                59: 'Fluxograma'
+                60: 'Folha'
+                61: 'Folheto/Folder'
+                62: 'Formulário'
+                63: 'Grade Curricular'
+                64: 'Guia'
+                65: 'Histórico'
+                66: 'Indicação'
+                67: 'Informe'
+                68: 'Instrução'
+                69: 'Inventário'
+                70: 'Laudo'
+                71: 'Lei'
+                72: 'Lista/Listagem'
+                73: 'Livro'
+                74: 'Mandado'
+                75: 'Manifesto'
+                76: 'Manual'
+                77: 'Mapa'
+                78: 'Medida Provisória'
+                79: 'Memorando'
+                80: 'Memorando-circular'
+                81: 'Memorial'
+                82: 'Mensagem'
+                83: 'Minuta'
+                84: 'Moção'
+                85: 'Norma'
+                86: 'Nota'
+                87: 'Notificação'
+                88: 'Ofício'
+                89: 'Ofício-Circular'
+                90: 'Orçamento'
+                91: 'Ordem'
+                92: 'Organograma'
+                93: 'Orientação'
+                94: 'Panfleto'
+                95: 'Parecer'
+                96: 'Passaporte'
+                97: 'Pauta'
+                98: 'Petição'
+                99: 'Planilha'
+                100: 'Plano'
+                101: 'Planta'
+                102: 'Portaria'
+                103: 'Precatório'
+                104: 'Processo'
+                105: 'Procuração'
+                106: 'Programa'
+                107: 'Projeto'
+                108: 'Prontuário'
+                109: 'Pronunciamento'
+                110: 'Proposta'
+                111: 'Prospecto'
+                112: 'Protocolo'
+                113: 'Prova'
+                114: 'Questionário'
+                115: 'Receita'
+                116: 'Recibo'
+                117: 'Recurso'
+                118: 'Regimento'
+                119: 'Registro'
+                120: 'Regulamento'
+                121: 'Relação'
+                122: 'Relatório'
+                123: 'Release'
+                124: 'Representação'
+                125: 'Requerimento'
+                126: 'Requisição'
+                127: 'Resolução'
+                128: 'Resumo'
+                129: 'Roteiro'
+                130: 'Sentença'
+                131: 'Sinopse'
+                132: 'Solicitação'
+                133: 'Súmula'
+                134: 'Tabela'
+                135: 'Telegrama'
+                136: 'Termo'
+                137: 'Tese'
+                138: 'Testamento'
+                139: 'Título'
+                140: 'Voto'
+                141: 'Carteira'
+                142: 'Cartão'
+                143: 'CPF/CIC'
+                144: 'CNPJ'
+                145: 'Calendário'
+                146: 'CNH'
+                147: 'RG'
+                148: 'Agenda'
+                149: 'Análise'
+                150: 'Anotação'
+                151: 'Áudio'
+                152: 'Boleto'
+                153: 'Conta'
+                154: 'Contrarrazões'
+                155: 'Correspondência'
+                156: 'Cota'
+                157: 'Credencial'
+                158: 'Croqui'
+                159: 'Defesa'
+                160: 'Demonstração'
+                161: 'Denúncia'
+                162: 'Esclarecimento'
+                163: 'Escrituração'
+                164: 'Estratégia'
+                165: 'Impugnação'
+                166: 'Informação'
+                167: 'Intenção'
+                168: 'Licença'
+                169: 'Matéria'
+                170: 'Material'
+                171: 'Memória'
+                172: 'Movimentação'
+                173: 'Pedido'
+                174: 'Reclamação'
+                175: 'Referendo'
+                176: 'Resultado'
+                177: 'Vídeo'
+                178: 'Alegações'
+                179: 'Anexo'
+                180: 'Documento'
+                181: 'Apartado'
+                182: 'Apresentação'
+                183: 'Diagnóstico'
+                184: 'Exame'
+                185: 'Página'
+                186: 'Estudo'
+                999: 'Outra'
+            tipo_conteudo:
+                1: 'txt'
+                2: 'img'
+                3: 'aud'
+                4: 'vid'
+                5: 'out'
+            mimetype:
+                1: 'application/pdf'
+                2: 'application/vnd.oasis.opendocument.text'
+                3: 'application/vnd.oasis.opendocument.formula'
+                4: 'application/vnd.oasis.opendocument.spreadsheet'
+                5: 'application/vnd.oasis.opendocument.presentation'
+                6: 'text/xml'
+                7: 'text/rtf'
+                8: 'text/html'
+                9: 'text/plain'
+                10: 'text/csv'
+                11: 'image/gif'
+                12: 'image/jpeg'
+                13: 'image/png'
+                14: 'image/svg+xml'
+                15: 'image/tiff'
+                16: 'image/bmp'
+                17: 'audio/mp4'
+                18: 'audio/midi'
+                19: 'audio/ogg'
+                20: 'audio/vnd.wave'
+                21: 'video/avi'
+                22: 'video/mpeg'
+                23: 'video/mp4'
+                24: 'video/ogg'
+                25: 'video/webm'
+                26: 'outro'
+            extensoes:
+                'application/pdf': 'pdf'
+                'application/vnd.oasis.opendocument.text': 'odt '
+                'application/vnd.oasis.opendocument.formula': 'odf'
+                'application/vnd.oasis.opendocument.spreadsheet': 'ods'
+                'application/vnd.oasis.opendocument.presentation': 'odp'
+                'application/vnd.google-earth.kml+xml': 'xml'
+                'application/x-zip-compressed': 'zip'
+                'text/xml': 'xml'
+                'text/rtf': 'rtf'
+                'text/html': 'html'
+                'text/plain': 'txt'
+                'text/csv': 'csv'
+                'image/gif': 'gif'
+                'image/jpeg': 'jpeg'
+                'image/png': 'png'
+                'image/svg+xml': 'svg'
+                'image/tiff': 'tiff'
+                'image/bmp': 'bmp'
+                'audio/mp4': 'mp4'
+                'audio/midi': 'midi'
+                'audio/ogg': 'ogg'
+                'audio/vnd.wave': 'wav'
+                'video/avi': 'avi'
+                'video/mpeg': 'mpeg'
+                'video/mp4': 'mp4'
+                'video/ogg': 'ogg'
+                'video/webm': 'webm'
+                'outro': null
+            motivo_recusa:
+                '01': 'Formato de componente digital não suportado'
+                '02': 'Componente digital corrompido'
+                '03': 'Falta de componentes digitais'
+                '99': 'Outro'
+
+    elasticsearch:
+        indexes:
+            pessoa:
+                properties:
+                    id: { type: keyword }
+                    nome: { type: text, asterisk: true }
+                    dataNascimento: { type: date }
+                    dataObito: { type: date }
+                    nomeGenitora: { type: text }
+                    pessoaValidada: { type: boolean }
+                    pessoaConveniada: { type: boolean }
+                    numeroDocumentoPrincipal: { type: text, asterisk: true }
+                    modalidadeQualificacaoPessoa:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            valor: { type: text }
+                    modalidadeGeneroPessoa:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            valor: { type: text }
+                    vinculacaoPessoaBarramento:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            repositorio: { type: keyword }
+                            nomeRepositorio: { type: text }
+                            estrutura: { type: keyword }
+                            nomeEstrutura: { type: text }
+                    origemDados:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            fonteDados: { type: text }
+                            idExterno: { type: text }
+
+            modelo:
+                properties:
+                    id: { type: keyword }
+                    nome: { type: text, asterisk: true }
+                    descricao: { type: text }
+                    ativo: { type: boolean }
+                    criadoEm: { type: date }
+                    atualizadoEm: { type: date }
+                    modalidadeModelo:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            valor: { type: text }
+                    documento:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            tipoDocumento:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                            componentesDigitais:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    conteudo: { type: attachment, denseVector: true }
+                    vinculacoesModelos:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            especieSetor:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                            setor:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    unidade:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            nome: { type: text }
+                                    especieSetor:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            nome: { type: text }
+                            modalidadeOrgaoCentral:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    valor: { type: text }
+                            usuario:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                            unidade:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+
+            repositorio:
+                properties:
+                    id: { type: keyword }
+                    nome: { type: text, asterisk: true }
+                    descricao: { type: text }
+                    ativo: { type: boolean }
+                    modalidadeRepositorio:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            valor: { type: text }
+                    documento:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            tipoDocumento:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                            componentesDigitais:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    conteudo: { type: attachment, denseVector: true }
+                    vinculacoesRepositorios:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            especieSetor:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                            setor:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    unidade:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            nome: { type: text }
+                                    especieSetor:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            nome: { type: text }
+                            modalidadeOrgaoCentral:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    valor: { type: text }
+                            usuario:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                            unidade:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+
+            componente_digital:
+                properties:
+                    id: { type: keyword }
+                    criadoEm: { type: date }
+                    criadoPor:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            nome: { type: text }
+                    fileName: { type: text }
+                    extensao: { type: text }
+                    editavel: { type: boolean }
+                    conteudo: { type: attachment }
+                    numeroUnicoDocumento: { type: text }
+                    documento:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            autor: { type: text }
+                            redator: { type: text }
+                            destinatario: { type: text }
+                            setorOrigem:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    unidade:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            nome: { type: text }
+                                    especieSetor:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            nome: { type: text }
+                            juntadaAtual:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    criadoEm: { type: date }
+                                    numeracaoSequencial: { type: integer }
+                                    criadoPor:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            nome: { type: text }
+                                    volume:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            numeracaoSequencial: { type: integer }
+                                            processo:
+                                                type: "object"
+                                                properties:
+                                                    id: { type: keyword }
+                                                    NUP: { type: text }
+                            tipoDocumento:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+            processo:
+                properties:
+                    id: { type: keyword }
+                    NUP: { type: text, name: 'n_up' }
+                    titulo: { type: text }
+                    descricao: { type: text }
+                    outroNumero: { type: text }
+                    dataHoraAbertura: { type: date }
+                    unidadeArquivistica: { type: integer }
+                    especieProcesso:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            nome: { type: text }
+                    modalidadeFase:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            valor: { type: text }
+                    classificacao:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            nome: { type: text }
+                    procedencia:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            nome: { type: text }
+                    modalidadeMeio:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            valor: { type: text }
+                    setorAtual:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            nome: { type: text }
+                            unidade:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                    vinculacoesProcessos:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            processoVinculado:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    processoVinculado:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            NUP: { type: text }
+                            modalidadeVinculacaoProcesso:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    valor: { type: text }
+                    interessados:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            pessoa:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                                    numeroDocumentoPrincipal: { type: text }
+                            modalidadeInteressado:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    valor: { type: text }
+                    assuntos:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            principal: { type: boolean }
+                            assuntoAdministrativo:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                    vinculacoesEtiquetas:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            etiqueta:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+            tese:
+                properties:
+                    id: { type: keyword }
+                    nome: { type: text, asterisk: true }
+                    sigla: { type: text }
+                    enunciado: { type: text, asterisk: true }
+                    ementa: { type: text, asterisk: true }
+                    ativo: { type: boolean }
+                    criadoEm: { type: date }
+                    atualizadoEm: { type: date }
+                    tema:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            nome: { type: text }
+                            sigla: { type: text }
+                            ramoDireito:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                                    sigla: { type: text }
+                    vinculacoesMetadados:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            idDispositivo: { type: text }
+                            textoDispositivo: { type: text }
+                            urn:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    tituloDispositivo: { type: text }
+                                    urn: { type: text }
+                                    modalidadeUrn:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            valor: { type: text }
+                                            descricao: { type: text }
+                    vinculacoesOrgaoCentralMetadados:
+                        type: "object"
+                        properties:
+                            id: { type: keyword }
+                            modalidadeOrgaoCentral:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    valor: { type: text }
+                            assuntoAdministrativo:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                            especieSetor:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                            especieProcesso:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                                    generoProcesso:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            nome: { type: text }
+                            especieDocumento:
+                                type: "object"
+                                properties:
+                                    id: { type: keyword }
+                                    nome: { type: text }
+                                    sigla: { type: text }
+                                    generoDocumento:
+                                        type: "object"
+                                        properties:
+                                            id: { type: keyword }
+                                            nome: { type: text }
+
+    supp_core.administrativo_backend.roles_processo: []
+
+    default_ocr_enabled: !php/const SuppCore\AdministrativoBackend\Elastic\ComponenteDigitalDocumentService::DEFAULT_OCR_ENABLED
+    default_ocr_pipeline_timeout: !php/const SuppCore\AdministrativoBackend\Elastic\ComponenteDigitalDocumentService::DEFAULT_OCR_PIPELINE_TIMEOUT
+    ocr_enabled: '%env(default:default_ocr_enabled:bool:OCR_ENABLED)%'
+    ocr_pipeline_timeout: '%env(default:default_ocr_pipeline_timeout:float:OCR_PIPELINE_TIMEOUT)%'
+    default_algoritmo_hash_componente_digital: 'SHA256'
+    algoritmo_hash_componente_digital: '%env(default:default_algoritmo_hash_componente_digital:bool:ALGORITMO_HASH_COMPONENTE_DIGITAL)%'
+    default_virus_verification_enabled: false
+    virus_verification_enabled: '%env(default:default_virus_verification_enabled:bool:VIRUS_VERIFICATION_ENABLED)%'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+        # fetching services directly from the container via $container->get() won't work.
+        # The best practice is to be explicit about your dependencies anyway.
+        bind:
+            $projectDir: '%kernel.project_dir%'
+
+    Redis: '@snc_redis.default'
+
+    ProxyManager\Factory\AccessInterceptorValueHolderFactory:
+        class: ProxyManager\Factory\AccessInterceptorValueHolderFactory
+
+    Twig\Extra\Intl\IntlExtension:
+        class: Twig\Extra\Intl\IntlExtension
+        tags: [ 'twig.extension' ]
+
+    SuppCore\AdministrativoBackend\EventListener\AuthenticationListener:
+        class: SuppCore\AdministrativoBackend\EventListener\AuthenticationListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    SuppCore\AdministrativoBackend\EventListener\LoginListener:
+        class: SuppCore\AdministrativoBackend\EventListener\LoginListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    SuppCore\AdministrativoBackend\Security\Voter\SigiloVoter:
+        class: SuppCore\AdministrativoBackend\Security\Voter\SigiloVoter
+        public: false
+        tags:
+            - { name: security.voter }
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Doctrine\ORM\SoftDeleteable\SoftDeleteableRequestListener:
+        class: SuppCore\AdministrativoBackend\Doctrine\ORM\SoftDeleteable\SoftDeleteableRequestListener
+        arguments: [ '@doctrine.orm.entity_manager', '@request_stack' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    SuppCore\AdministrativoBackend\Doctrine\ORM\Pcu\PcuRequestListener:
+        class: SuppCore\AdministrativoBackend\Doctrine\ORM\Pcu\PcuRequestListener
+        arguments: [ '@doctrine.orm.entity_manager', '@security.authorization_checker', '@request_stack' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    SuppCore\AdministrativoBackend\:
+        resource: '../src/*'
+        exclude: '../src/{Bundles,Entity,Document,Repository,DataCollector,Migrations,Tests,Kernel.php,EventListener,Utils/Tests,Maker,Security/ApiKeyUser.php,Security/UsuarioRepository.php,Api/V1/Triggers,Api/V1/Mapper/Pipes,Doctrine/ORM/SoftDeleteable,Doctrine/ORM/Pcu}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    SuppCore\AdministrativoBackend\Controller\:
+        resource: '../src/Controller/*'
+        tags: [ 'controller.service_arguments' ]
+
+    SuppCore\AdministrativoBackend\Repository\:
+        resource: '../src/Repository/*'
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Controller\:
+        resource: '../src/Api/V1/Controller/*'
+        tags: [ 'controller.service_arguments' ]
+
+    SuppCore\AdministrativoBackend\Document\Adaptador\AdaptadorManager:
+        class: SuppCore\AdministrativoBackend\Document\Adaptador\AdaptadorManager
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Controller\ProcessoController:
+        class: SuppCore\AdministrativoBackend\Api\V1\Controller\ProcessoController
+        arguments: [ '@SuppCore\AdministrativoBackend\Api\V1\Resource\ProcessoResource', '@SuppCore\AdministrativoBackend\Rest\ResponseHandler', '@SuppCore\AdministrativoBackend\Document\Processo', '@SuppCore\AdministrativoBackend\Elastic\ElasticQueryBuilderService' ]
+        tags: [ 'controller.service_arguments' ]
+
+    SuppCore\AdministrativoBackend\Api\V1\Controller\PessoaController:
+        class: SuppCore\AdministrativoBackend\Api\V1\Controller\PessoaController
+        arguments: [ '@SuppCore\AdministrativoBackend\Api\V1\Resource\PessoaResource', '@SuppCore\AdministrativoBackend\Rest\ResponseHandler', '@SuppCore\AdministrativoBackend\Document\Pessoa', '@SuppCore\AdministrativoBackend\Elastic\ElasticQueryBuilderService' ]
+        tags: [ 'controller.service_arguments' ]
+
+    SuppCore\AdministrativoBackend\Api\V1\Controller\ModeloController:
+        class: SuppCore\AdministrativoBackend\Api\V1\Controller\ModeloController
+        arguments: [ '@SuppCore\AdministrativoBackend\Api\V1\Resource\ModeloResource', '@SuppCore\AdministrativoBackend\Rest\ResponseHandler', '@SuppCore\AdministrativoBackend\Document\Modelo', '@SuppCore\AdministrativoBackend\Elastic\ElasticQueryBuilderService' ]
+        tags: [ 'controller.service_arguments' ]
+
+    SuppCore\AdministrativoBackend\Api\V1\Controller\RepositorioController:
+        class: SuppCore\AdministrativoBackend\Api\V1\Controller\RepositorioController
+        arguments: [ '@SuppCore\AdministrativoBackend\Api\V1\Resource\RepositorioResource', '@SuppCore\AdministrativoBackend\Rest\ResponseHandler', '@SuppCore\AdministrativoBackend\Document\Repositorio', '@SuppCore\AdministrativoBackend\Elastic\ElasticQueryBuilderService' ]
+        tags: [ 'controller.service_arguments' ]
+
+    SuppCore\AdministrativoBackend\Api\V1\Controller\ComponenteDigitalController:
+        class: SuppCore\AdministrativoBackend\Api\V1\Controller\ComponenteDigitalController
+        arguments: [ '@SuppCore\AdministrativoBackend\Api\V1\Resource\ComponenteDigitalResource', '@SuppCore\AdministrativoBackend\Rest\ResponseHandler', '@SuppCore\AdministrativoBackend\Document\ComponenteDigital', '@SuppCore\AdministrativoBackend\Elastic\ElasticQueryBuilderService' ]
+        tags: [ 'controller.service_arguments' ]
+
+    # Tests
+    SuppCore\AdministrativoBackend\Utils\Tests\Auth:
+        class: SuppCore\AdministrativoBackend\Utils\Tests\Auth
+        public: true
+        lazy: true
+
+    # Note that Resource objects needs to be public
+    SuppCore\AdministrativoBackend\Api\V1\Resource\:
+        resource: '../src/Api/V1/Resource/*'
+        tags: [ 'supp_core.administrativo_backend.rest.resource' ]
+        lazy: true
+        public: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Resource\ComponenteDigitalResource:
+        class: SuppCore\AdministrativoBackend\Api\V1\Resource\ComponenteDigitalResource
+        arguments: [ '@SuppCore\AdministrativoBackend\Repository\ComponenteDigitalRepository', '@validator', '@parameter_bag', '@SuppCore\AdministrativoBackend\Utils\CompressService', '@Knp\Snappy\Pdf' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Resource\StatusBarramentoResource:
+        class: SuppCore\AdministrativoBackend\Api\V1\Resource\StatusBarramentoResource
+        arguments: [ '@SuppCore\AdministrativoBackend\Repository\StatusBarramentoRepository', '@validator', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ProcessoResource' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Rest\Describer\ApiDocDescriber:
+        tags:
+            - { name: nelmio_api_doc.describer, priority: -500 }
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Rules\:
+        resource: '../src/Api/V1/Rules/*/*'
+        tags: [ 'rules_manager.rule' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Security\Roles\:
+        resource: '../src/Security/Roles/*'
+        tags: [ 'roles_service.role' ]
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\:
+        resource: '../src/Api/V1/Triggers/*/*'
+        tags: [ 'triggers_manager.trigger' ]
+        exclude: '../src/Api/V1/Triggers/*/*/*'
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Counters\:
+        resource: '../src/Api/V1/Counters/*/*'
+        tags: [ 'counter_manager.counter' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Mapper\Pipes\:
+        resource: '../src/Api/V1/Mapper/Pipes/*/*'
+        tags: [ 'pipes_manager.pipe' ]
+        exclude: '../src/Api/V1/Mapper/Pipes/*/*/*'
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Integracao\Dossie\DossieManager:
+        tags: [ 'integracao_dossie.manager' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Integracao\Datalake\TopicManager:
+        tags: [ 'integracao_datalake.topic_manager' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Integracao\Datalake\Producer\:
+        resource: '../src/Integracao/Datalake/Producer/*'
+        tags: [ 'integracao_datalake.topic_producer' ]
+
+    SuppCore\AdministrativoBackend\Integracao\Datalake\Consumer\:
+        resource: '../src/Integracao/Datalake/Consumer/*'
+        tags: [ 'integracao_datalake.topic_consumer' ]
+
+    SuppCore\AdministrativoBackend\Integracao\Avaliacao\AvaliacaoManager:
+        tags: [ 'integracao_avaliacao.manager' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Fields\FieldsManager:
+        public: true
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Fields\Field\:
+        resource: '../src/Fields/Field/*'
+        tags: [ 'fields_manager.field' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Fields\Style\:
+        resource: '../src/Fields/Style/*'
+        tags: [ 'styles_manager.style' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Mapper\DefaultMapper:
+        class: SuppCore\AdministrativoBackend\Mapper\DefaultMapper
+        tags: [ 'dto_mapper.mapper' ]
+
+    SuppCore\AdministrativoBackend\Api\V1\Mapper\:
+        resource: '../src/Api/V1/Mapper/*'
+        tags: [ 'dto_mapper.mapper' ]
+        exclude: '../src/Api/V1/Mapper/Pipes'
+
+    SuppCore\AdministrativoBackend\Integracao\Avaliacao\Fabrica\:
+        resource: '../src/Integracao/Avaliacao/Fabrica/*'
+        tags: [ 'integracao_avaliacao.avaliacao' ]
+        exclude: '../src/Integracao/Avaliacao/Fabrica/*/*'
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Rest\Controller:
+        abstract: true
+
+    SuppCore\AdministrativoBackend\EventListener\ComponenteDigitalListener:
+        class: SuppCore\AdministrativoBackend\EventListener\ComponenteDigitalListener
+        arguments: [ '@SuppCore\AdministrativoBackend\Utils\CompressService', '@SuppCore\AdministrativoBackend\Repository\ComponenteDigitalRepository' ]
+        tags:
+            - { name: doctrine.event_listener, event: 'prePersist', connection: default, priority: -1 }
+            - { name: doctrine.event_listener, event: 'preUpdate', connection: default, priority: -1 }
+            - { name: doctrine.event_listener, event: 'postSoftDelete', connection: default, priority: -1 }
+        lazy: true
+
+    SuppCore\AdministrativoBackend\EventListener\ComponenteDigitalNumeracaoSequencial:
+        class: SuppCore\AdministrativoBackend\EventListener\ComponenteDigitalNumeracaoSequencial
+        tags:
+            - { name: doctrine.event_listener, event: 'prePersist', connection: default, priority: -1 }
+            - { name: doctrine.event_listener, event: 'preUpdate', connection: default, priority: -1 }
+            - { name: doctrine.event_listener, event: 'postSoftDelete', connection: default, priority: -1 }
+            - { name: doctrine.event_listener, event: 'postFlush', connection: default, priority: -1 }
+        lazy: true
+
+    SuppCore\AdministrativoBackend\EventListener\AclListener:
+        class: SuppCore\AdministrativoBackend\EventListener\AclListener
+        tags:
+            - { name: doctrine.event_listener, event: 'prePersist', connection: default, priority: -1 }
+            - { name: doctrine.event_listener, event: 'postFlush', connection: default, priority: -1 }
+        lazy: true
+
+    SuppCore\AdministrativoBackend\EventListener\SigiloListener:
+        class: SuppCore\AdministrativoBackend\EventListener\SigiloListener
+        tags:
+            - { name: doctrine.event_listener, event: 'prePersist', connection: default, priority: -1 }
+            - { name: doctrine.event_listener, event: 'postFlush', connection: default, priority: -1 }
+        lazy: true
+
+    SuppCore\AdministrativoBackend\EventListener\TipoRelatorioListener:
+        class: SuppCore\AdministrativoBackend\EventListener\TipoRelatorioListener
+        tags:
+            - { name: doctrine.event_listener, event: 'prePersist', connection: default, priority: -1 }
+            - { name: doctrine.event_listener, event: 'postFlush', connection: default, priority: -1 }
+        lazy: true
+
+    SuppCore\AdministrativoBackend\EventListener\RateListenerRequest:
+        class: SuppCore\AdministrativoBackend\EventListener\RateListenerRequest
+        tags:
+            - { name: kernel.event_subscriber }
+
+    SuppCore\AdministrativoBackend\EventListener\PostCreateClientListener:
+        class: SuppCore\AdministrativoBackend\EventListener\PostCreateClientListener
+        tags:
+            - { name: kernel.event_subscriber, event: ongr.es.event.post_client_create, method: onPostClientCreate }
+
+    SuppCore\AdministrativoBackend\Rest\Describer\ApiDocDescriberInformation:
+        arguments:
+            $rootDir: '%kernel.project_dir%'
+        tags:
+            - { name: nelmio_api_doc.describer, priority: -500 }
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Security\RolesService:
+        arguments: [ '%security.role_hierarchy.roles%', '@security.token_storage' ]
+
+    SuppCore\AdministrativoBackend\QueryBuilder\SortingFieldResolving\SortingFieldResolverInterface: '@SuppCore\AdministrativoBackend\QueryBuilder\SortingFieldResolving\AnnotationSortingFieldResolver'
+
+    supp_core.administrativo_backend.service_locator:
+        class: Symfony\Component\DependencyInjection\ServiceLocator
+        tags: [ 'container.service_locator' ]
+        public: true
+        arguments:
+            -   SuppCore\AdministrativoBackend\Security\RolesService: '@SuppCore\AdministrativoBackend\Security\RolesService'
+            -   SuppCore\AdministrativoBackend\Utils\Tests\Auth: '@SuppCore\AdministrativoBackend\Utils\Tests\Auth'
+
+    monolog.logstash_formatter:
+        class: SuppCore\AdministrativoBackend\Monolog\Formatter\LogstashFormatter
+        arguments: [ 'supp' ]
+
+    SuppCore\AdministrativoBackend\EventListener\StatsRequestListener:
+        class: SuppCore\AdministrativoBackend\EventListener\StatsRequestListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate, method: onControllerResponse }
+            - { name: monolog.logger, channel: 'statistics' }
+
+    jms_serializer.serialized_name_annotation_strategy:
+        class: JMS\Serializer\Naming\SerializedNameAnnotationStrategy
+        arguments:
+            - '@jms_serializer.identical_property_naming_strategy'
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Juntada\MessageHandler\IndexacaoMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Document\ComponenteDigital', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ComponenteDigitalResource' ]
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Pessoa\MessageHandler\IndexacaoMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Document\Pessoa', '@SuppCore\AdministrativoBackend\Api\V1\Resource\PessoaResource' ]
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Modelo\MessageHandler\IndexacaoMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Document\Modelo', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ModeloResource', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ComponenteDigitalResource' ]
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Repositorio\MessageHandler\IndexacaoMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Document\Repositorio', '@SuppCore\AdministrativoBackend\Api\V1\Resource\RepositorioResource', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ComponenteDigitalResource' ]
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Processo\MessageHandler\IndexacaoMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Document\Processo', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ProcessoResource' ]
+        tags: [ messenger.message_handler ]
+
+    SuppCore\AdministrativoBackend\Command\Elastic\MessageHandlers\PopulateComponenteDigitalMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Document\ComponenteDigital', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ComponenteDigitalResource' ]
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Command\Elastic\MessageHandlers\PopulatePessoaMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Document\Pessoa', '@SuppCore\AdministrativoBackend\Api\V1\Resource\PessoaResource' ]
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Command\Elastic\MessageHandlers\PopulateModeloMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Document\Modelo', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ModeloResource', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ComponenteDigitalResource' ]
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Command\Elastic\MessageHandlers\PopulateRepositorioMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Document\Repositorio', '@SuppCore\AdministrativoBackend\Api\V1\Resource\RepositorioResource', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ComponenteDigitalResource' ]
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Command\Elastic\MessageHandlers\PopulateProcessoMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Document\Processo', '@SuppCore\AdministrativoBackend\Api\V1\Resource\ProcessoResource' ]
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Command\Elastic\MessageHandlers\PopulateTeseMessageHandler:
+        arguments:
+            - '@SuppCore\AdministrativoBackend\Document\Tese'
+            - '@SuppCore\AdministrativoBackend\Api\V1\Resource\TeseResource'
+            - '@logger'
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Tese\MessageHandler\IndexacaoMessageHandler:
+        arguments:
+            - '@SuppCore\AdministrativoBackend\Document\Tese'
+            - '@SuppCore\AdministrativoBackend\Api\V1\Resource\TeseResource'
+            - '@logger'
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Counter\MessageHandler\PushMessageHandler:
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Relatorio\MessageHandler\CreateMessageHandler:
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Assinatura\MessageHandler\AssinaDocumentoMessageHandler:
+        tags: [ messenger.message_handler ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Integracao\Dossie\Operacoes\GerarDossie\MessageHandler\GerarDossieService:
+        arguments: [ '@stof_doctrine_extensions.listener.blameable' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Integracao\Dossie\Operacoes\GerarDossie\MessageHandler\GerarDossieMessageHandler:
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Integracao\Dossie\Operacoes\GerarDossieTarefa\MessageHandler\GerarDossieTarefaMessageHandler:
+        arguments: ['@stof_doctrine_extensions.listener.blameable']
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Favorito\MessageHandler\FavoritoMessageHandler:
+        arguments: [ '@SuppCore\AdministrativoBackend\Api\V1\Resource\FavoritoResource', '@SuppCore\AdministrativoBackend\Api\V1\Resource\UsuarioResource', '@SuppCore\AdministrativoBackend\Transaction\TransactionManager' ]
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Processo\MessageHandler\DownloadProcessoMessageHandler:
+        arguments: ['@stof_doctrine_extensions.listener.blameable']
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Processo\MessageHandler\CopyProcessoDocumentosMessageHandler:
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\StatusBarramento\MessageHandler\SincronizaBarramentoMessageHandler:
+        arguments: ['@stof_doctrine_extensions.listener.blameable']
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\ComponenteDigital\MessageHandler\VerificacaoVirusMessageHandler:
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Triggers\Setor\MessageHandler\TransferirAcervoMessageHandler:
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\RegrasEtiqueta\MessageHandler\RegrasEtiquetaMessageHandler:
+        arguments: ['@stof_doctrine_extensions.listener.blameable']
+        tags: [ 'messenger.message_handler' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Security\LoginUnicoGovBrService:
+        arguments:
+            - '%supp_core.administrativo_backend.sso_gov_br_client_id%'
+            - '%supp_core.administrativo_backend.sso_gov_br_client_secret%'
+            - '%supp_core.administrativo_backend.sso_gov_br_redirect_uri%'
+            - '%supp_core.administrativo_backend.sso_gov_br_sso_url%'
+            - '%supp_core.administrativo_backend.sso_gov_br_api_url%'
+            - '%supp_core.administrativo_backend.sso_gov_br_confiabilidades_validas%'
+            - '%supp_core.administrativo_backend.sso_gov_br_niveis_validos%'
+            - '%supp_core.administrativo_backend.sso_gov_br_revalida_client_id%'
+            - '%supp_core.administrativo_backend.sso_gov_br_revalida_client_secret%'
+            - '%supp_core.administrativo_backend.sso_gov_br_revalida_oauth_url%'
+            - '%supp_core.administrativo_backend.sso_gov_br_revalida_redirect_uri%'
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Security\LdapService:
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Barramento\Service\BarramentoLogger:
+        class: SuppCore\AdministrativoBackend\Barramento\Service\BarramentoLogger
+        arguments:
+            - "@logger"
+        tags:
+            - { name: monolog.logger, channel: integracao_barramento }
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Api\V1\Controller\VinculacaoPessoaBarramentoController:
+        class: SuppCore\AdministrativoBackend\Api\V1\Controller\VinculacaoPessoaBarramentoController
+        arguments: [
+                '@SuppCore\AdministrativoBackend\Api\V1\Resource\VinculacaoPessoaBarramentoResource',
+                '@SuppCore\AdministrativoBackend\Rest\ResponseHandler',
+                '@SuppCore\AdministrativoBackend\Barramento\Service\BarramentoClient',
+                '@JMS\Serializer\SerializerInterface'
+        ]
+        tags: [ 'controller.service_arguments' ]
+
+    SuppCore\AdministrativoBackend\Api\V1\Controller\TeseController:
+        class: SuppCore\AdministrativoBackend\Api\V1\Controller\TeseController
+        arguments: [ '@SuppCore\AdministrativoBackend\Api\V1\Resource\TeseResource', '@SuppCore\AdministrativoBackend\Rest\ResponseHandler', '@SuppCore\AdministrativoBackend\Document\Tese', '@SuppCore\AdministrativoBackend\Elastic\ElasticQueryBuilderService' ]
+        tags: [ 'controller.service_arguments' ]
+
+    SuppCore\AdministrativoBackend\Reports\ReportsFormatManager:
+        class: SuppCore\AdministrativoBackend\Reports\ReportsFormatManager
+        arguments: [ '@twig', '@Knp\Snappy\Pdf' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\NUP\Providers\:
+        resource: '../src/NUP/Providers/*'
+        tags: [ 'nup_provider_manager.provider' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\NUP\NUPProviderManager:
+        public: true
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Security\InternalLogInService:
+        class: SuppCore\AdministrativoBackend\Security\InternalLogInService
+        arguments: ['@stof_doctrine_extensions.listener.blameable']
+        public: true
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Helpers\TipoRelatorio\Drivers\:
+        resource: '../src/Helpers/TipoRelatorio/Drivers/*'
+        tags: [ 'tipo_relatorio_drivers.driver' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Helpers\ProtocoloExterno\Drivers\:
+        resource: '../src/Helpers/ProtocoloExterno/Drivers/*'
+        tags: [ 'protocolo_externo_drivers.driver' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Helpers\Configuration\Drivers\:
+        resource: '../src/Helpers/Configuration/Drivers/*'
+        tags: [ 'configuration_manager.configuration_driver' ]
+        lazy: true
+
+    SuppCore\AdministrativoBackend\Migrations\Helpers\MigrationHelper:
+        lazy: true
+        public: true
+
+    _instanceof:
+        SuppCore\AdministrativoBackend\Crypto\CryptoServiceInterface:
+            tags: [ 'crypto.service' ]
+            lazy: true
+        SuppCore\AdministrativoBackend\Filesystem\FilesystemServiceInterface:
+            tags: [ 'filesystem.service' ]
+            lazy: true
+        SuppCore\AdministrativoBackend\Document\Adaptador\AdaptadorInterface:
+            tags: [ 'document_adaptador_manager.adaptador' ]
+            lazy: true
+        SuppCore\AdministrativoBackend\EARQ\EARQEventoPreservacaoLoggerInterface:
+            tags: [ { name: monolog.logger, channel: 'eventos_preservacao' } ]
+        SuppCore\AdministrativoBackend\Cronjob\CronjobLoggerInterface:
+            tags: [ { name: monolog.logger, channel: 'cronjob' } ]
+
+    SuppCore\AdministrativoBackend\Elastic\ComponenteDigitalDocumentService:
+        class: SuppCore\AdministrativoBackend\Elastic\ComponenteDigitalDocumentService
+        lazy: true
+        calls:
+            -   method: setConfigs
+                arguments:
+                    $configs:
+                        ocr_enabled: '%ocr_enabled%'
+                        ocr_pipeline_timeout: '%ocr_pipeline_timeout%'
+
+    SuppCore\AdministrativoBackend\Doctrine\ORM\Immutable\ImmutableListener:
+        class: SuppCore\AdministrativoBackend\Doctrine\ORM\Immutable\ImmutableListener
+        tags:
+            - { name: doctrine.event_listener, event: 'preUpdate', connection: default, priority: -1 }
+            - { name: doctrine.event_listener, event: 'preSoftDelete', connection: default, priority: -1 }
+            - { name: doctrine.event_listener, event: 'preRemove', connection: default, priority: -1 }
+
+    Doctrine\Migrations\Version\DbalMigrationFactory: ~
+    SuppCore\AdministrativoBackend\Migrations\Factory\MigrationFactoryDecorator:
+        decorates: Doctrine\Migrations\Version\DbalMigrationFactory
+        arguments: [ '@SuppCore\AdministrativoBackend\Migrations\Factory\MigrationFactoryDecorator.inner', '@service_container' ]
+        lazy: true
+
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler:
+        arguments:
+            - '@Redis'
+            # you can optionally pass an array of options. The only options are 'prefix' and 'ttl',
+            # which define the prefix to use for the keys to avoid collision on the Redis server
+            # and the expiration time for any given entry (in seconds), defaults are 'sf_s' and null:
+            - { 'ttl': 600 }
+
+    Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
+
+    SuppCore\AdministrativoBackend\InteligenciaArtificial\Core\Services\InteligenciaArtificialService:
+        lazy: true
+
+    SuppCore\AdministrativoBackend\InteligenciaArtificial\Triagem\MessageHandler\TriagemMessageHandler:
+        lazy: true
+
+    SuppCore\AdministrativoBackend\InteligenciaArtificial\Triagem\Trilhas\BaseTrilhaTriagem:
+        abstract: true
+        lazy: true
+
+    SuppCore\AdministrativoBackend\EventListener\MessengerListener:
+        lazy: true

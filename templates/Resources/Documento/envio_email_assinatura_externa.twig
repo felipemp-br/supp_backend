@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <title>SUPP</title>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div>
+    <p>Solicitação de Assinatura de Documentos do sistema {{ sistema }}!</p>
+
+    <p>
+        Clique <a href="{{link}}">aqui</a> para assinar o Documento no ambiente de {{ ambiente }}!<br>
+        Ou acesse o link abaixo: <br>
+        <code>{{link}}</code>
+    </p>
+
+    <p>Email enviado em {{date()|date('d/m/Y')}} às {{date()|date('H:i:s')}}.</p>
+
+    {% if mensagem|length > 0 %}
+        <br><p>{{ mensagem }}</p>
+    {% endif %}
+</div>
+</body>
+</html>

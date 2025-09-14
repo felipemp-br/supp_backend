@@ -1,0 +1,6 @@
+doctrine_migrations:
+    migrations_paths:
+        DoctrineMigrations: '%kernel.project_dir%/src/Migrations'
+        SuppCore\AdministrativoBackend\Migrations: '%kernel.project_dir%/src/Migrations'
+    services:
+        'Doctrine\Migrations\Version\MigrationFactory': 'SuppCore\AdministrativoBackend\Migrations\Factory\MigrationFactoryDecorator'

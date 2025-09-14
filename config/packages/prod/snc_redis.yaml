@@ -1,0 +1,13 @@
+snc_redis:
+    clients:
+        default:
+            type: phpredis
+            alias: default
+            logging: false
+            dsn: '%env(REDIS_URL)%'
+            options:
+                connection_persistent: true
+    monolog:
+        formatter: monolog.logstash_formatter
+        client: default
+        key: monolog

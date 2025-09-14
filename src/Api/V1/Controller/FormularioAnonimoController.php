@@ -1,0 +1,82 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * /src/Controller/FormularioAnonimoController.php.
+ *
+ * @author  Advocacia-Geral da União <supp@agu.gov.br>
+ */
+
+namespace SuppCore\AdministrativoBackend\Api\V1\Controller;
+
+use OpenApi\Attributes as OA;
+use SuppCore\AdministrativoBackend\Annotation\RestApiDoc;
+use SuppCore\AdministrativoBackend\Api\V1\Resource\FormularioResource;
+use SuppCore\AdministrativoBackend\Rest\Controller;
+use SuppCore\AdministrativoBackend\Rest\ResponseHandler;
+use SuppCore\AdministrativoBackend\Rest\Traits\Actions;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
+
+/**
+ * @author  Advocacia-Geral da União <supp@agu.gov.br>
+ *
+ * @method FormularioResource getResource()
+ */
+#[Route(path: '/v1/administrativo/formulario_anonimo')]
+#[OA\Tag(name: 'FormularioAnonimo')]
+class FormularioAnonimoController extends Controller
+{
+    // Traits
+    use Actions\Anon\FindOneAction;
+    use Actions\Anon\FindAction;
+    use Actions\Anon\CountAction;
+    use Actions\Anon\CreateAction;
+    use Actions\Anon\UpdateAction;
+    use Actions\Anon\PatchAction;
+
+    /**
+     * FormularioAnonimoResource constructor.
+     *
+     * @param FormularioResource $resource
+     * @param ResponseHandler    $responseHandler
+     */
+    public function __construct(
+        FormularioResource $resource,
+        ResponseHandler $responseHandler
+    ) {
+        $this->init($resource, $responseHandler);
+    }
+
+    #[Route(
+        path: '/{id}/fields',
+        requirements: [
+            'documentoId' => '\d+',
+        ],
+        methods: ['GET']
+    )]
+    #[RestApiDoc]
+    public function formularioFields(
+        Request $request,
+        int $id
+    ): Response {
+        $allowedHttpMethods ??= ['GET'];
+
+        $this->validateRestMethod($request, $allowedHttpMethods);
+        try {
+            $result = $this->getResource()->getFormularioJsonSchemaFields($id);
+            return new Response(
+                $this->getResponseHandler()->getSerializer()->serialize(
+                    $result,
+                    'json',
+                ),
+                200,
+                ['Content-Type' => 'application/json']
+            );
+        } catch (Throwable $e) {
+            throw $this->handleRestMethodException($e, $id);
+        }
+    }
+}

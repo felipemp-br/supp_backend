@@ -1,0 +1,6 @@
+doctrine:
+    dbal:
+        default_connection: default
+        driver: pdo_sqlite
+        url: '%env(DATABASE_URL)%'
+        logging: false

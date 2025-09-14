@@ -1,0 +1,245 @@
+name: CI/CD Universal AKS (Backend)
+
+on:
+  push:
+    branches:
+      - master
+      - homologacao
+  workflow_dispatch:
+
+env:
+  REGISTRY: suppregistry.azurecr.io
+  IMAGE_TAG_NUMERIC: 1.0.${{ github.run_number }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      numeric_tag: ${{ steps.set_numeric_tag.outputs.tag }}
+      backend_image_name: ${{ steps.set_dynamic_names.outputs.backend_image_name }}
+
+    steps:
+      - name: Checkout do repositório backend
+        uses: actions/checkout@v4
+        with:
+          repository: supp-core/supp-administrativo-backend
+
+      - name: Definir Nomes Dinâmicos (Build)
+        id: set_dynamic_names
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          if [[ "$BRANCH_NAME" == "master" ]]; then
+            IMAGE_PREFIX="producao"
+            IMAGE_NAME_SUFFIX="php-supp-prod"
+          elif [[ "$BRANCH_NAME" == "homologacao" ]]; then
+            IMAGE_PREFIX="homologacao"
+            IMAGE_NAME_SUFFIX="php-supp-hml"
+          else
+            echo "::error::Branch não configurada para nome de imagem: $BRANCH_NAME"
+            exit 1
+          fi
+          FINAL_IMAGE_NAME="${IMAGE_PREFIX}/${IMAGE_NAME_SUFFIX}"
+          echo "BACKEND_IMAGE_NAME=${FINAL_IMAGE_NAME}" >> $GITHUB_ENV
+          echo "backend_image_name=${FINAL_IMAGE_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Definir tag numérica para build
+        id: set_numeric_tag
+        run: echo "tag=${{ env.IMAGE_TAG_NUMERIC }}" >> $GITHUB_OUTPUT
+
+      - name: Login no Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+          driver-opts: |
+            network=host
+          buildkitd-flags: --allow-insecure-entitlement security.insecure
+
+      - name: Build e push da imagem Backend com cache
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/prod/DockerFile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ steps.set_numeric_tag.outputs.tag }}
+            ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}:latest
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}:buildcache,mode=max
+
+  wait-for-approval:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Aguardar Aprovação Manual
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: marcoribeiropbh,Rafaelpgm
+          minimum-approvals: 1
+          issue-title: "🚀 Deploy ${{ github.ref_name }} - Backend PHP SUPP"
+          issue-body: |
+            ## 🔄 Solicitação de Aprovação de Deploy
+
+            > 👥 **Revisores**: @marcoribeiropbh @Rafaelpgm
+
+            ### 📋 Informações do Deploy
+            - **Ambiente**: `${{ github.ref_name }}`
+            - **Aplicação**: Backend PHP SUPP
+            - **Imagem para Deploy**: `${{ needs.build.outputs.backend_image_name }}:${{ needs.build.outputs.numeric_tag }}`
+            - **Imagem Numérica Gerada**: `${{ needs.build.outputs.backend_image_name }}:${{ needs.build.outputs.numeric_tag }}`
+
+            ### 🔍 Detalhes da Build
+            - **Branch**: `${{ github.ref_name }}`
+            - **Commit**: [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+            - **Autor**: @${{ github.actor }}
+            - **Workflow**: [Ver Build](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            ### 📝 Últimas Alterações
+            ```
+            ${{ github.event.head_commit.message }}
+            ```
+
+            ### ✅ Instruções de Aprovação
+            1. Revise as informações acima
+            2. Para aprovar, comente uma das opções:
+                - `approved`
+                - `approve`
+                - `lgtm`
+                - `yes`
+            3. Para rejeitar, comente uma das opções:
+                - `denied`
+                - `deny`
+                - `no`
+
+            > ⚠️ **Atenção**: Esta aprovação é necessária para prosseguir com o deploy.
+            > Por favor, verifique se todas as validações foram realizadas antes de aprovar.
+
+            ---
+            *Deploy solicitado em: ${{ github.event.head_commit.timestamp }}*
+
+  deploy:
+    needs: [build, wait-for-approval]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório de deploy
+        uses: actions/checkout@v4
+        with:
+          repository: supp-core/supp-deploy-cicd
+          ref: ${{ github.ref_name }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Definir Nomes, Caminhos e Nomes de Deployments Dinâmicos (Deploy)
+        id: set_deploy_vars
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          BACKEND_IMAGE_NAME_FROM_BUILD="${{ needs.build.outputs.backend_image_name }}"
+          WORKER_DEPLOYMENT_NAME_VAL=""
+
+          if [[ "$BRANCH_NAME" == "master" ]]; then
+            WORKER_MANIFEST_PATH="kubernetes/php-prod/php-prod-worker-aks.yaml"
+            NGINX_MANIFEST_PATH="kubernetes/php-prod/php-prod-nginx-aks.yaml"
+            WORKER_DEPLOYMENT_NAME_VAL="php-worker"
+          elif [[ "$BRANCH_NAME" == "homologacao" ]]; then
+            WORKER_MANIFEST_PATH="kubernetes/php-prod/php-prod-worker-aks-hml.yaml"
+            NGINX_MANIFEST_PATH="kubernetes/php-prod/php-prod-nginx-aks-hml.yaml"
+            WORKER_DEPLOYMENT_NAME_VAL="php-worker"
+          else
+            echo "::error::Branch não configurada para caminhos de manifesto dinâmicos ou nome de deployment: $BRANCH_NAME"
+            exit 1
+          fi
+          echo "WORKER_MANIFEST_PATH=${WORKER_MANIFEST_PATH}" >> $GITHUB_ENV
+          echo "NGINX_MANIFEST_PATH=${NGINX_MANIFEST_PATH}" >> $GITHUB_ENV
+          echo "BACKEND_IMAGE_NAME_ENV=${BACKEND_IMAGE_NAME_FROM_BUILD}" >> $GITHUB_ENV
+          echo "WORKER_DEPLOYMENT_NAME=${WORKER_DEPLOYMENT_NAME_VAL}" >> $GITHUB_ENV
+
+      - name: Configurar acesso ao Kubernetes
+        run: |
+          echo "Setting up Kubeconfig for branch: ${{ github.ref_name }}"
+          mkdir -p $HOME/.kube
+          KUBECONFIG_CONTENT=""
+
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
+            echo "Using KUBECONFIG_PROD secret."
+            KUBECONFIG_CONTENT="${{ secrets.KUBECONFIG_PROD }}"
+          elif [[ "${{ github.ref_name }}" == "homologacao" ]]; then
+            echo "Using KUBECONFIG_HML secret."
+            KUBECONFIG_CONTENT="${{ secrets.KUBECONFIG_HML }}"
+          else
+            echo "::error::Branch ${{ github.ref_name }} does not have a Kubeconfig mapping."
+            exit 1
+          fi
+
+          if [[ -z "$KUBECONFIG_CONTENT" ]]; then
+            echo "::error::Kubeconfig content is empty for ${{ github.ref_name }}. Ensure the corresponding secret (KUBECONFIG_PROD or KUBECONFIG_HML) is set and not empty in GitHub repository secrets."
+            exit 1
+          fi
+
+          echo "$KUBECONFIG_CONTENT" > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+          
+          echo "Attempting to parse Kubeconfig and get API server endpoint..."
+          if ! kubectl config view --kubeconfig "$HOME/.kube/config" > /dev/null; then
+            echo "::error::Falha ao parsear o arquivo Kubeconfig em $HOME/.kube/config. O conteúdo da secret está provavelmente corrompido (ex: dados Base64 ilegais ou YAML malformado)."
+            echo "Por favor, verifique CUIDADOSAMENTE o conteúdo da secret ${{ (github.ref_name == 'master' && 'KUBECONFIG_PROD') || 'KUBECONFIG_HML' }} no GitHub."
+            exit 1
+          fi
+          
+          API_SERVER=$(kubectl config view --kubeconfig "$HOME/.kube/config" -o jsonpath='{.clusters[0].cluster.server}')
+          if [[ -z "$API_SERVER" ]]; then
+            echo "::error::Não foi possível extrair o API server do Kubeconfig, embora o parse inicial tenha funcionado. Verifique a estrutura do Kubeconfig (caminho .clusters[0].cluster.server ausente?)."
+            echo "Por favor, verifique CUIDADOSAMENTE o conteúdo da secret ${{ (github.ref_name == 'master' && 'KUBECONFIG_PROD') || 'KUBECONFIG_HML' }} no GitHub."
+            exit 1
+          fi
+          echo "API Server: $API_SERVER"
+          echo "Setup Kubeconfig step completed."
+
+      - name: Substituir IMAGE_TAG nos arquivos YAML
+        run: |
+          echo "Substituindo image tag com: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME_ENV }}:${{ needs.build.outputs.numeric_tag }}"
+          find kubernetes/ -type f \( -name "php-prod-worker*" -o -name "php-prod-nginx*" \) -exec \
+            sed -i "s|image: .*/php-supp-.*:.*|image: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME_ENV }}:${{ needs.build.outputs.numeric_tag }}|g" {} +
+          echo "Substituição concluída."
+
+      - name: Aplicar deployments no AKS
+        run: |
+          echo "Aplicando Worker: ${{ env.WORKER_MANIFEST_PATH }}"
+          kubectl apply -f "${{ env.WORKER_MANIFEST_PATH }}" -n php-worker --kubeconfig "$HOME/.kube/config"
+          echo "Aplicando Nginx: ${{ env.NGINX_MANIFEST_PATH }}"
+          kubectl apply -f "${{ env.NGINX_MANIFEST_PATH }}" -n php-nginx --kubeconfig "$HOME/.kube/config"
+
+      - name: Reiniciar deployments para aplicar a nova imagem
+        run: |
+          echo "🔄 Reiniciando deployments..."
+          kubectl rollout restart deployment ${{ env.WORKER_DEPLOYMENT_NAME }} -n php-worker --kubeconfig "$HOME/.kube/config"
+          kubectl rollout restart deployment php-prod-nginx -n php-nginx --kubeconfig "$HOME/.kube/config"
+
+      # - name: Verificar status dos deployments
+      #   run: |
+      #     echo "📋 Verificando deployment do worker..."
+      #     kubectl rollout status deployment/${{ env.WORKER_DEPLOYMENT_NAME }} -n php-worker --timeout=300s --kubeconfig "$HOME/.kube/config"
+
+      #     echo "📋 Verificando deployment do nginx..."
+      #     kubectl rollout status deployment/php-prod-nginx -n php-nginx --timeout=300s --kubeconfig "$HOME/.kube/config"
+
+      #     echo "🔍 Verificando imagem atual do worker..."
+      #     kubectl get deployment ${{ env.WORKER_DEPLOYMENT_NAME }} -n php-worker -o=jsonpath='{.spec.template.spec.containers[0].image}' --kubeconfig "$HOME/.kube/config"
+      #     echo
+
+      #     echo "🔍 Verificando imagem atual do nginx..."
+      #     kubectl get deployment php-prod-nginx -n php-nginx -o=jsonpath='{.spec.template.spec.containers[0].image}' --kubeconfig "$HOME/.kube/config"
+      #     echo
+
+      # - name: Rollback em caso de falha
+      #   if: failure()
+      #   run: |
+      #     echo "🔄 Iniciando rollback dos deployments..."
+      #     kubectl rollout undo deployment/${{ env.WORKER_DEPLOYMENT_NAME }} -n php-worker --kubeconfig "$HOME/.kube/config"
+      #     kubectl rollout undo deployment/php-prod-nginx -n php-nginx --kubeconfig "$HOME/.kube/config"
+      #     echo "⚠️ Deployments revertidos para versão anterior devido a falha"

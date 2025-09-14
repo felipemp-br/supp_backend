@@ -1,0 +1,203 @@
+{# @var processo   \SuppCore\AdministrativoBackend\Api\V1\DTO\Processo #}
+{# @var usuario    \SuppCore\AdministrativoBackend\Entity\Usuario #}
+{# @var vinculados              array #}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <title>FORMULÁRIO PARA SOLICITAÇÃO DE INFORMAÇÕES GERAIS PARA TRANSAÇÃO EXTRAORDINÁRIA</title>
+
+    <style>
+        body {
+            width: 100%;
+            font-family: "Calibri", sans-serif;
+            font-size: 12px;
+            margin-top: 5%;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 80%;
+            line-height: 140%;
+            -webkit-print-color-adjust: exact !important;
+        }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            line-height: 1.1em;
+        }
+
+        .titulo {
+            text-align: center;
+            max-width: 100%;
+            font-weight: bold;
+
+        }
+
+        .subtitulo {
+            text-align: left;
+            max-width: 100%;
+            font-weight: bold !important;
+            border-width: 1px 1px 1px 1px !important;
+            background-color: #e5e5e5 !important;
+            padding: 3px !important;
+            margin-top: 1lh;
+            margin-bottom: 1lh;
+        }
+
+        p.texto {
+            text-indent: 50px;
+            text-align: justify;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .cabecalho {
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="cabecalho">
+    {{ formatCabecalho(processo.setorAtual, true)|raw }}<br/>
+</div>
+
+<div class="titulo">
+    FORMULÁRIO PARA SOLICITAÇÃO DE INFORMAÇÕES GERAIS PARA TRANSAÇÃO EXTRAORDINÁRIA
+</div>
+<br/>
+
+{# @var municipioEntity \SuppCore\AdministrativoBackend\Entity\Municipio #}
+{% set municipioEntity = municipio|toEntity('Administrativo', 'Municipio') %}
+
+{# @var estadoEntity \SuppCore\AdministrativoBackend\Entity\Estado #}
+{% set estadoEntity = estado|toEntity('Administrativo', 'Estado') %}
+
+<div class="subtitulo">
+    I – IDENTIFICAÇÃO DO ADERENTE
+</div>
+1. Tipo de pessoa:
+({% if (tipoPessoa == 'fisica') %}X{% else %}  {% endif %}) Física
+({% if (tipoPessoa == 'juridica') %}X{% else %}  {% endif %}) Jurídica<br/>
+2. CPF/CNPJ: {{ cpfCnpj|onlyNumbers|formatCpfCnpj }}<br/>
+{% if tipoPessoa == 'juridica' and tipoSolicitacao == 'transacao_informacoes_gerais' %}
+2.1 CNPJs Filiais: {{ cnpjsFiliais }}<br/>
+{% endif %}
+3. Nome/Razão Social: {{ nomeRazaoSocial }}<br/>
+4. E-mail para resposta: {{ email }}<br/>
+4.1. Confirme o e-mail: {{ confirmeEmail }}<br/>
+5. Telefone: {{ telefone }}<br/>
+6. Endereço completo<br/>
+6.1. CEP: {{ cep }}<br/>
+6.2. Endereço (avenida/rua/número): {{ endereco }} {{ complemento }}<br/>
+6.3. Município: {{ municipioEntity.nome }}<br/>
+6.4. Estado: {{ estadoEntity.nome }}<br/>
+
+<div class="subtitulo">
+    II – DADOS DO REPRESENTANTE LEGAL (INFORMAR APENAS QUANDO PREENCHIDO PELO REPRESENTANTE LEGAL)
+</div>
+7. Nome: {{ nomeRepresentante }}<br/>
+8. CPF: {{ cpfRepresentante ? cpfRepresentante|onlyNumbers|formatCpfCnpj }}<br/>
+9. OAB (se advogado): Número: {{ oab }} UF: {{ ufRepresentante }}<br/>
+10. E-mail: {{ emailRepresentante }}<br/>
+11. Telefone Celular: {{ celularRepresentante }}<br/>
+12. Telefone Comercial: {{ telefoneComercialRepresentante }}<br/>
+
+<div class="subtitulo">
+    III - TIPO DE SOLICITAÇÃO
+</div>
+
+13. Solicitações:<br/>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(X) Receber informações gerais
+sobre o(s) débito(s).<br/>
+
+<br/>
+14. Entidade credora: {{ credor }}<br/>
+
+<div class="subtitulo">
+    IV. IDENTIFICAÇÃO DA(S) DÍVIDA(S)
+</div>
+15. Número(s) do(s) processo(s) administrativo(s) ou do(s) débito(s):<br/>
+{% for p in processos %}
+    {{ p.processo }}<br/>
+{% endfor %}
+
+<br/>
+16. Número(s) do(s) processo(s) judicial(s), se houver:<br/>
+{% for p in processosJudicial %}
+    {{ p.processoJudicial }}<br/>
+{% endfor %}
+
+<br/>
+17. O(s) débito(s) objeto da solicitação está(ão) protestado(s)?<br/>
+({% if (protestado == 'sim') %}X{% else %}  {% endif %}) Sim (indicar o(s) número(s) do(s) título(s) ou do(s)
+protocolo(s):<br/>
+{% for p in protocolos %}
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ p.protocolo }}<br/>
+{% endfor %}
+({% if (protestado == 'nao') %}X{% else %}  {% endif %}) Não<br/>
+({% if (protestado == 'nao_sabe') %}X{% else %}  {% endif %}) Não sabe<br/>
+
+<br/>
+18. Existem embargos à(s) execução(s) fiscal(s) ou ação(s) anulatória(s) do(s) débito(s)?<br/>
+({% if (embargo == 'sim') %}X{% else %}  {% endif %}) Sim. Indicar o(s) número(s) do(s) processo(s) judicial(s):<br/>
+{% for p in embargosProcesso %}
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ p.embargoProcesso }}<br/>
+{% endfor %}
+({% if (embargo == 'nao') %}X{% else %}  {% endif %}) Não<br/>
+({% if (embargo == 'nao_sabe') %}X{% else %}  {% endif %}) Não sabe<br/>
+
+<br/>
+19. Caso deseje prestar INFORMAÇÕES ADICIONAIS, utilizar o campo abaixo:
+{{ infoAdicionais }}<br/>
+
+<div class="subtitulo">
+    CONDIÇÕES E INFORMAÇÕES IMPORTANTES
+</div>
+<p class="texto">
+    a) O(a) requerente e seu(a) representante, se houver, responsabilizam-se pela veracidade de todas
+    informações prestadas neste formulário e pela autenticidade de todos os documentos a ele anexos e,
+    inclusive para os fins dos artigos 1º, 2º e 3º da Lei nº 7.115 de 29.08.1983 e do artigo 3º,
+    parágrafo único, do Decreto nº 9.094 de 17.07.2017, concedem expressamente a autorização de
+    compartilhamento de informações a que se refere o caput do mencionado artigo 3º.
+</p>
+<br/>
+
+<p class="texto">
+    b) A omissão ou falsidade das informações prestadas e documentos apresentados implicará o arquivamento
+    provisório por prazo indeterminado até o saneamento, sem análise, ou mesmo o indeferimento definitivo
+    do(s) requerimento(s), bem como a cabível responsabilização civil, administrativa e criminal,
+    sem prejuízo da possível incursão do(s) responsável(s) nas penas do art. 299 do Código Penal
+    (falsidade ideológica), isentando de qualquer responsabilidade a unidade da PGF e a entidade
+    representada,
+    bem como seus servidores, quanto a danos ao(à) próprio(a) requerente pela falta de atendimento ao
+    requerido.
+</p>
+<br/>
+
+<p class="texto">
+    c) Qualquer informação sobre a tramitação do presente requerimento somente será prestada ao
+    requerente ou seu representante legal,
+    por meio de consulta pelo requerente ao protocolo eletrônico da AGU ou envio de mensagem pela
+    PGF ao e-mail indicado.
+</p>
+
+<br/>
+<hr>
+<br/>
+
+<p style="text-align:center;">
+    Local/Data: {{ municipioEntity.nome }}/{{ estadoEntity.nome }} - {{ "now"|date('d/m/Y') }}<br/>
+    Assinatura: {{ nomeRazaoSocial }}
+</p>
+
+<br/>
+<br/>
+<br/>
+
+</body>
+</html>
+
+

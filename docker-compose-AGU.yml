@@ -1,0 +1,277 @@
+version: '3'
+services:
+    php-dev:
+        container_name: php-dev
+        build:
+            context: .
+            dockerfile: docker/dev/php/DockerFile
+        environment:
+            XDEBUG_CONFIG: client_host=192.168.1.5    # docker network ip. No OSX usar host.docker.internal, no Ubuntu usar 'ip a' para verificar (em geral 172.17.0.1). Ao alterar o IP, é necessário reconstruir a imagem. Confirme config do xdebug no phpinfo()
+            PHP_IDE_CONFIG: serverName=xdebug-docker # phpstorm variavel de ambiente com o nome do server configurado. No VSCODE, manter mesmo valor
+            XDEBUG_SESSION: docker
+            XDEBUG_TRIGGER: 1
+            USE_PHP_FPM_AND_CADDY: 1
+        depends_on:
+            - redis
+            - mysql
+            - elasticsearch
+            - mercure-php
+            - logstash
+            - kibana
+            - rabbitmq
+            - ldap
+        ports:
+            - '8000:8000'
+            - '443:443'
+        volumes:
+            - '.:/app'
+        tty: true
+        command: tail -f /dev/null
+        links:
+            - redis
+            - mysql
+            - elasticsearch
+            - mercure-php
+            - rabbitmq
+#            - oracledb
+#            - postgresdb
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.10
+
+    rabbitmq:
+        container_name: rabbitmq
+        hostname: rabbitmq
+        build:
+            context: .
+            dockerfile: docker/rabbit/DockerFile
+        environment:
+            RABBITMQ_CONFIG_FILE: /etc/rabbitmq/custom/rabbitmq.conf
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        volumes:
+            - './docker/dev/rabbit:/etc/rabbitmq/custom'
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.26
+
+    logstash:
+        container_name: logstash
+        build:
+            context: .
+            dockerfile: docker/logstash/DockerFile
+        tty: true
+        command: tail -f /dev/null
+        links:
+            - redis
+            - elasticsearch
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.13
+
+    kibana:
+        container_name: kibana
+        image: opensearchproject/opensearch-dashboards:2.6.0
+        ports:
+            - '5601:5601'
+        expose:
+            - '5601'
+        environment:
+            - 'OPENSEARCH_HOSTS=["http://elasticsearch:9200"]'
+            - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.14
+
+    redis:
+        container_name: redis
+        image: eqalpha/keydb:alpine_x86_64_v6.3.3
+        hostname: redis
+            - "6379:6379"
+        ports:
+            - 6379:6379
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.12
+
+    mysql:
+        container_name: mysql
+        build:
+            context: .
+            dockerfile: docker/dev/mysql/DockerFile
+        restart: always
+        hostname: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: supp
+        volumes:
+            - 'mysql-data:/mysql'
+        ports:
+            - 3306:3306
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.19
+
+    elasticsearch:
+        container_name: elasticsearch
+        hostname: elasticsearch
+        build:
+            context: .
+            dockerfile: docker/elasticsearch/DockerFile
+        ports:
+            - '9200:9200'
+            - '9300:9300'
+            - '9600:9600'
+        environment:
+            - 'node.name=es01'
+            - 'cluster.name=docker-cluster'
+            - 'discovery.type=single-node'
+            - 'bootstrap.memory_lock=true'
+            - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx4g'
+            - 'DISABLE_SECURITY_PLUGIN=true'
+        ulimits:
+            nofile:
+                soft: 65535
+                hard: 65535
+            memlock:
+                soft: -1
+                hard: -1
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.21
+
+    maintenance:
+        container_name: maintenace
+        build:
+            context: .
+            dockerfile: docker/maintenance/Dockerfile
+        tty: true
+        command: tail -f /dev/null
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.31
+
+    ldap:
+        container_name: ldap
+        build:
+            context: docker/dev/ldap
+        ports:
+            - 389:389
+            - 10389:10389
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.22
+
+    php-prod:
+        container_name: php-prod
+        environment:
+            APP_ENV: "prod"
+            APP_DEBUG: 0
+        build:
+            context: .
+            dockerfile: docker/prod/DockerFile
+        ports:
+            - '8000:8000'
+        volumes:
+            - '.:/var/www/html'
+        tty: true
+        command: tail -f /dev/null
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.29
+
+    # 1. Recuperar a imagem do database Oracle no Oracle Registry
+    #    Acesse a url: https://container-registry.oracle.com/, faça o registro para ter acesso as imagens
+    #    disponibilizadas pela Oracle (não estão mais disponíveis no dockerhub).
+    #    Após isso fazer login no registry pelo CLI do docker executando o comando abaixo e fornecendo
+    #    seu usuário e senha:
+    #    sudo docker login container-registry.oracle.com -u '<user>' -p '<password>'
+    # 2. Dentro do container executar comandos no banco de banco dados criando o usuario
+    #    sudo docker exec -it oracledb bash -c "source /home/oracle/.bashrc; sqlplus /nolog"
+    #    connect sys as sysdba; # Oradoc_db1
+    #    alter session set "_ORACLE_SCRIPT"=true;
+    #    create user supp identified by supp;
+    #    GRANT ALL PRIVILEGES TO supp;
+    # 3. Alterar o arquivo .env
+    #    DATABASE_URL=oci8://supp:supp@oracledb:1521/ORCLCDB.localdomain?connectstring=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oracledb)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORCLCDB.localdomain)))
+    #    DATABASE_SERVICE=true
+    # 4. No docker-entrypoint.sh comentar a linha que cria o SCHEMA de banco (pois ele é criado no passo 2)
+    #
+    oracledb:
+        container_name: oracledb
+        hostname: oracledb
+        image: container-registry.oracle.com/database/enterprise:12.2.0.1
+#        image: store/oracle/database-enterprise:12.2.0.1 # imagem antiga (mudou).
+        volumes:
+            - oracle-data:/ORCL
+        ports:
+            - '1521:1521'
+            - '5500:5500'
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.30
+
+    postgresdb:
+        container_name: postgresdb
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: supp
+        image: postgres:16
+        ports:
+            - "5432:5432"
+        restart: "no"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.33
+
+    mercure-php:
+        container_name: mercure-php
+        image: dunglas/mercure:v0.15.6
+        restart: unless-stopped
+        environment:
+            SERVER_NAME: ':4001'
+            # RECOMENDAMOS A TROCA DAS JWT_KEYS DO MERCURE NO SEU AMBIENTE DE HOMOLOGAÇÃO E PRODUÇÃO
+            MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+            MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+            # Uncomment the following line to enable the development mode
+            # command: /usr/bin/caddy run --config /etc/caddy/Caddyfile.dev
+            # Set the URL of your Symfony project (without trailing slash!) as value of the cors_origins directive
+            MERCURE_EXTRA_DIRECTIVES: |
+                cors_origins *
+                transport_url bolt:///data/mercure.db?bucket_name=supp_mercure&size=1000&cleanup_frequency=0.5
+            GLOBAL_OPTIONS: |
+                log {
+                    level ERROR
+                }
+            CADDY_SERVER_EXTRA_DIRECTIVES: |
+                log {
+                    output discard
+                }
+        volumes:
+            - mercure_data:/data
+            - mercure_config:/config
+        ports:
+            - '4001:4001'
+        networks:
+            supp_network:
+                ipv4_address: 192.168.0.32
+
+networks:
+    supp_network:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.0.0/24
+
+volumes:
+    mysql-data:
+    oracle-data:
+    mercure_data:
+    mercure_config:
+    postgres_data:

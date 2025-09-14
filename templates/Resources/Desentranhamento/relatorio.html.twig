@@ -1,0 +1,138 @@
+<html lang="pt">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>SUPER-BR</title>
+    <style type="text/css">
+        body {
+            font-family: "Times New Roman, Times, serif", serif;
+            font-size: 10pt;
+            margin-top: 5%;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 210mm;
+        }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            line-height: 1.1em;
+        }
+
+        table.tableData {
+            border-right: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tableData tbody td {
+            border-left: 1px solid #000000;
+            border-top: 1px solid #000000;
+            padding-top: 1px;
+            padding-bottom: 1px;
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+
+        .tableData thead th {
+            background-color: #e5e5e5;
+            text-align: center;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #000000;
+            border-left: 1px solid #000000;
+            border-top: 1px solid #000000;
+        }
+
+        .tableData td {
+            vertical-align: top;
+            text-align: left;
+            font-size: 10pt;
+            font-weight: normal;
+            color: #000000;
+            padding-top: 1px;
+            padding-bottom: 1px;
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+
+        .tableData tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        .tableData tbody tr:nth-child(even) {
+            background-color: #e5e5e5;
+        }
+
+        .tableData td.thead {
+            text-align: left;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #000000;
+            border-left: none;
+        }
+
+        .tableData td.firstthead {
+            text-align: left;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .titulo {
+            text-align: center;
+            max-width: 100%;
+            font-weight: bold;
+            border-width: 1px 1px 1px 1px;
+            background-color: #e5e5e5;
+            padding: 3px;
+        }
+
+        .cabecalho {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body lang="pt-BR">
+{% block cabecalho %}
+    <div class="cabecalho">
+        {{ getParameter('supp_core.administrativo_backend.logo_instituicao')|raw }}
+        <br>
+        <b>{{ getParameter('supp_core.administrativo_backend.nome_instituicao') }}</b>
+        <br>
+        <p>
+            <b>TERMO DE DESENTRANHAMENTO</b>
+            <br>
+            <b>SETOR DO PROCESSO: {{ setor }}</b>
+        </p>
+    </div>
+{% endblock %}
+
+<br /><br />
+<table class="tableData">
+    <thead>
+    <tr>
+        <th>NUP</th>
+        <th>DATA DO DESENTRANHAMENTO</th>
+        <th>RESPONSÁVEL</th>
+        <th>ID DO DOCUMENTO</th>
+        <th>MOTIVO</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for juntada in juntadas %}
+            <tr>
+                <td>{{ nup }}</td>
+                <td>{{date()|date('d/m/Y H:i')}}</td>
+                <td>{{ responsavel }}</td>
+                <td>{{ juntada.documento.id }}</td>
+                <td>{{ motivo }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+</body>
+</html>

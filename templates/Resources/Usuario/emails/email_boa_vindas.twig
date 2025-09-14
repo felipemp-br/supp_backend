@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <title>SUPP</title>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div>
+    <p>Bem-vindo ao {{ sistema }}!</p>
+
+    <p>
+        Seu cadastro foi concluído com sucesso no ambiente de {{ ambiente }}!<br>
+        Seu nome é: {{ nome }}<br>
+        Seu login é: {{ username }}<br>
+        Sua senha é: {{ senha }}<br>
+        Acesse o sistema em {{ url }}<br>
+    </p>
+
+    <p>
+        Atenção: Para acessar o sistema com todas as funcionalidades é<br>
+        necessário que o Administrador de sua Unidade efetue a<br>
+        sua lotação em pelo menos um dos setores!<br>
+    </p>
+
+    <p>Email enviado em {{date()|date('d/m/Y')}} às {{date()|date('H:i:s')}}.</p>
+</div>
+</body>
+</html>

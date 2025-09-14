@@ -1,0 +1,809 @@
+{# @var processo \SuppCore\AdministrativoBackend\Api\V1\DTO\Processo #}
+{# @var usuario \SuppCore\AdministrativoBackend\Entity\Usuario #}
+{# @var vinculados array #}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <title>FORMULÁRIO DE TRANSAÇÃO EXTRAORDINÁRIA PGF</title>
+
+    <style>
+        body {
+            width: 100%;
+            font-family: "Calibri", sans-serif;
+            font-size: 12px;
+            margin-top: 5%;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 80%;
+            line-height: 140%;
+            -webkit-print-color-adjust: exact !important;
+        }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            line-height: 1.1em;
+        }
+
+        .titulo {
+            text-align: center;
+            max-width: 100%;
+            font-weight: bold;
+
+        }
+
+        .subtitulo {
+            text-align: left;
+            max-width: 100%;
+            font-weight: bold !important;
+            border-width: 1px 1px 1px 1px !important;
+            background-color: #e5e5e5 !important;
+            padding: 3px !important;
+            margin-top: 1lh;
+            margin-bottom: 1lh;
+        }
+
+        p.texto {
+            text-indent: 50px;
+            text-align: justify;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .cabecalho {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .list-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .list-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cabecalho">
+    {{ formatCabecalho(processo.setorAtual, true)|raw }}<br/>
+</div>
+
+<div class="titulo">
+    FORMULÁRIO DE TRANSAÇÃO EXTRAORDINÁRIA PGF<br/>
+</div>
+<br/>
+
+{# @var municipioEntity \SuppCore\AdministrativoBackend\Entity\Municipio #}
+{% set municipioEntity = municipio|toEntity('Administrativo', 'Municipio') %}
+
+{# @var estadoEntity \SuppCore\AdministrativoBackend\Entity\Estado #}
+{% set estadoEntity = estado|toEntity('Administrativo', 'Estado') %}
+
+{% set item = 0 %}
+
+<div class="subtitulo">
+    I - IDENTIFICAÇÃO DA CREDORA:
+</div>
+{{ incrementItem() }}. Entidade credora: {{ credor }}
+
+<br/>
+
+<div class="subtitulo">
+    II – IDENTIFICAÇÃO DO ADERENTE
+</div>
+{{ incrementItem() }}. Tipo de pessoa:
+({% if (tipoPessoa == 'fisica') %}X{% else %}  {% endif %}) Física
+({% if (tipoPessoa == 'juridica') %}X{% else %}  {% endif %}) Jurídica<br/>
+{{ incrementItem() }}. CNPJ/CPF: {{ cpfCnpj|onlyNumbers|formatCpfCnpj }}<br/>
+{{ incrementItem() }}. Nome/Razão Social: {{ nomeRazaoSocial }}<br/>
+{{ incrementItem() }}. Endereço: {{ endereco }}<br/>
+{{ incrementItem(false) }}.1. Complemento: {{ complemento }}<br/>
+{{ incrementItem(false) }}.2. CEP: {{ cep }}<br/>
+{{ incrementItem(false) }}.3. Município: {{ municipioEntity.nome }}<br/>
+{{ incrementItem(false) }}.4. Estado: {{ estadoEntity.nome }}<br/>
+{{ incrementItem() }}. E-mail: {{ email }}<br/>
+{{ incrementItem() }}. Telefone: {{ telefone }} <br/>
+{{ incrementItem() }}. O devedor é pessoa física, microempreendedor individual ou pessoa jurídica enquadrada como microempresa ou
+empresa de pequeno porte, santa casa de misericórdia, sociedade cooperativa e demais organizações da sociedade civil de
+que trata a Lei nº 13.019, de 31 de julho de 2014, e instituição de ensino?
+<br>
+({% if (devedorPessoaFisicaEDemais == true) %}X{% else %}  {% endif %}) Sim
+({% if (devedorPessoaFisicaEDemais == false) %}X{% else %}  {% endif %}) Não
+
+<br/>
+
+<div class="subtitulo">
+    III - IDENTIFICAÇÃO DO SOLICITANTE
+</div>
+{{ incrementItem() }}. CPF: {{ cpfSolicitante }}<br/>
+{{ incrementItem() }}. Nome: {{ nomeSolicitante }}<br/>
+{{ incrementItem() }}. E-mail: {{ emailSolicitante }}<br/>
+{{ incrementItem() }}. Telefone: {{ telefoneSolicitante }}
+
+<br/>
+
+<div class="subtitulo">
+    IV - IDENTIFICAÇÃO DOS DÉBITOS A SEREM INCLUÍDOS NA TRANSAÇÃO
+</div>
+{{ incrementItem() }}. Deseja incluir na transação todos os débitos não tributários inscritos na dívida ativa da autarquia ou
+fundação pública federal credora ou débitos específicos?
+<br>
+({% if (incluirCreditosInscritosDividaAtiva == true) %}X{% else %}  {% endif %}) Todos
+({% if (incluirCreditosInscritosDividaAtiva == false) %}X{% else %}  {% endif %}) Débitos específicos
+<br>
+<br/>
+<div class="list-container">
+    <ul>
+        <li class="list-title">Certidão de inscrição em dívida ativa</li>
+        {% for ccida in certidoesCreditosInscritosDividaAtiva %}
+            <li>{{ ccida.certidaoCreditoInscricaoDividaAtiva }}</li>
+        {% endfor %}
+    </ul>
+
+    <ul>
+        <li class="list-title">Processo administrativo de constituição do débito</li>
+        {% for pacid in processosAdministrativosCreditosInscritosDividaAtiva %}
+            <li>{{ pacid.processoAdministrativoCreditoInscritoDividaAtiva }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<br>
+
+{% if (incluirCreditosInscritosDividaAtiva == false) %}
+{{ incrementItem() }}. Tem ciência se o(s) débito(s) é objeto de execução fiscal?
+<br>
+({% if (cienciaDebitoExecucaoFiscal == true) %}X{% else %}  {% endif %}) Sim
+({% if (cienciaDebitoExecucaoFiscal == false) and (cienciaDebitoExecucaoFiscal is not null) %}X{% else %}  {% endif %}) Não
+<br>
+<br/>
+<div class="list-container">
+    <ul>
+        <li class="list-title">Certidão de inscrição em dívida ativa</li>
+        {% for ccidaef in certidoesInscricaoDividaAtivaExecucaoFiscal %}
+            <li>{{ ccidaef.certidaoInscricaoDividaAtivaExecucaoFiscal }}</li>
+        {% endfor %}
+    </ul>
+
+    <ul>
+        <li class="list-title">Processo administrativo de constituição do débito</li>
+        {% for pacef in processosAdministrativosConstituicaoExecucaoFiscal %}
+            <li>{{ pacef.processoAdministrativoConstituicaoExecucaoFiscal }}</li>
+        {% endfor %}
+    </ul>
+
+    <ul>
+        <li class="list-title">Processo de execução fiscal</li>
+        {% for paef in processosAdministrativosExecucaoFiscal %}
+            <li>{{ paef.processoAdministrativoExecucaoFiscal }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<br>
+{% endif %}
+
+{{ incrementItem() }}. Existem embargos à(s) execução(ões) fiscal(is) ou ação(ões) discutindo o(s) débito(s)?
+<br>
+({% if (existemEmbargosExecucaoFiscal == true) %}X{% else %}  {% endif %}) Sim
+({% if (existemEmbargosExecucaoFiscal == false) %}X{% else %}  {% endif %}) Não
+<br>
+<br/>
+<div class="list-container">
+    <ul>
+        <li class="list-title">Certidão de inscrição em dívida ativa</li>
+        {% for cidae in certidoesInscricaoDividaAtivaEmbargos %}
+            <li>{{ cidae.certidaoInscricaoDividaAtivaEmbargo }}</li>
+        {% endfor %}
+    </ul>
+
+    <ul>
+        <li class="list-title">Processo administrativo de constituição do débito</li>
+        {% for pace in processosAdministrativosConstituicaoEmbargos %}
+            <li>{{ pace.processoAdministrativoConstituicaoEmbargo }}</li>
+        {% endfor %}
+    </ul>
+
+    <ul>
+        <li class="list-title">Processo judicial</li>
+        {% for pje in processosJudiciaisEmbargos %}
+            <li>{{ pje.processoJudicialEmbargo }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<br>
+
+{{ incrementItem() }}. Deseja incluir na transação débitos que ainda estão em constituição nas autarquias e fundações públicas federais?
+<br>
+({% if (incluirCreditosConstituicaoAutarquias == true) %}X{% else %}  {% endif %}) Sim
+({% if (incluirCreditosConstituicaoAutarquias == false) %}X{% else %}  {% endif %}) Não
+<br>
+<br/>
+<div class="list-container">
+    <ul>
+        <li class="list-title">Processo administrativo de constituição do débito</li>
+        {% for pacc in processosAdministrativosCreditosConstituicao %}
+            <li>{{ pacc.processoAdministrativoCreditoConstituicao }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<br>
+
+{{ incrementItem() }}. Existem depósitos judiciais vinculados aos débitos a serem incluídos na transação?
+<br>
+({% if (existemDepositosJudiciaisVinculadosCreditos == true) %}X{% else %}  {% endif %}) Sim
+({% if (existemDepositosJudiciaisVinculadosCreditos == false) %}X{% else %}  {% endif %}) Não
+<br>
+<br/>
+<div class="list-container">
+    <ul>
+        <li class="list-title">Certidão de inscrição em dívida ativa</li>
+        {% for cidadj in certidoesInscricaoDividaAtivaDepositosJudiciais %}
+            <li>{{ cidadj.certidaoInscricaoDividaAtivaDepositoJudicial }}</li>
+        {% endfor %}
+    </ul>
+
+    <ul>
+        <li class="list-title">Processo administrativo de constituição do débito</li>
+        {% for padj in processosAdministrativosDepositosJudiciais %}
+            <li>{{ padj.processoAdministrativoDepositoJudicial }}</li>
+        {% endfor %}
+    </ul>
+
+    <ul>
+        <li class="list-title">Processo judicial</li>
+        {% for pjdj in processosJudiciaisDepositosJudiciais %}
+            <li>{{ pjdj.processoJudicialDepositoJudicial }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<br>
+
+{{ incrementItem() }}. Opções de pagamento na transação
+<br>
+<br>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <thead>
+    <tr>
+        <th rowspan="3" style="text-align: center;">Devedor</th>
+        <th rowspan="3" style="text-align: center;">Abrangência da transação</th>
+        <th colspan="4" style="text-align: center;">Desconto</th>
+        <th rowspan="2" colspan="2" style="text-align: center;">Forma de pagamento</th>
+    </tr>
+    <tr>
+        <th colspan="4" style="text-align: center;">Tempo de inscrição em Dívida Ativa</th>
+    </tr>
+    <tr>
+        <th style="text-align: center;">10 anos ou mais</th>
+        <th style="text-align: center;">5 anos ou mais</th>
+        <th style="text-align: center;">3 anos ou mais</th>
+        <th style="text-align: center;">Menos de 3 anos</th>
+        <th style="text-align: center;">Opção</th>
+        <th style="text-align: center;">Quantidade Parcelas</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if (devedorPessoaFisicaEDemais == true) and (incluirCreditosInscritosDividaAtiva == true) %}
+        <tr>
+            <td rowspan="5">
+                • Pessoa física, inclusive microempreendedor individual
+                <br><br>
+                • Microempresa e empresa de pequeno porte
+                <br><br>
+                • Santa casa de misericórdia, sociedade cooperativa e demais organizações da sociedade civil
+                de que trata a Lei nº 13.019, de 31 de julho de 2014
+                <br><br>
+                • Instituição de ensino
+            </td>
+            <td rowspan="5">
+                Integral
+            </td>
+            <td>70%</td>
+            <td>55%</td>
+            <td>40%</td>
+            <td>25%</td>
+            <td>
+                à vista ({% if (opcaoPagamentoParcelado == 'pessoa_fisica_integral_avista') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50"></td>
+        </tr>
+        <tr>
+            <td>60%</td>
+            <td>45%</td>
+            <td>30%</td>
+            <td>15%</td>
+            <td>
+                12 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_fisica_integral_12_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_fisica_integral_12_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>40%</td>
+            <td>25%</td>
+            <td>10%</td>
+            <td>NA</td>
+            <td>
+                48 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_fisica_integral_48_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_fisica_integral_48_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>20%</td>
+            <td>5%</td>
+            <td>0%</td>
+            <td>NA</td>
+            <td>
+                96 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_fisica_integral_96_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_fisica_integral_96_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>0%</td>
+            <td>0%</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>
+                145 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_fisica_integral_145_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_fisica_integral_145_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if (devedorPessoaFisicaEDemais == true) and (incluirCreditosInscritosDividaAtiva == false) %}
+        <tr>
+            <td rowspan="5">
+                • Pessoa física, inclusive microempreendedor individual
+                <br><br>
+                • Microempresa e empresa de pequeno porte
+                <br><br>
+                • Santa casa de misericórdia, sociedade cooperativa e demais organizações da sociedade civil
+                de que trata a Lei nº 13.019, de 31 de julho de 2014
+                <br><br>
+                • Instituição de ensino
+            </td>
+            <td rowspan="5">
+                Parcial
+            </td>
+            <td>60%</td>
+            <td>45%</td>
+            <td>30%</td>
+            <td>15%</td>
+            <td>
+                à vista ({% if (opcaoPagamentoParcelado == 'pessoa_fisica_parcial_avista') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50"></td>
+        </tr>
+        <tr>
+            <td>50%</td>
+            <td>35%</td>
+            <td>20%</td>
+            <td>5%</td>
+            <td>
+                12 meses ({% if (opcaoPagamentoParcelado == 'pessoa_fisica_parcial_12_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_fisica_parcial_12_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>30%</td>
+            <td>15%</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>
+                48 meses ({% if (opcaoPagamentoParcelado == 'pessoa_fisica_parcial_48_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_fisica_parcial_48_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>10%</td>
+            <td>0%</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>
+                96 meses ({% if (opcaoPagamentoParcelado == 'pessoa_fisica_parcial_96_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_fisica_parcial_96_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>0%</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>
+                145 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_fisica_parcial_145_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_fisica_parcial_145_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if (devedorPessoaFisicaEDemais == false) and (incluirCreditosInscritosDividaAtiva == true) %}
+        <tr>
+            <td rowspan="5">
+                Pessoa jurídica
+            </td>
+            <td rowspan="5">
+                Integral
+            </td>
+            <td>65%</td>
+            <td>50%</td>
+            <td>35%</td>
+            <td>20%</td>
+            <td>
+                à vista ({% if (opcaoPagamentoParcelado == 'pessoa_juridica_integral_avista') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50"></td>
+        </tr>
+        <tr>
+            <td>55%</td>
+            <td>40%</td>
+            <td>25%</td>
+            <td>10%</td>
+            <td>
+                12 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_juridica_integral_12_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_juridica_integral_12_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>35%</td>
+            <td>20%</td>
+            <td>5%</td>
+            <td>NA</td>
+            <td>
+                48 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_juridica_integral_48_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_juridica_integral_48_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>15%</td>
+            <td>0%</td>
+            <td>0%</td>
+            <td>NA</td>
+            <td>
+                96 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_juridica_integral_96_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_juridica_integral_96_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>0%</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>
+                120 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_juridica_integral_120_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_juridica_integral_120_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if (devedorPessoaFisicaEDemais == false) and (incluirCreditosInscritosDividaAtiva == false) %}
+        <tr>
+            <td rowspan="5">
+                Pessoa jurídica
+            </td>
+            <td rowspan="5">
+                Parcial
+            </td>
+            <td>55%</td>
+            <td>40%</td>
+            <td>25%</td>
+            <td>10%</td>
+            <td>
+                à vista ({% if (opcaoPagamentoParcelado == 'pessoa_juridica_parcial_avista') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50"></td>
+        </tr>
+        <tr>
+            <td>45%</td>
+            <td>30%</td>
+            <td>15%</td>
+            <td>NA</td>
+            <td>
+                12 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_juridica_parcial_12_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_juridica_parcial_12_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>25%</td>
+            <td>10%</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>
+                48 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_juridica_parcial_48_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_juridica_parcial_48_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>5%</td>
+            <td>0%</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>
+                96 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_juridica_parcial_96_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_juridica_parcial_96_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>0%</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>
+                120 meses
+                ({% if (opcaoPagamentoParcelado == 'pessoa_juridica_parcial_120_meses') %}X{% else %}  {% endif %})
+            </td>
+            <td width="50">
+                {% if (opcaoPagamentoParcelado == 'pessoa_juridica_parcial_120_meses') %}
+                    {{ quantidadeParcelas }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+
+<br/>
+<br/>
+
+<div class="titulo">
+    REQUERIMENTO DE ADESÃO À TRANSAÇÃO EXTRAORDINÁRIA
+</div>
+
+<p class="texto">
+    Ao salvar este formulário eletrônico, adiro à transação extraordinária de que trata o art.
+    22 da Lei nº 14.973, de 16 de setembro de 2024, a Portaria Normativa AGU nº 150, de 03 de
+    outubro de 2024, e o Edital de Transação por Adesão.
+</p>
+
+<br/>
+
+<p class="texto">
+    Declaro a aceitação plena e irretratável de todas as condições, exigências e obrigações
+    estabelecidas no Edital, bem como assumo os compromissos nele previstos, em especial:
+</p>
+
+<br/>
+
+<p class="texto">
+    a) Estou ciente de que este instrumento de adesão será indeferido caso não apresente
+    todas as informações e os documentos previstos neste Edita.
+</p>
+
+<br/>
+
+<p class="texto">
+    b) Estou ciente de que o processamento deste requerimento será efetuado
+    exclusivamente por meio eletrônico no SUPER SAPIENS, bem como assumo o compromisso de
+    acompanhar o processamento deste requerimento, independentemente de notificação. Estou
+    ciente, ainda, de que as notificações relativas à transação serão realizadas mediante a
+    disponibilização de despachos e decisões no processo eletrônico no SUPER SAPIENS aberto com
+    a apresentação deste requerimento, independentemente do envio de comunicação por meio
+    físico ou eletrônico.
+</p>
+
+<br/>
+
+<p class="texto">
+    c) Confesso, de forma irrevogável e irretratável, os débitos indicados neste ato para
+    adesão à Transação Extraordinária do Edital, nos termos dos art. 389 e art. 395 da Lei nº 13.105,
+    de 16 de março de 2015 – Código de Processo Civil, renunciando expressamente a qualquer
+    contestação ou impugnação quanto ao valor e à procedência da dívida, assumindo integral
+    responsabilidade pela sua exatidão, ficando ressalvado à(s)autarquia(s) ou fundação(ões)
+    pública(s) federal(ais) representadas pela Procuradoria-Geral Federal o direito de apurar, a
+    qualquer tempo, a existência de outras importâncias devidas e não incluídas neste
+    requerimento. A presente confissão não adentra de forma alguma em análise de mérito a
+    respeito da licitude das condutas sancionadas, e o reconhecimento dos débitos se dá com
+    objetivo único e exclusivo de celebrar esta transação.
+</p>
+
+<br/>
+
+<p class="texto">
+    d) Declaro estar ciente de que o deferimento da adesão à Transação Extraordinária do
+    Edital ficará condicionado ao pagamento da parcela única, em caso de pagamento à vista, ou,
+    em caso de parcelamento, da primeira prestação, a ser efetuado exclusivamente mediante guia
+    de recolhimento emitida pelo respectivo sistema de transação da Advocacia-Geral da União ou,
+    excepcionalmente, guia entregue por órgão da Procuradoria-Geral Federal, até o último dia útil
+    do mês de sua emissão.
+</p>
+
+<br/>
+
+<p class="texto">
+    e) Declaro estar ciente de que a ausência do pagamento da primeira prestação importará
+    no indeferimento da adesão à Transação Extraordinária do Edital independentemente de
+    qualquer comunicação.
+</p>
+
+<br/>
+
+<p class="texto">
+    f) Declaro estar ciente que os débitos renunciados na fase administrativa de sua
+    constituição e incluídos presente transação extraordinária, nos termos do art. 22, §2º, da Lei nº
+    14.973, de 16 de setembro de 2024, em caso de rescisão da transação, terão o prosseguimento
+    de sua cobrança perante a Procuradoria-Geral Federal.
+</p>
+
+<br/>
+
+<p class="texto">
+    g) Declaro estar ciente e de acordo que eventuais incorreções nas opções de descontos
+    assinaladas no presente instrumento de adesão serão corrigidas de ofício para suas adequações
+    aos dados existentes em bancos de dados à disposição da Procuradoria-Geral Federal.
+</p>
+
+<br/>
+
+<p class="texto">
+    h) Na hipótese de transação extraordinária em relação a débito previsto no § 2º do art.
+    22 da Lei nº 14.973, de 2024, declaro estar ciente e notificado pela Procuradoria-Geral Federal
+    da existência de débito passível de inscrição no Cadastro Informativo de créditos não quitados
+    do setor público federal (Cadin) em caso de inadimplemento de qualquer das prestações
+    previstas no art. 7º da Portaria Normativa AGU nº 150/2024, ou em qualquer hipótese de
+    rescisão da transação extraordinária, contando-se o prazo de que trata o art. 2º, § 2º, da Lei nº
+    10.522, de 19 de julho de 2002, do dia seguinte ao do vencimento da prestação não paga ou à
+    data da notificação da rescisão.
+</p>
+
+<br/>
+
+<p class="texto">
+    i) Estou ciente de que o deferimento deste requerimento de adesão à transação
+    extraordinária não exime o devedor do pagamento de honorários advocatícios fixados, em favor
+    da Procuradoria-Geral Federal, por decisões judiciais proferidas até a data do presente
+    requerimento, nos autos das ações ordinárias, medidas cautelares, embargos à execução e em
+    todas as demais medidas judiciais objeto de desistência, que questionem os débitos incluídos na
+    transação.
+</p>
+
+<br/>
+
+<p class="texto">
+    j) Estou ciente de que, ressalvadas as hipóteses de que trata o item anterior, o
+    deferimento da transação extraordinária exime o devedor do pagamento de honorários
+    advocatícios nos autos das ações ordinárias, medidas cautelares, embargos à execução e em
+    todas as demais medidas judiciais objeto de desistência, que questionem os débitos incluídos na
+    transação.
+</p>
+
+<br/>
+
+<p class="texto">
+    k) Estou ciente de que o deferimento deste requerimento de transação prejudica e
+    extingue honorários eventualmente fixados, em favor dos advogados dos devedores, por
+    decisões judiciais proferidas nos autos das ações ordinárias, medidas cautelares, embargos à
+    execução e em todas as demais medidas judiciais objeto de desistência, que questionem os
+    débitos incluídos na transação.
+</p>
+
+<br/>
+
+<p class="texto">
+    Responsabilizo-me pela veracidade de todas as informações prestadas neste formulário
+    e pela autenticidade de todos os documentos anexos e, inclusive para os fins dos arts. 1º, 2º e
+    3º da Lei nº 7.115 de 29.08.1983 e do art. 3º, parágrafo único, do Decreto nº 9.094, de 17 de
+    julho de 2017, concedo expressamente a autorização de compartilhamento de informações a
+    que se refere o caput do mencionado art 3º.
+</p>
+
+<br/>
+
+<p class="texto">
+    Restando evidenciado que o aderente prestou informações inverídicas, simulou ou
+    omitiu informações previstas no Edital que o beneficiem indevidamente das condições
+    diferenciadas de pagamento previstas neste Edital, notadamente da sonegação de informações
+    sobre depósitos judiciais vinculados ao débito, haverá a rescisão da transação extraordinária
+    celebrada, a exigibilidade imediata da totalidade dos débitos nela incluídos, a reinclusão no
+    Cadastro Informativo de créditos não quitados do setor público federal (Cadin) e a automática
+    execução das garantias existentes, bem como a Procuradoria-Geral Federal encaminhará
+    representação ao Ministério Público Federal do foro do domicílio do aderente, para apuração do
+    crime tipificado no art. 299 do Código Penal.
+</p>
+
+<br/>
+
+<p class="texto">
+    O devedor se compromete a informar eventual alteração de seu endereço ou endereço
+    de e-mail à Procuradoria-Geral Federal, reputando-se válidas as comunicações encaminhadas
+    para o último endereço de e-mail por ele declinado no presente instrumento.
+</p>
+
+<br/>
+<br/>
+<hr>
+<br/>
+
+<p style="text-align: center;">
+    Local/Data: {{ municipioEntity.nome }}/{{ estadoEntity.nome }} - {{ "now"|date('d/m/Y') }}<br/>
+    Assinatura: {{ nomeSolicitante }}
+</p>
+
+<br/>
+<br/>
+<br/>
+</body>
+</html>

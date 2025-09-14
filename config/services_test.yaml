@@ -1,0 +1,33 @@
+parameters:
+    supp_core.administrativo_backend.filesystem_directory: '%kernel.project_dir%/filesystem'
+    supp_core.administrativo_backend.filesystem_create: true
+    supp_core.administrativo_backend.filesystem_mode: 0o777
+
+    supp_core.administrativo_backend.crypto_cipher: 'AES-128-CBC'
+    supp_core.administrativo_backend.crypto_algo: 'sha256'
+    supp_core.administrativo_backend.crypto_key: '%env(CRYPTO_KEY)%'
+    supp_core.administrativo_backend.crypto_sha2len: 32
+
+    supp_core.administrativo_backend.gzcompress_level: 9
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: true        # Allows optimizing the container by removing unused services; this also means
+        # fetching services directly from the container via $container->get() won't work.
+        # The best practice is to be explicit about your dependencies anyway.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    SuppCore\AdministrativoBackend\Utils\Tests\:
+        resource: '../src/Utils/Tests/*'
+
+    SuppCore\AdministrativoBackend\Utils\Tests\FixturesLoader:
+        class: SuppCore\AdministrativoBackend\Utils\Tests\FixturesLoader
+        arguments:
+            - '@doctrine.fixtures.loader'
+            - '@doctrine.orm.default_entity_manager'
+            - '@service_container'
+
+    Predis\Client: '@snc_redis.default'

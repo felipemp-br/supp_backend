@@ -1,0 +1,35 @@
+controllers:
+    resource: ../../src/Controller/
+    type: attribute
+
+api_v1_controllers:
+    resource: ../../src/Api/V1/Controller/
+    type: attribute
+
+kernel:
+    resource: ../../src/Kernel.php
+    type: attribute
+
+supp_core.consultivo_backend:
+    resource: ../../vendor/supp-core/supp-consultivo-backend/src/Api/V1/Controller/
+    type: attribute
+
+supp_core.disciplinar_backend:
+    resource: ../../vendor/supp-core/supp-disciplinar-backend/src/Api/V1/Controller/
+    type: attribute
+
+supp_core.ecarta_backend:
+    resource: ../../vendor/supp-core/supp-ecarta-backend/src/Api/V1/Controller/
+    type: attribute
+
+supp_core.judicial_backend:
+    resource: ../../vendor/supp-core/supp-judicial-backend/src/Api/V1/Controller/
+    type: attribute
+
+supp_core.gestao_devedor_backend:
+    resource: ../../vendor/supp-core/supp-gestao-devedor-backend/src/Api/V1/Controller/
+    type: attribute
+
+supp_core.receita_federal_backend:
+    resource: ../../vendor/supp-core/supp-receita-federal-backend/src/Api/V1/Controller/
+    type: attribute

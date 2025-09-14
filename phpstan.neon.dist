@@ -1,0 +1,14 @@
+parameters:
+    level: max
+    paths:
+        - src
+        - tests
+    editorUrl: '%%file%%:%%line%%'
+    checkGenericClassInNonGenericObjectType: false
+    symfony:
+        container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
+    checkExplicitMixed: false
+includes:
+    - vendor-bin/phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor-bin/phpstan/vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor-bin/phpstan/vendor/phpstan/phpstan-symfony/extension.neon

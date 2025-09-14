@@ -1,0 +1,24 @@
+# See docs https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+    annotations:
+        enabled: false
+    enabled_locales: ['en', 'pt_br']
+    default_locale: pt_br
+    handle_all_throwables: false
+    http_method_override: true
+    secret: '%env(APP_SECRET)%'
+    serializer:
+        enable_attributes: true
+    csrf_protection: false
+    php_errors:
+        log: true
+    router:
+        strict_requirements: null
+    session:
+        cookie_samesite: null
+        cookie_secure: false
+        use_cookies: false
+        handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
+    test: ~
+    lock:
+        scheduler: '%env(REDIS_URL)%'

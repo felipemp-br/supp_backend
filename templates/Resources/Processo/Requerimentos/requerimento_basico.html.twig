@@ -1,0 +1,22 @@
+{# @var processo   \SuppCore\AdministrativoBackend\Api\V1\DTO\Processo #}
+{# @var usuario    \SuppCore\AdministrativoBackend\Entity\Usuario #}
+{# @var vinculados  array #}
+<!DOCTYPE html>
+<html lang="br">
+    <head>
+        <meta charset="UTF-8" />
+        <title>REQUERIMENTO</title>
+    </head>
+
+    <body>
+    <p><b>PROTOCOLO ELETRÔNICO</b></p>
+    <p>REALIZADO POR: {{ usuario.nome }}  </p>
+    <p>EMAIL CADASTRADO: {{ usuario.email }} </p>
+    <p>EM NOME DE: {{ vinculados|join(',') }}</p>
+    <p>NA DATA: {{ "now"|date('d/m/Y H:i:s') }}</p>
+    <p>TIPO: {{ processo.requerimento }}</p>
+    <p>PARA: {{ processo.setorAtual.nome }}</p>
+    <p></p>
+    <p>{{ processo.descricao }}</p>
+    </body>
+</html>

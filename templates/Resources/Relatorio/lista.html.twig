@@ -1,0 +1,74 @@
+{% extends "relatorio.html.twig" %}
+
+{% macro totaliza(table) %}
+    {% set total = 0 %}
+    {% set exibe = 0 %}
+    {% for i, row in table %}
+        {% if row.subtotal is defined %}
+            {% set total = total + row.subtotal %}
+            {% set exibe = 1 %}
+        {% endif %}
+    {% endfor %}
+    {% if exibe %}
+        <br>
+        <table>
+            <tr>
+                <td>
+                    Total:
+                </td>
+                <td>
+                    {{ total }}
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+{% endmacro %}
+
+{% macro tabledraw(table) %}
+    {% import _self as self %}
+    <table>
+        <thead>
+        {% if table[0] is defined %}
+            <tr>
+            {% for key in table[0]|keys %}
+                <th>{{ key }}</th>
+            {% endfor %}
+            </tr>
+        {% endif %}
+    </thead>
+    <tbody>
+        {% for i, row in table %}
+            <tr>
+                {% if row is iterable %}
+                    {% for j, cell in row %}
+                        <td>
+                            {% if cell is iterable %}
+                                {{ self.tabledraw(cell) }}
+                            {% else %}
+                                {% if cell.timestamp is defined %}
+                                    {{ cell|date('d/m/Y H:i:s') }}
+                                {% else %}
+                                    {{ cell|raw('html') }}
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                {% else %}
+                        <td>
+                            {{ row }}
+                        </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% block conteudo %}
+    {% from _self import totaliza %}
+    {% from _self import tabledraw %}
+    {{ tabledraw(table) }}
+    {{ totaliza (table) }}
+    <br>
+    Exibindo {{ table|length }} registro(s).
+{% endblock %}

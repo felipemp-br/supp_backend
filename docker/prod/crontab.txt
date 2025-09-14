@@ -1,0 +1,1 @@
+0 0 * * * find /tmp -iregex '.*\.\(pdf\|html\)$' -type f -delete

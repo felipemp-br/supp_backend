@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Guia de Tramitação</title>
+    </head>
+
+    <body>
+        <div style="max-width: 210mm; padding: 20mm" class="guia">
+            <div style="margin-top: 0;"><center><img src="/images/sapiens_cinza.png"></center></div><br>
+            <table>
+                <tr><td>AGU - ADVOCACIA-GERAL DA UNIÃO</td></tr>
+                <tr><td>SAPIENS - Sistema de Inteligência Jurídica</td></tr>
+                <tr><td>Usuário: {{ usuario.getNome() }}</td></tr>
+                <tr><td>Data: {{ "now"|date("d-m-Y G:i") }}</td></tr>
+            </table><br>
+
+            <div><center><b>GUIA DE TRAMITAÇÃO</b></center></div><br>
+
+{#            {%  if (tramitacao[0].getInterna()) %}#}
+{#                <span>MODALIDADE: INTERNA</span><br><br>#}
+{#            {% else %}#}
+{#                <span>MODALIDADE: EXTERNA</span><br><br>#}
+{#            {% endif %}#}
+
+            <span>SETOR ORIGEM: {{tramitacao[0].getSetorOrigem().getNome()}}</span><br>
+{#            {%  if (tramitacao[0].getInterna()) %}#}
+{#                <span>SETOR DESTINO: {{tramitacao[0].getSetorDestino().getNomeFormatado()}}</span><br>#}
+{#                <span>USUÁRIO DESTINO: {{tramitacao[0].getUsuarioDestino().getNome()}}</span><br>#}
+{#            {% else %}#}
+{#                <span>PESSOA DESTINO: {{tramitacao[0].getPessoaDestino().getNome()}}</span><br>#}
+{#            {% endif %}#}
+
+            <br>
+
+            {%  set tramitacoes = tramitacao %}
+            {% if tramitacoes|length > 0 %}
+                {% for i in 0..tramitacoes|length-1 %}
+                    <table style="border-collapse: collapse; border: 1px solid; width: 100%">
+                        {%  if (tramitacao[i].getProcesso().getDocumentosAvulsos()) %}
+                            <thead style="border: 1px solid #000;"><tr><th colspan=3><center>-------------------------- DOCUMENTO AVULSO --------------------------</center></th></tr></thead>
+                        {% else %}
+                            <thead style="border: 1px solid #000;"><tr><th colspan=3><center>-------------------------- PROCESSO --------------------------</center></th></tr></thead>
+                        {% endif %}
+                        <tr style="border: 1px solid #000;">
+                            <td style="border: 1px solid #000;">
+                                NUP: {{tramitacao[i].getProcesso().getNUPFormatado()}}
+                                <br>
+                                {{ tramitacao[i].getProcesso().getNUP()|drawBarCodeEtiqueta|raw }}
+                                {{ tramitacao[i].getProcesso().getNUPFormatado()}}
+{#                                {% if (tramitacao[i].getProcesso().getEspecieProcesso() == 1) %}#}
+{#                                    <br> Processo Judicial: {{ tramitacao[i].getProcesso().getNumeroFormatado() }}#}
+{#                                {% endif %}#}
+                            </td>
+                            <td style="border: 1px solid #000;">
+                                Remessa: {{ tramitacao[i].getCriadoEm()|date("d-m-Y G:i") }}
+                            </td>
+                            <td style="border: 1px solid #000;">
+                                Urgente:
+                                {% if (tramitacao[i].geturgente ) %}
+                                    <span>SIM</span>
+                                {% else %}
+                                    <span>NÃO</span>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    </table><br>
+                {% endfor %}
+            {% endif %}
+
+            <br>
+
+            <span>RECEBIDO POR: ___________________________________________________________ DATA:___/___/___</span><br>
+            <span>ASSINATURA: ____________________________________________________________ HORA: ____:____</span><br>
+
+        </div> <!-- end guia-->
+    </body>
+</html>

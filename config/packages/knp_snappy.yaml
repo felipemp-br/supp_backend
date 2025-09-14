@@ -1,0 +1,17 @@
+knp_snappy:
+  pdf:
+    enabled:    true
+    binary:     '%env(WKHTMLTOPDF_PATH)%'
+    options:
+      load-error-handling: ignore
+      load-media-error-handling: ignore
+      disable-external-links: true
+      disable-internal-links: true
+      disable-javascript: true
+      disable-forms: true
+      image-dpi: 150
+      dpi: 300
+  image:
+    enabled:    true
+    binary:     '%env(WKHTMLTOIMAGE_PATH)%'
+    options:    []

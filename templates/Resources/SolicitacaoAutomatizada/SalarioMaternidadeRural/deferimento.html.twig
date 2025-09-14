@@ -1,0 +1,101 @@
+{# @var processo \SuppCore\AdministrativoBackend\Api\V1\DTO\Processo #}
+{# @var usuario \SuppCore\AdministrativoBackend\Entity\Usuario #}
+{# @var vinculados array #}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <title>ACORDO - PACIFICA - SALÁRIO MATERNIDADE RURAL</title>
+
+    <style>
+        body {
+            width: 100%;
+            font-family: "Calibri", sans-serif;
+            font-size: 12px;
+            margin-top: 5%;
+            margin-right: auto;
+            margin-left: auto;
+            max-width: 80%;
+            line-height: 140%;
+            -webkit-print-color-adjust: exact !important;
+        }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            line-height: 1.1em;
+        }
+
+        .titulo {
+            text-align: center;
+            max-width: 100%;
+            font-weight: bold;
+
+        }
+
+        .subtitulo {
+            text-align: left;
+            max-width: 100%;
+            font-weight: bold !important;
+            border-width: 1px 1px 1px 1px !important;
+            background-color: #e5e5e5 !important;
+            padding: 3px !important;
+            margin-top: 1lh;
+            margin-bottom: 1lh;
+        }
+
+        p.texto {
+            text-indent: 50px;
+            text-align: justify;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .cabecalho {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0 15px;
+            list-style-type: none;
+        }
+
+        li {
+            list-style-position: inside;
+        }
+
+        ul.lowerAlpha li {
+            list-style-type: lower-alpha;
+        }
+    </style>
+</head>
+<body>
+<div class="cabecalho">
+    {{ formatCabecalho(processo.setorAtual, true)|raw }}<br/>
+</div>
+
+<div class="titulo">
+    PACIFICA<br/>
+    SALÁRIO – MATERNIDADE (SEGURADA ESPECIAL)
+</div>
+<br/>
+
+<p><b>NUP:</b> {{ processo.nup | formatNup }}</p>
+<p><b>SETOR:</b> {{ processo.setorAtual.nome }} / {{ processo.setorAtual.unidade.sigla }}</p>
+<p><b>REQUERENTE:</b> {{ beneficiario.nome }}</p>
+<p><b>CPF DO REQUERENTE:</b> {{ beneficiario.numeroDocumentoPrincipal }}</p>
+<p><b>NÚMERO DO BENEFÍCIO:</b> {{ dadosSolicitacao.nb }}</p>
+<p><b>CPF DA CRIANÇA:</b> {{ dadosSolicitacao.cpfCrianca }}</p>
+<p><b>DATA DO REQUERIMENTO ADMINISTRATIVO:</b> {% if dadosSolicitacao.dataRequerimento %} {{ dadosSolicitacao.dataRequerimento|date("d/m/Y") }} {% endif %}</p>
+<br>
+
+{{ getConfigModulo('supp_core.administrativo_backend.solicitacao_automatizada.salario_maternidade_rural', 'termos_documento.cumprimento')|raw }}
+
+<br/>
+<br/>
+
+</body>
+</html>

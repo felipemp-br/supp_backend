@@ -1,0 +1,286 @@
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: supp-administrativo-backend-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: supp-administrativo-backend-worker
+      tier: backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: supp-administrativo-backend-worker
+        tier: backend
+    spec:
+      containers:
+        - name: supp-administrativo-backend-worker
+          image: IMAGE_NAME:IMAGE_TAG # Será substituído no momento da implantação (supp-administrativo-backend.deploy)
+          imagePullPolicy: Always #para garantir que ao refazer redeploy da mesma tag, seja recriado o container.
+          ports:
+            - containerPort: 4200
+              protocol: "TCP"
+          tty: true
+          stdin: true
+          volumeMounts:
+            - mountPath: /filesystem
+              name: filesystem
+            - mountPath: /receita
+              name: receita
+            - mountPath: /cert
+              name: cert
+              readOnly: true
+            - mountPath: /env-prod
+              name: env-prod
+              readOnly: true
+          envFrom:
+            - configMapRef:
+                name: env-ambiente    # variaveis de ambiente definidas pela infra... como APP_ENVIRONMENT, que diz que o ambiente corrente da app.          
+          env:
+            - name: NGINX
+              value: "false"
+            - name: WORKER
+              value: "true"
+            - name: ALL_JOBS
+              value: "true"
+            - name: CURRENT_JOB
+              value: "false"
+            - name: NUM_PROCS
+              value: "2"
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - "/bin/sh"
+                  - "-c"
+                  - "cp /env-prod/env-prod /var/www/html/.env.prod && cp /cert/* /var/www/html/ && /var/www/html/bin/console redis:flushall --env=prod --no-interaction && /var/www/html/docker/prod/start.sh"
+      volumes:
+        - name: filesystem
+          persistentVolumeClaim:
+            claimName: "pv-supp-administrativo-claim"
+        - name: receita
+          persistentVolumeClaim:
+            claimName: "pv-receita-claim"
+        - name: env-prod
+          secret:
+            secretName: secret-supp-administrativo
+        - name: cert
+          secret:
+            secretName: secret-a1
+---
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: supp-administrativo-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: supp-administrativo-backend
+      tier: backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: supp-administrativo-backend
+        tier: backend
+    spec:
+      containers:
+        - name: supp-administrativo-backend
+          image: IMAGE_NAME:IMAGE_TAG # Será substituído no momento da implantação (supp-administrativo-backend.deploy)
+          imagePullPolicy: Always #para garantir que ao refazer redeploy da mesma tag, seja recriado o container.
+          ports:
+            - containerPort: 8000
+              protocol: "TCP"
+          tty: true
+          stdin: true
+          resources:
+            limits:
+              memory: 30Gi
+            requests:
+              memory: 1Gi
+          volumeMounts:
+            - mountPath: /filesystem
+              name: filesystem
+            - mountPath: /receita
+              name: receita
+            - mountPath: /cert
+              name: cert
+              readOnly: true
+            - mountPath: /env-prod
+              name: env-prod
+              readOnly: true
+          envFrom:
+            - configMapRef:
+                name: env-ambiente    # variaveis de ambiente definidas pela infra... como APP_ENVIRONMENT, que diz que o ambiente corrente da app.          
+          env:
+            ###--INFRA--###
+            - name: NGINX
+              value: "true"
+            - name: WORKER
+              value: "false"
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - "/bin/sh"
+                  - "-c"
+                  - "cp /env-prod/env-prod /var/www/html/.env.prod && cp /cert/* /var/www/html/  && /var/www/html/bin/console redis:flushall --env=prod --no-interaction && /var/www/html/docker/prod/start.sh"
+      volumes:
+        - name: filesystem
+          persistentVolumeClaim:
+            claimName: "pv-supp-administrativo-claim"
+        - name: receita
+          persistentVolumeClaim:
+            claimName: "pv-receita-claim"
+        - name: env-prod
+          secret:
+            secretName: secret-supp-administrativo
+        - name: cert
+          secret:
+            secretName: secret-a1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: supp-administrativo-backend
+  labels:
+    app: supp-administrativo-backend
+    tier: backend
+spec:
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+      protocol: TCP
+  selector:
+    app: supp-administrativo-backend
+    tier: backend
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: supp-administrativo-backend-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.org/client-max-body-size: "100m"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+spec:
+  tls:
+    - hosts:
+        - supersapiensbackend$(SUFFIX_INGRESS_DNS_ENTRY)
+      secretName: "secret-tls"
+  rules:
+    - host: supersapiensbackend$(SUFFIX_INGRESS_DNS_ENTRY)
+      http:
+        paths:
+          - backend:
+              service:
+                name: supp-administrativo-backend
+                port:
+                  number: 8000
+            path: /
+            pathType: ImplementationSpecific
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: supp-administrativo-backend-ingress-x509
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-secret: "secret-ca-icpbrasil"
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "10"
+    nginx.ingress.kubernetes.io/auth-tls-error-page: "https://supersapiens$(SUFFIX_INGRESS_DNS_ENTRY)/pages/certificado"
+    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+spec:
+  tls:
+    - hosts:
+        - supersapiensbackendsecure$(SUFFIX_INGRESS_DNS_ENTRY)
+      secretName: "secret-tls"
+  rules:
+    - host: supersapiensbackendsecure$(SUFFIX_INGRESS_DNS_ENTRY)
+      http:
+        paths:
+          - backend:
+              service:
+                name: supp-administrativo-backend
+                port:
+                  number: 8000
+            path: /
+            pathType: ImplementationSpecific
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: supp-administrativo-backend-cronjob
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: supp-administrativo-backend-cronjob
+              image: IMAGE_NAME:IMAGE_TAG # Será substituído no momento da implantação (supp-administrativo-backend.deploy)
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 8000
+                  protocol: "TCP"
+              tty: true
+              stdin: true
+              volumeMounts:
+                - mountPath: /filesystem
+                  name: filesystem
+                - mountPath: /receita
+                  name: receita
+                - mountPath: /cert
+                  name: cert
+                  readOnly: true
+                - mountPath: /env-prod
+                  name: env-prod
+                  readOnly: true
+              envFrom:
+                - configMapRef:
+                    name: env-ambiente    # variaveis de ambiente definidas pela infra... como APP_ENVIRONMENT, que diz que o ambiente corrente da app.          
+              env:
+                ###--INFRA--###
+                - name: NGINX
+                  value: "false"
+                - name: WORKER
+                  value: "false"
+              lifecycle:
+                postStart:
+                  exec:
+                    command:
+                      - "/bin/sh"
+                      - "-c"
+                      - "cp /env-prod/env-prod /var/www/html/.env.prod && cp /cert/* /var/www/html/ && /var/www/html/bin/console redis:flushall --env=prod --no-interaction && /var/www/html/docker/prod/start.sh"
+              command:
+                - "/bin/sh"
+                - "-c"
+                - "php /var/www/html/bin/console supp:barramento:processamento --env=prod --no-debug"
+          restartPolicy: OnFailure
+          volumes:
+            - name: filesystem
+              persistentVolumeClaim:
+                claimName: "pv-supp-administrativo-cronjob-claim"
+            - name: receita
+              persistentVolumeClaim:
+                claimName: "pv-receita-claim"
+            - name: env-prod
+              secret:
+                secretName: secret-supp-administrativo
+            - name: cert
+              secret:
+                secretName: secret-a1                

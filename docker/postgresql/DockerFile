@@ -1,0 +1,15 @@
+FROM postgres:13
+
+#ENV POSTGRES_PASSWORD=root
+#RUN psql -c "create user root with password 'root' "
+#&& psql -c "create database supp"
+
+
+WORKDIR /app
+
+# Certifique-se de que o diretório /app existe e que tem as permissões corretas
+#RUN mkdir -p /app && chown -R postgres:postgres /app
+
+EXPOSE 5432
+
+CMD ["postgres"]

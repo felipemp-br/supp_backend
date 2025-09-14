@@ -1,0 +1,97 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * /src/DataFixtures/ORM/Test/LoadEspecieDocumentoAvulsoData.php.
+ *
+ * @author Advocacia-Geral da União <supp@agu.gov.br>
+ */
+
+namespace SuppCore\AdministrativoBackend\DataFixtures\ORM\Test;
+
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
+use SuppCore\AdministrativoBackend\Entity\EspecieDocumentoAvulso;
+use SuppCore\AdministrativoBackend\Entity\GeneroDocumentoAvulso;
+
+/**
+ * Class LoadEspecieDocumentoAvulsoData.
+ *
+ * @author Advocacia-Geral da União <supp@agu.gov.br>
+ */
+class LoadEspecieDocumentoAvulsoData extends Fixture implements OrderedFixtureInterface, FixtureGroupInterface
+{
+    public function load(ObjectManager $manager): void
+    {
+        $especieDocumentoAvulso = new EspecieDocumentoAvulso();
+        $especieDocumentoAvulso->setNome('RECURSOS HUMANOS');
+        $especieDocumentoAvulso->setDescricao('RECURSOS HUMANOS');
+        $especieDocumentoAvulso->setAtivo(true);
+        $especieDocumentoAvulso->setGeneroDocumentoAvulso(
+            $this->getReference('GeneroDocumentoAvulso-ADMINISTRATIVO', GeneroDocumentoAvulso::class)
+        );
+
+        $manager->persist($especieDocumentoAvulso);
+
+        $this->addReference(
+            'EspecieDocumentoAvulso-'.$especieDocumentoAvulso->getNome(),
+            $especieDocumentoAvulso
+        );
+
+        $especieDocumentoAvulso = new EspecieDocumentoAvulso();
+        $especieDocumentoAvulso->setNome('ADMINISTRATIVO');
+        $especieDocumentoAvulso->setDescricao('ADMINISTRATIVO');
+        $especieDocumentoAvulso->setAtivo(true);
+        $especieDocumentoAvulso->setGeneroDocumentoAvulso(
+            $this->getReference('GeneroDocumentoAvulso-ADMINISTRATIVO', GeneroDocumentoAvulso::class)
+        );
+
+        $manager->persist($especieDocumentoAvulso);
+
+        $this->addReference(
+            'EspecieDocumentoAvulso-'.$especieDocumentoAvulso->getNome(),
+            $especieDocumentoAvulso
+        );
+
+        $especieDocumentoAvulso = new EspecieDocumentoAvulso();
+        $especieDocumentoAvulso->setNome('JURÍDICO');
+        $especieDocumentoAvulso->setDescricao('JURÍDICO');
+        $especieDocumentoAvulso->setAtivo(true);
+        $especieDocumentoAvulso->setGeneroDocumentoAvulso(
+            $this->getReference('GeneroDocumentoAvulso-ADMINISTRATIVO', GeneroDocumentoAvulso::class)
+        );
+
+        $manager->persist($especieDocumentoAvulso);
+
+        $this->addReference(
+            'EspecieDocumentoAvulso-'.$especieDocumentoAvulso->getNome(),
+            $especieDocumentoAvulso
+        );
+
+        // Flush database changes
+        $manager->flush();
+    }
+
+    /**
+     * Get the order of this fixture.
+     *
+     * @return int
+     */
+    public function getOrder(): int
+    {
+        return 2;
+    }
+
+    /**
+     * This method must return an array of groups
+     * on which the implementing class belongs to.
+     *
+     * @return string[]
+     */
+    public static function getGroups(): array
+    {
+        return ['test'];
+    }
+}

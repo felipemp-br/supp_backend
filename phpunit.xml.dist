@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.4/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutOutputDuringTests="true"
+         bootstrap="vendor/autoload.php">
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <ini name="display_errors" value="On" />
+        <ini name="display_startup_errors" value="On" />
+        <ini name="date.timezone" value="UTC" />
+
+        <env name="KERNEL_CLASS" value="App\Kernel" />
+        <env name="SHELL_VERBOSITY" value="-1" />
+        <env name="APP_ENV" value="test" force="true" />
+        <env name="APP_DEBUG" value="0" />
+        <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb" />
+
+        <!--
+            To make sure that application has no "direct" deprecations we use `max[direct]=0` as a default one
+            indirect deprecations are just shown on test output to help to track those.
+            Note that you can change this behaviour if you want to, just see following documentation and see
+            how you can configure that.
+            https://symfony.com/doc/current/components/phpunit_bridge.html#direct-and-indirect-deprecations
+        -->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=1" />
+
+        <!-- ###+ symfony/framework-bundle ### -->
+        <env name="APP_ENV" value="dev"/>
+        <env name="APP_SECRET" value="30d82ff573236a2f26e49b11f8eee3cf"/>
+        <!-- env name="TRUSTED_PROXIES" value="127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16" -->
+        <!-- env name="TRUSTED_HOSTS" value="'^(localhost|example\.com)$'" -->
+        <!-- ###- symfony/framework-bundle ### -->
+
+        <!-- ###+ doctrine/doctrine-bundle ### -->
+        <!-- Format described at https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url -->
+        <!-- For an SQLite database, use: "sqlite:///%kernel.project_dir%/var/data.db" -->
+        <!-- For a PostgreSQL database, use: "postgresql://db_user:db_password@127.0.0.1:5432/db_name?serverVersion=11&charset=utf8" -->
+        <!-- IMPORTANT: You MUST configure your server version, either here or in config/packages/doctrine.yaml -->
+        <env name="DATABASE_URL" value="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7"/>
+        <!-- ###- doctrine/doctrine-bundle ### -->
+
+        <!-- ###+ lexik/jwt-authentication-bundle ### -->
+        <env name="JWT_SECRET_KEY" value="%kernel.project_dir%/config/jwt/private.pem"/>
+        <env name="JWT_PUBLIC_KEY" value="%kernel.project_dir%/config/jwt/public.pem"/>
+        <env name="JWT_PASSPHRASE" value="e1ab03d0f1e1c6650c44d294d2f2a35d"/>
+        <!-- ###- lexik/jwt-authentication-bundle ### -->
+
+        <!-- ###+ nelmio/cors-bundle ### -->
+        <env name="CORS_ALLOW_ORIGIN" value="^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$"/>
+        <!-- ###- nelmio/cors-bundle ### -->
+
+        <!-- ###+ symfony/mercure-bundle ### -->
+        <!-- See https://symfony.com/doc/current/mercure.html#configuration -->
+        <env name="MERCURE_URL" value="http://mercure-php:4001/.well-known/mercure"/>
+        <!-- The default token is signed with the secret key: !ChangeMe! -->
+        <env name="MERCURE_JWT_TOKEN" value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOltdfX0.Oo0yg7y4yMa1vr_bziltxuTCqb8JVHKxp-f_FwwOim0"/>
+        <!-- ###- symfony/mercure-bundle ### -->
+
+        <!-- ###+ symfony/messenger ### -->
+        <!-- Choose one of the transports below -->
+        <!-- MESSENGER_TRANSPORT_DSN=amqp://guest:guest@localhost:5672/%2f/messages -->
+        <!-- MESSENGER_TRANSPORT_DSN=doctrine://default -->
+        <!-- MESSENGER_TRANSPORT_DSN=redis://localhost:6379/messages -->
+        <!-- ###- symfony/messenger ### -->
+    </php>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
+
+    <testsuites>
+        <testsuite name="E2E">
+            <directory>./tests/E2E/</directory>
+        </testsuite>
+        <testsuite name="Functional">
+            <directory>./tests/Functional/</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>./tests/Integration/</directory>
+        </testsuite>
+        <testsuite name="Unit">
+            <directory>./tests/Unit/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory>./src/Command</directory>
+                <directory>./src/DataFixtures</directory>
+                <directory>./src/Migrations</directory>
+                <file>./src/Kernel.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html" target="build/report" lowUpperBound="55" highLowerBound="90" />
+        <log type="coverage-clover" target="build/logs/clover.xml" />
+        <log type="coverage-text" target="php://stdout" showOnlySummary="true" />
+        <log type="junit" target="build/logs/junit.xml" />
+    </logging>
+</phpunit>

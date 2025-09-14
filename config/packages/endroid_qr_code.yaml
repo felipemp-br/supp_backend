@@ -1,0 +1,8 @@
+endroid_qr_code:
+    default:
+        writer: Endroid\QrCode\Writer\PngWriter
+        size: 300
+        margin: 10
+    assinatura:
+        writer: Endroid\QrCode\Writer\SvgWriter
+        size: 90

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <title>SUPP</title>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div>
+    <p>Solicitação de acesso ao processo do sistema {{ sistema }}!</p>
+
+    <p>
+        O Usuário {{ usuario }} solicitou acesso ao Documento (id: {{ documentoId }}) da Juntada (id: {{ juntadaId }}) - Sequencial {{ sequencial }} do NUP {{ NUP }} no ambiente de {{ ambiente }}!<br>
+    </p>
+
+    <p>Justificativa:<br><b>{{ justificativa }}</b></p>
+    
+
+    <p>Email enviado em {{date()|date('d/m/Y')}} às {{date()|date('H:i:s')}}.</p>
+</div>
+</body>
+</html>

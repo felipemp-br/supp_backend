@@ -1,0 +1,16 @@
+FROM rabbitmq:3.11.10-management
+
+RUN apt update && apt install curl -y
+
+# Baixa o plugin rabbitmq_delayed_message_exchange e coloca no diretório de plugins do RabbitMQ
+RUN curl -L -o /opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange-3.11.0.ez \
+    https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/3.11.1/rabbitmq_delayed_message_exchange-3.11.1.ez
+
+# Habilita o plugin rabbitmq_delayed_message_exchange
+RUN rabbitmq-plugins enable rabbitmq_delayed_message_exchange
+
+# Exponha a porta 5672 para o protocolo AMQP e a porta 15672 para a interface de management
+EXPOSE 5672 15672
+
+# Define o ponto de entrada padrão para o contêiner RabbitMQ
+CMD ["rabbitmq-server"]

@@ -1,0 +1,11 @@
+parameters:
+    supp_core.administrativo_backend.filesystem_directory: '/filesystem/documentos'
+    supp_core.administrativo_backend.filesystem_create: true
+    supp_core.administrativo_backend.filesystem_mode: 0o777
+
+    supp_core.administrativo_backend.crypto_cipher: 'AES-128-CBC'
+    supp_core.administrativo_backend.crypto_algo: 'sha256'
+    supp_core.administrativo_backend.crypto_key: '%env(CRYPTO_KEY)%'
+    supp_core.administrativo_backend.crypto_sha2len: 32
+
+    supp_core.administrativo_backend.gzcompress_level: 9
